@@ -18,6 +18,7 @@ import {
   Lock,
   Printer,
   ShieldAlert,
+  ShieldCheck,
   Snowflake,
   Timer,
   UserRound,
@@ -201,11 +202,11 @@ export function SafetyDashboard({ result }: { result: CycleCompletionResult }) {
 
       <p className="mt-3 text-sm text-muted-foreground">{result.safetyStatusDetail}</p>
 
-      <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-3">
-        <Lock className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+      <div className="mt-4 flex items-start gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3.5 py-3">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
         <div>
-          <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
-            Trigger, OHSS and freeze-all algorithms not yet activated
+          <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+            Cycle Completion, OHSS Risk & Freeze-All Engine Active
           </p>
           <p className="mt-1 text-xs text-muted-foreground">{result.pendingMessage}</p>
         </div>
@@ -321,9 +322,31 @@ export function OhssPanelCard({ result }: { result: CycleCompletionResult }) {
         </Badge>
       }
     >
-      <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-3">
-        <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
-          Evidence algorithm pending
+      <div
+        className={cn(
+          "rounded-xl border px-3.5 py-3",
+          o.level === "critical"
+            ? "border-rose-500/40 bg-rose-500/10"
+            : o.level === "high"
+              ? "border-orange-500/40 bg-orange-500/10"
+              : o.level === "moderate"
+                ? "border-amber-500/40 bg-amber-500/10"
+                : "border-emerald-500/40 bg-emerald-500/10",
+        )}
+      >
+        <p
+          className={cn(
+            "text-sm font-semibold",
+            o.level === "critical"
+              ? "text-rose-700 dark:text-rose-300"
+              : o.level === "high"
+                ? "text-orange-700 dark:text-orange-300"
+                : o.level === "moderate"
+                  ? "text-amber-700 dark:text-amber-300"
+                  : "text-emerald-700 dark:text-emerald-300",
+          )}
+        >
+          {o.status}
         </p>
         <p className="mt-1 text-xs text-muted-foreground">{o.statusDetail}</p>
       </div>

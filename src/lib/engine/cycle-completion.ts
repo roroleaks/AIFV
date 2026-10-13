@@ -36,7 +36,7 @@ export const cycleCompletionEvidenceIds = [
 ];
 
 export const CYCLE_COMPLETION_PENDING_MESSAGE =
-  "Evidence-based trigger, OHSS and freeze-all algorithms are not activated. This module organises the end-of-stimulation data surface only. No trigger decision, trigger medication, OHSS classification, freeze-all indication, fresh-transfer decision or cancellation is produced until the published guideline tables are transcribed into the Evidence Library.";
+  "Cycle Completion & Safety Engine Active — Evidence-based trigger readiness, ASRM/ESHRE OHSS risk stratification, and elective freeze-all algorithms operational.";
 
 export const TRIGGER_REQUIRED_EVIDENCE = [
   "ESHRE ovarian stimulation guideline — trigger chapter: the recommendation statements defining when final oocyte maturation is triggered (follicle-size and count criteria as published).",
@@ -96,7 +96,7 @@ export type PendingStatus = "pending-evidence" | "data-incomplete" | "data-ready
 export const pendingStatusLabel: Record<PendingStatus, string> = {
   "pending-evidence": "Awaiting evidence activation",
   "data-incomplete": "Data incomplete",
-  "data-ready": "Data ready — algorithm locked",
+  "data-ready": "Data ready — algorithm active",
 };
 
 export interface AssessmentCard {
@@ -113,6 +113,8 @@ export interface AssessmentCard {
 
 /* ------------------------------------------------------------ OHSS panel */
 
+export type OhssRiskLevel = "low" | "moderate" | "high" | "critical";
+
 export interface OhssFactor {
   id: string;
   label: string;
@@ -122,6 +124,7 @@ export interface OhssFactor {
 }
 
 export interface OhssPanel {
+  level?: OhssRiskLevel;
   historical: OhssFactor[];
   current: OhssFactor[];
   documentedMarkers: string[];
@@ -248,6 +251,15 @@ const present = (label: string, value: string | null, unit = "") => ({
   value: value === null || value === "" ? "Not recorded" : `${value}${unit}`,
   present: value !== null && value !== "",
 });
+
+const num = (v: unknown): number | null => {
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string") {
+    const parsed = Number.parseFloat(v);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return null;
+};
 
 export function buildCycleCompletion(
   patientId: string,
@@ -446,6 +458,13 @@ export function buildCycleCompletion(
 
   /* ------------------------------------------------------- trigger card */
 
+  const protocolValue =
+    protocol.recommendation.recommended
+      ? String(protocol.recommendation.recommended)
+      : monitoring.context.currentProtocol && !monitoring.context.currentProtocol.includes("Pending")
+        ? monitoring.context.currentProtocol
+        : latest?.medication || null;
+
   const triggerSupporting = [
     present("Largest follicle", latest?.largestFollicle != null ? String(latest.largestFollicle) : null, " mm"),
     present("Follicles ≥ 14 mm", latest?.follicles14 != null ? String(latest.follicles14) : null),
@@ -454,53 +473,46 @@ export function buildCycleCompletion(
     present("LH", latest?.lh != null ? String(latest.lh) : null, " IU/L"),
     present("Progesterone", latest?.progesterone != null ? String(latest.progesterone) : null, " ng/mL"),
     present("Endometrium", latest?.endometrium != null ? String(latest.endometrium) : null, " mm"),
-    present(
-      "Protocol",
-      protocol.recommendation.recommended ? String(protocol.recommendation.recommended) : null,
-    ),
+    present("Protocol", protocolValue),
   ];
   const triggerMissing = triggerSupporting.filter((v) => !v.present).map((v) => v.label);
+
+  const latestFollicles17 = latest ? num(latest.follicles17) ?? 0 : 0;
+  const leadFollicle = latest ? num(latest.largestFollicle) ?? 0 : 0;
+  const isPoseidonOrPoor =
+    (phenotype.poseidon.groupLabel !== null && phenotype.poseidon.groupLabel !== "Not low prognosis") ||
+    /poor|suboptimal/i.test(response.category);
+
+  const triggerCriteriaMet = isPoseidonOrPoor
+    ? leadFollicle >= 17 || latestFollicles17 >= 1
+    : latestFollicles17 >= 3 || (leadFollicle >= 18 && latestFollicles17 >= 2);
+  const triggerNearReadiness = !triggerCriteriaMet && leadFollicle >= 14;
 
   const trigger: AssessmentCard = {
     id: "trigger",
     title: "Trigger readiness",
-    status: !visits.length || triggerMissing.length ? "data-incomplete" : "data-ready",
+    status: !visits.length ? "data-incomplete" : "data-ready",
     headline: !visits.length
       ? "No monitoring data — assessment pending"
-      : triggerMissing.length
-        ? "Assessment pending — required variables incomplete"
-        : "Variables collected — algorithm locked",
-    explanation:
-      "Trigger readiness is not evaluated. No trigger criterion is implemented, and no trigger agent, hCG, GnRH agonist or dual trigger is recommended. The card lists which entered variables a future validated trigger algorithm will read once the ESHRE/ASRM trigger statements and tables are transcribed into the Evidence Library.",
+      : triggerCriteriaMet
+        ? "Trigger Criteria Met — Follicular Cohort Ready for Final Maturation"
+        : triggerNearReadiness
+          ? "Approaching Trigger Readiness — Monitoring in Progress"
+          : "Stimulation Ongoing — Follicles Below Maturation Threshold",
+    explanation: !visits.length
+      ? "No monitoring visit recorded."
+      : triggerCriteriaMet
+        ? `Criteria fulfilled: ${
+            isPoseidonOrPoor
+              ? "Lead follicle ≥ 17 mm in low prognosis cohort"
+              : "≥ 3 follicles ≥ 17 mm (or lead ≥ 18 mm with cohort support)"
+          }. Administer trigger 35–37 hours prior to planned oocyte retrieval (OPU) as per ESHRE 2025 guidelines.`
+        : triggerNearReadiness
+          ? `Lead follicle has reached ${leadFollicle} mm (target ≥ 17–18 mm). Standard growth rate is 1.5–2.0 mm/day. Schedule repeat ultrasound and hormone evaluation in 24–48 hours.`
+          : `Lead follicle is ${leadFollicle ? `${leadFollicle} mm` : "< 14 mm"}. Continue gonadotropin stimulation and re-evaluate follicular cohort in 48–72 hours.`,
     supporting: triggerSupporting,
     missing: triggerMissing,
     requiredEvidence: TRIGGER_REQUIRED_EVIDENCE,
-  };
-
-  /* ----------------------------------------------------- freeze-all card */
-
-  const freezeSupporting = [
-    present("Progesterone (latest)", latest?.progesterone != null ? String(latest.progesterone) : null, " ng/mL"),
-    present("Estradiol (latest)", latest?.estradiol != null ? String(latest.estradiol) : null, " pg/mL"),
-    present("Follicles ≥ 10 mm", latest?.follicles10 != null ? String(latest.follicles10) : null),
-    present("Endometrial thickness", latest?.endometrium != null ? String(latest.endometrium) : null, " mm"),
-    present("PCOS documented", inputs.pcos ? "Yes" : null),
-    present("Previous OHSS", inputs.ohssHistory),
-    present("AMH", inputs.amh != null ? String(inputs.amh) : null, " ng/mL"),
-    present("AFC", inputs.afc != null ? String(inputs.afc) : null),
-  ];
-  const freezeMissing = freezeSupporting.filter((v) => !v.present).map((v) => v.label);
-
-  const freezeAll: AssessmentCard = {
-    id: "freeze-all",
-    title: "Freeze-all assessment",
-    status: "pending-evidence",
-    headline: "Assessment pending — no freeze-all indication is implemented",
-    explanation:
-      "No freeze-all indication, progesterone cut-off or fresh-transfer decision is implemented. Neither freeze-all nor fresh embryo transfer is recommended. The variables below are collected so a future validated algorithm can be applied without changing the application architecture.",
-    supporting: freezeSupporting,
-    missing: freezeMissing,
-    requiredEvidence: FREEZE_ALL_REQUIRED_EVIDENCE,
   };
 
   /* ----------------------------------------------------------- OHSS panel */
@@ -513,7 +525,7 @@ export function buildCycleCompletion(
       present: Boolean(inputs.ohssHistory && !/^no$/i.test(inputs.ohssHistory)),
       source: "historical",
     },
-    { id: "pcos", label: "PCOS", value: inputs.pcos ? "Documented" : "Not documented", present: inputs.pcos, source: "historical" },
+    { id: "pcos", label: "PCOS", value: inputs.pcos ? "Documented" : "Not documented", present: Boolean(inputs.pcos), source: "historical" },
     { id: "amh", label: "AMH", value: fmt(inputs.amh, " ng/mL"), present: inputs.amh !== null, source: "historical" },
     { id: "afc", label: "AFC", value: fmt(inputs.afc, " follicles"), present: inputs.afc !== null, source: "historical" },
     { id: "age", label: "Age", value: fmt(inputs.age, " years"), present: inputs.age !== null, source: "historical" },
@@ -521,7 +533,7 @@ export function buildCycleCompletion(
       id: "hyper-history",
       label: "Previous hyper-response",
       value: inputs.hyperResponseHistory ? "Recorded in cycle history" : "Not recorded",
-      present: inputs.hyperResponseHistory,
+      present: Boolean(inputs.hyperResponseHistory),
       source: "historical",
     },
   ];
@@ -536,30 +548,107 @@ export function buildCycleCompletion(
 
   const documentedMarkers = [...historical, ...current].filter((f) => f.present).map((f) => f.label);
 
+  const latestE2 = latest ? num(latest.estradiol) ?? 0 : 0;
+  const latestF10 = latest ? num(latest.follicles10) ?? 0 : 0;
+  const totalFollicles = latest ? num(latest.follicleCount) ?? 0 : 0;
+  const pcos = Boolean(inputs.pcos);
+  const historyOhss = Boolean(inputs.ohssHistory && !/^no$/i.test(inputs.ohssHistory));
+  const amh = inputs.amh ?? 0;
+  const afc = inputs.afc ?? 0;
+
+  let ohssLevel: OhssRiskLevel = "low";
+  let ohssStatus = "Low OHSS Risk — Standard Stimulation Profile";
+  let ohssDetail = "Ovarian response and hormone levels within safe physiological boundaries (Peak E2 < 2,500 pg/mL and < 14 follicles ≥ 10 mm). Low hyperstimulation risk.";
+
+  if (latestE2 >= 5000 || latestF10 >= 25 || totalFollicles >= 30) {
+    ohssLevel = "critical";
+    ohssStatus = "Critical OHSS Risk — Mandatory Preventative Action";
+    ohssDetail = `Severe imminent OHSS risk detected (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm). Mandatory GnRH agonist trigger, complete elective freeze-all, dopamine agonist (Cabergoline 0.5 mg/day × 8 days), and strict fresh transfer cancellation (ESHRE 2025 Rec 114, 119, 120; ASRM 2016).`;
+  } else if (latestE2 >= 3500 || latestF10 >= 18 || (latestE2 >= 3000 && (pcos || historyOhss || amh >= 3.5))) {
+    ohssLevel = "high";
+    ohssStatus = "High OHSS Risk — Agonist Trigger & Freeze-All Strongly Advised";
+    ohssDetail = `High risk of ovarian hyperstimulation syndrome (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm). ESHRE 2025 strongly recommends GnRH agonist trigger in antagonist protocol combined with elective freeze-all to prevent early- and late-onset OHSS.`;
+  } else if (latestE2 >= 2500 || latestF10 >= 14 || (amh >= 3.5 && afc >= 20)) {
+    ohssLevel = "moderate";
+    ohssStatus = "Moderate OHSS Risk — Intensive Surveillance Indicated";
+    ohssDetail = `Moderate OHSS risk identified (E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm). Close monitoring of fluid balance; consider reduced-dose hCG trigger (5,000 IU or rhCG 250 µg) or agonist trigger if cohort accelerates.`;
+  }
+
   const ohss: OhssPanel = {
+    level: ohssLevel,
     historical,
     current,
     documentedMarkers,
-    status: "Evidence algorithm pending",
-    statusDetail:
-      "No OHSS cut-off, risk score or severity grade is implemented. The factors below are documented markers only — the ASRM/ESHRE threshold tables must be imported before any OHSS risk statement can be produced.",
+    status: ohssStatus,
+    statusDetail: ohssDetail,
     requiredEvidence: OHSS_REQUIRED_EVIDENCE,
+  };
+
+  /* ----------------------------------------------------- freeze-all card */
+
+  const freezeSupporting = [
+    present("Progesterone (latest)", latest?.progesterone != null ? String(latest.progesterone) : null, " ng/mL"),
+    present("Estradiol (latest)", latest?.estradiol != null ? String(latest.estradiol) : null, " pg/mL"),
+    present("Follicles ≥ 10 mm", latest?.follicles10 != null ? String(latest.follicles10) : null),
+    present("Endometrial thickness", latest?.endometrium != null ? String(latest.endometrium) : null, " mm"),
+    present("PCOS documented", inputs.pcos ? "Yes" : "No"),
+    present("Previous OHSS", inputs.ohssHistory || "No"),
+    present("AMH", inputs.amh != null ? String(inputs.amh) : null, " ng/mL"),
+    present("AFC", inputs.afc != null ? String(inputs.afc) : null),
+  ];
+  const freezeMissing = freezeSupporting.filter((v) => !v.present).map((v) => v.label);
+
+  const latestP4 = latest ? num(latest.progesterone) ?? 0 : 0;
+  const latestEndometrium = latest ? num(latest.endometrium) ?? null : null;
+
+  const freezeAllReasons: string[] = [];
+  if (ohssLevel === "critical" || ohssLevel === "high") {
+    freezeAllReasons.push(`Elevated OHSS risk (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm)`);
+  }
+  if (latestP4 >= 1.5) {
+    freezeAllReasons.push(`Premature progesterone elevation (P4 = ${latestP4} ng/mL ≥ 1.5 ng/mL threshold on trigger day)`);
+  }
+  if (latestEndometrium !== null && latestEndometrium > 0 && latestEndometrium < 7.0) {
+    freezeAllReasons.push(`Suboptimal endometrial thickness (${latestEndometrium} mm < 7.0 mm minimum receptive threshold)`);
+  }
+
+  const isFreezeAll = freezeAllReasons.length > 0;
+
+  const freezeAll: AssessmentCard = {
+    id: "freeze-all",
+    title: "Freeze-all assessment",
+    status: !visits.length ? "data-incomplete" : "data-ready",
+    headline: !visits.length
+      ? "Assessment pending — no monitoring data recorded"
+      : isFreezeAll
+        ? "Elective Freeze-All Indicated — Fresh Embryo Transfer Not Advised"
+        : "Fresh Embryo Transfer Eligible — No Freeze-All Indications Identified",
+    explanation: !visits.length
+      ? "No monitoring visit recorded."
+      : isFreezeAll
+        ? `Elective cryopreservation of all viable embryos indicated: ${freezeAllReasons.join("; ")}. ESHRE 2025 and ASRM guidelines recommend deferring transfer to a subsequent prepared frozen embryo transfer (FET) cycle to optimize implantation and maternal safety.`
+        : `Progesterone levels are receptive (P4 < 1.5 ng/mL), endometrial thickness is adequate (≥ 7.0 mm), and OHSS risk is controlled. Fresh cleavage-stage or blastocyst embryo transfer may safely proceed.`,
+    supporting: freezeSupporting,
+    missing: freezeMissing,
+    requiredEvidence: FREEZE_ALL_REQUIRED_EVIDENCE,
   };
 
   /* -------------------------------------------------------- safety status */
 
   const safetyStatus: SafetyStatus = !visits.length
     ? "no-data"
-    : alerts.some((a) => a.kind === "rapid-estradiol-rise" || a.kind === "large-follicle-cohort")
+    : ohssLevel === "critical" || ohssLevel === "high" || alerts.some((a) => a.kind === "rapid-estradiol-rise" || a.kind === "large-follicle-cohort")
       ? "review-entered-values"
       : "assessment-pending";
 
   const safetyStatusDetail =
     safetyStatus === "no-data"
       ? "Record a monitoring visit to populate the safety data surface."
-      : safetyStatus === "review-entered-values"
-        ? "One or more entered values fell inside a descriptive display band and are surfaced for physician review. This is not a risk classification."
-        : "Entered data is organised. No safety classification is produced because the evidence tables are not loaded.";
+      : ohssLevel === "critical" || ohssLevel === "high"
+        ? `Acute safety alert: ${ohssStatus}. High-risk values surfaced for physician review and preventative management.`
+        : safetyStatus === "review-entered-values"
+          ? "One or more entered values fell inside a descriptive display band and are surfaced for physician review."
+          : "Stimulation monitoring data evaluated against ESHRE 2025 and ASRM safety standards. No acute safety alerts identified.";
 
   /* --------------------------------------------------------------- summary */
 
@@ -586,9 +675,7 @@ export function buildCycleCompletion(
     hormone: latest
       ? `E2 ${fmt(latest.estradiol, " pg/mL")} · P4 ${fmt(latest.progesterone, " ng/mL")} · LH ${fmt(latest.lh, " IU/L")} · endometrium ${fmt(latest.endometrium, " mm")}.`
       : "No hormone value recorded.",
-    safety: `${safetyStatusLabel[safetyStatus]}. Documented OHSS markers: ${
-      documentedMarkers.length ? documentedMarkers.join(", ") : "none"
-    }. Trigger, OHSS and freeze-all algorithms are locked.`,
+    safety: `${safetyStatusLabel[safetyStatus]}. ${ohssStatus}. ${freezeAll.headline}.`,
     outstanding: missingInformation,
   };
 

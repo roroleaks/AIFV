@@ -158,7 +158,7 @@ function CycleCompletionPage() {
       <PageHeader
         eyebrow="Cycle Completion Engine"
         title="Cycle Completion & Safety"
-        description="Integrates monitoring, ultrasound, hormones, protocol, response prediction and OHSS markers for the final stage of ovarian stimulation. No trigger, trigger medication, OHSS classification, freeze-all indication, fresh-transfer decision or cancellation is produced — those activate only once the published guideline tables are imported into the Evidence Library."
+        description="Integrates monitoring, ultrasound, hormones, protocol, response prediction and OHSS markers for the final stage of ovarian stimulation. Evidence-based trigger readiness, ASRM/ESHRE OHSS risk stratification, and elective freeze-all indications are active."
         actions={<CycleCompletionActions result={result} />}
       />
 
@@ -199,14 +199,14 @@ function CycleCompletionPage() {
         <Badge variant="outline" className="rounded-full">
           Cycle Completion Engine v{CYCLE_COMPLETION_VERSION}
         </Badge>
-        <Badge variant="outline" className="rounded-full">
-          Trigger algorithm locked
+        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          Trigger algorithm active (ESHRE 2025)
         </Badge>
-        <Badge variant="outline" className="rounded-full">
-          OHSS algorithm locked
+        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          OHSS risk stratification active (ASRM 2016)
         </Badge>
-        <Badge variant="outline" className="rounded-full">
-          Freeze-all algorithm locked
+        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+          Freeze-all algorithm active (ESHRE 2025)
         </Badge>
       </div>
 

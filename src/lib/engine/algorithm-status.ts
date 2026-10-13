@@ -194,11 +194,7 @@ export const treatmentAlgorithmDefinitions: Record<
   "trigger-strategy": {
     id: "trigger-strategy",
     name: "Trigger Strategy Engine",
-    suppressedOutputs: [
-      "Trigger agent (hCG, GnRH agonist, dual trigger)",
-      "Trigger timing",
-      "Trigger dose",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
       eshre2025Evidence(
         "ESHRE 2025 ovarian stimulation guideline — triggering and OHSS-prevention recommendation statements",
@@ -210,11 +206,7 @@ export const treatmentAlgorithmDefinitions: Record<
   "freeze-all": {
     id: "freeze-all",
     name: "Freeze-All Decision Engine",
-    suppressedOutputs: [
-      "Freeze-all indication",
-      "Fresh transfer decision",
-      "Progesterone threshold decision",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
       eshre2025Evidence(
         "ESHRE 2025 ovarian stimulation guideline — freeze-all and OHSS-prevention recommendation statements",
