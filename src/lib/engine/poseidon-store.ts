@@ -84,9 +84,7 @@ export function usePoseidonAssessments() {
 
   useEffect(() => {
     const sync = () =>
-      setEntries(
-        Object.values(read()).sort((a, b) => b.assessedAt.localeCompare(a.assessedAt)),
-      );
+      setEntries(Object.values(read()).sort((a, b) => b.assessedAt.localeCompare(a.assessedAt)));
     sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);

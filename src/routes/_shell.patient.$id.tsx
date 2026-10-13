@@ -16,7 +16,12 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { usePatients } from "@/lib/assessment/patients";
 import { steps, visibleFields, visibleGroups } from "@/lib/assessment/schema";
-import { buildAlerts, buildTimeline, computeTotals, formatDuration } from "@/lib/assessment/derived";
+import {
+  buildAlerts,
+  buildTimeline,
+  computeTotals,
+  formatDuration,
+} from "@/lib/assessment/derived";
 import { severityLabels, severityTone, validateAssessment } from "@/lib/assessment/validation";
 import { buildClinicalDataset, moduleReadiness } from "@/lib/clinical/data-mapping";
 import { knowledgeModules } from "@/lib/clinical/knowledge-model";
@@ -157,7 +162,11 @@ function PatientSummary() {
           )}
         </SectionCard>
 
-        <SectionCard title="Clinical flags" description={`${alerts.length} recorded`} contentClassName="p-4">
+        <SectionCard
+          title="Clinical flags"
+          description={`${alerts.length} recorded`}
+          contentClassName="p-4"
+        >
           {alerts.length === 0 ? (
             <EmptyPlaceholder label="No flags" className="min-h-32" />
           ) : (
@@ -198,7 +207,10 @@ function PatientSummary() {
                       </p>
                       <dl className="mt-2 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
                         {visibleFields(g, values).map((f) => (
-                          <div key={f.key} className="flex items-baseline justify-between gap-3 text-xs">
+                          <div
+                            key={f.key}
+                            className="flex items-baseline justify-between gap-3 text-xs"
+                          >
                             <dt className="truncate text-muted-foreground">{f.label}</dt>
                             <dd className="shrink-0 font-semibold">
                               {f.type === "derived" && f.compute
@@ -231,13 +243,23 @@ function PatientSummary() {
             <table className="w-full text-left text-xs">
               <thead className="border-b border-border/60 text-[11px] uppercase tracking-wide text-muted-foreground">
                 <tr>
-                  {["#", "Date", "Type", "Protocol", "Retrieved", "MII", "Blastocysts", "Transferred", "Pregnancy", "Live birth", "OHSS"].map(
-                    (h) => (
-                      <th key={h} className="px-4 py-3 font-semibold">
-                        {h}
-                      </th>
-                    ),
-                  )}
+                  {[
+                    "#",
+                    "Date",
+                    "Type",
+                    "Protocol",
+                    "Retrieved",
+                    "MII",
+                    "Blastocysts",
+                    "Transferred",
+                    "Pregnancy",
+                    "Live birth",
+                    "OHSS",
+                  ].map((h) => (
+                    <th key={h} className="px-4 py-3 font-semibold">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
@@ -273,7 +295,10 @@ function PatientSummary() {
           ) : (
             <ol className="space-y-2">
               {timeline.map((e) => (
-                <li key={e.id} className="flex items-start gap-3 rounded-xl border border-border/60 px-3 py-2">
+                <li
+                  key={e.id}
+                  className="flex items-start gap-3 rounded-xl border border-border/60 px-3 py-2"
+                >
                   <e.icon className="mt-0.5 size-4 shrink-0 text-primary" />
                   <div className="min-w-0">
                     <p className="truncate text-xs font-semibold">{e.title}</p>

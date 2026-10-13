@@ -11,13 +11,7 @@ import type { CycleRecord, FieldValue } from "@/lib/assessment/use-assessment";
 import type { MappedVariable } from "@/lib/clinical/data-mapping";
 
 /** Lifecycle state surfaced in the Clinical Intelligence Engine dashboard. */
-export type EngineStatus =
-  | "ready"
-  | "waiting-data"
-  | "running"
-  | "completed"
-  | "locked"
-  | "future";
+export type EngineStatus = "ready" | "waiting-data" | "running" | "completed" | "locked" | "future";
 
 export const engineStatusLabels: Record<EngineStatus, string> = {
   ready: "Ready",
@@ -41,15 +35,36 @@ export const engineStatusTone: Record<EngineStatus, string> = {
 export type EngineStage = "validation" | "classification" | "risk" | "planning" | "output";
 
 export const engineStages: { id: EngineStage; label: string; description: string }[] = [
-  { id: "validation", label: "Patient Validation", description: "Data completeness, plausibility and conflict checks." },
-  { id: "classification", label: "Patient Classification", description: "Descriptive patient and ovarian reserve grouping." },
-  { id: "risk", label: "Risk Assessment", description: "Documented response and safety risk factors." },
-  { id: "planning", label: "Future Clinical Algorithms", description: "Protocol, medication and transfer frameworks." },
-  { id: "output", label: "Output & Explanation", description: "Report assembly and evidence explanation." },
+  {
+    id: "validation",
+    label: "Patient Validation",
+    description: "Data completeness, plausibility and conflict checks.",
+  },
+  {
+    id: "classification",
+    label: "Patient Classification",
+    description: "Descriptive patient and ovarian reserve grouping.",
+  },
+  {
+    id: "risk",
+    label: "Risk Assessment",
+    description: "Documented response and safety risk factors.",
+  },
+  {
+    id: "planning",
+    label: "Future Clinical Algorithms",
+    description: "Protocol, medication and transfer frameworks.",
+  },
+  {
+    id: "output",
+    label: "Output & Explanation",
+    description: "Report assembly and evidence explanation.",
+  },
 ];
 
 /** Implementation maturity of the engine itself (separate from patient data). */
-export type EngineImplementation = "implemented" | "not-implemented" | "awaiting-evidence" | "planned";
+export type EngineImplementation =
+  "implemented" | "not-implemented" | "awaiting-evidence" | "planned";
 
 export interface EngineModuleDefinition {
   id: string;

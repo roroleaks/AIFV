@@ -32,7 +32,9 @@ export function moduleLinks(library: EvidenceEntry[]): ModuleEvidenceLink[] {
       moduleId: m.id,
       moduleName: m.name,
       kind: "knowledge" as const,
-      entries: [...declared].map((id) => byId.get(id)).filter((e): e is EvidenceEntry => Boolean(e)),
+      entries: [...declared]
+        .map((id) => byId.get(id))
+        .filter((e): e is EvidenceEntry => Boolean(e)),
       missing: [...declared].filter((id) => !byId.has(id)),
     };
   });
@@ -48,7 +50,9 @@ export function moduleLinks(library: EvidenceEntry[]): ModuleEvidenceLink[] {
       moduleId: m.id,
       moduleName: m.name,
       kind: "engine" as const,
-      entries: [...declared].map((id) => byId.get(id)).filter((e): e is EvidenceEntry => Boolean(e)),
+      entries: [...declared]
+        .map((id) => byId.get(id))
+        .filter((e): e is EvidenceEntry => Boolean(e)),
       missing: [...declared].filter((id) => !byId.has(id)),
     };
   });

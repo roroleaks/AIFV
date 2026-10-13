@@ -64,11 +64,7 @@ export function HistoricalBadge({ className }: { className?: string }) {
 export function AlgorithmStatusBadge({ gate }: { gate: TreatmentGate }) {
   return (
     <Badge variant="outline" className={cn("rounded-full", algorithmStatusTone[gate.status])}>
-      {gate.status === "ACTIVE" ? (
-        <ShieldCheck className="size-3" />
-      ) : (
-        <Lock className="size-3" />
-      )}
+      {gate.status === "ACTIVE" ? <ShieldCheck className="size-3" /> : <Lock className="size-3" />}
       {gate.name.split(" ")[0]}: {gate.statusLabel}
     </Badge>
   );
@@ -94,10 +90,7 @@ export function EvidencePendingGate({
 
   return (
     <section
-      className={cn(
-        "rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4",
-        className,
-      )}
+      className={cn("rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4", className)}
       aria-label={`${gate.name} status`}
     >
       <div className="flex flex-wrap items-center gap-2">
@@ -190,9 +183,7 @@ export function EvidencePendingGate({
         <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
           Suppressed while pending
         </p>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          {gate.suppressedOutputs.join(" · ")}
-        </p>
+        <p className="mt-0.5 text-xs text-muted-foreground">{gate.suppressedOutputs.join(" · ")}</p>
       </div>
     </section>
   );

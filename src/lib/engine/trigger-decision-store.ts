@@ -129,7 +129,11 @@ export function saveTriggerDecision(decision: TriggerDecision) {
 }
 
 export function clearTriggerDecision(patientId: string) {
-  writeList(KEY, readList<TriggerDecision>(KEY).filter((d) => d.patientId !== patientId), LIMIT);
+  writeList(
+    KEY,
+    readList<TriggerDecision>(KEY).filter((d) => d.patientId !== patientId),
+    LIMIT,
+  );
 }
 
 export function getTriggerAudit(patientId?: string): TriggerAuditEntry[] {

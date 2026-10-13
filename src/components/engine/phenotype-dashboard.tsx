@@ -37,10 +37,7 @@ import {
   reserveCategoryLabel,
   type PhenotypeResult,
 } from "@/lib/engine/phenotype";
-import {
-  responseCategoryLabel,
-  type OvarianResponseResult,
-} from "@/lib/engine/ovarian-response";
+import { responseCategoryLabel, type OvarianResponseResult } from "@/lib/engine/ovarian-response";
 import { formatDuration } from "@/lib/assessment/derived";
 import type { StoredPhenotypeAssessment } from "@/lib/engine/phenotype-store";
 
@@ -102,7 +99,9 @@ function Expandable({ label, children }: { label: string; children: React.ReactN
         className="flex w-full items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground print:hidden"
       >
         {label}
-        <ChevronDown className={cn("size-4 transition-transform duration-300", open && "rotate-180")} />
+        <ChevronDown
+          className={cn("size-4 transition-transform duration-300", open && "rotate-180")}
+        />
       </button>
       <div
         className={cn(
@@ -242,7 +241,9 @@ export function PoseidonPhenotypeCard({ result }: { result: PhenotypeResult }) {
       }
     >
       <p className="text-sm font-medium">{p.headline}</p>
-      <p className="mt-1 text-xs text-muted-foreground">{p.groupTitle ?? "Classification withheld."}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {p.groupTitle ?? "Classification withheld."}
+      </p>
 
       <div className="mt-4 space-y-1.5">
         <div className="flex items-center justify-between text-[11px] text-muted-foreground">
@@ -307,17 +308,17 @@ export function BolognaCard({ result }: { result: BolognaResult }) {
         {[...result.satisfied, ...result.notSatisfied, ...result.unknown].map((c) => {
           const Icon = criterionIcon(c.state);
           return (
-            <li
-              key={c.id}
-              className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
-            >
+            <li key={c.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
               <div className="flex items-start gap-2">
                 <Icon className={cn("mt-0.5 size-4 shrink-0", criterionTone(c.state))} />
                 <div className="min-w-0">
                   <p className="text-sm font-medium">{c.label}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">{c.detail}</p>
                 </div>
-                <Badge variant="secondary" className="ml-auto shrink-0 rounded-lg text-[10px] uppercase">
+                <Badge
+                  variant="secondary"
+                  className="ml-auto shrink-0 rounded-lg text-[10px] uppercase"
+                >
                   {c.state === "met" ? "Met" : c.state === "not-met" ? "Not met" : "Unknown"}
                 </Badge>
               </div>
@@ -331,7 +332,9 @@ export function BolognaCard({ result }: { result: BolognaResult }) {
           <p className="text-xs font-semibold text-amber-600 dark:text-amber-400">
             Required missing information
           </p>
-          <p className="mt-1 text-xs text-foreground/80">Missing {result.missing.join("; missing ")}.</p>
+          <p className="mt-1 text-xs text-foreground/80">
+            Missing {result.missing.join("; missing ")}.
+          </p>
         </div>
       )}
 
@@ -439,8 +442,8 @@ export function PhenotypeTimeline({ entries }: { entries: StoredPhenotypeAssessm
                 </span>
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                POSEIDON: {e.poseidonGroup ? `Group ${e.poseidonGroup}` : e.poseidonStatus} · Bologna:{" "}
-                {bolognaStatusLabel[e.bolognaStatus]} · Reserve:{" "}
+                POSEIDON: {e.poseidonGroup ? `Group ${e.poseidonGroup}` : e.poseidonStatus} ·
+                Bologna: {bolognaStatusLabel[e.bolognaStatus]} · Reserve:{" "}
                 {reserveCategoryLabel[e.reserveCategory]}
               </p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">
@@ -514,7 +517,6 @@ export function PhenotypeSummaryPanel({
     .filter(Boolean)
     .map((e) => `${e!.journal} ${e!.year}`);
 
-
   return (
     <CardShell icon={Activity} title="Physician summary">
       <dl className="grid gap-2 sm:grid-cols-2">
@@ -550,7 +552,10 @@ export function PhenotypeSummaryPanel({
               : `${result.completedAssessments.length} complete · ${result.pendingAssessments.length} pending`
           }
         />
-        <Cell label="Assessment date" value={mounted ? new Date(result.computedAt).toLocaleString() : "—"} />
+        <Cell
+          label="Assessment date"
+          value={mounted ? new Date(result.computedAt).toLocaleString() : "—"}
+        />
         <Cell
           label="Completed assessments"
           value={result.completedAssessments.join(", ") || "None"}
@@ -586,7 +591,10 @@ export function FutureModulesPanel() {
           >
             <Lock className="size-4 shrink-0 text-muted-foreground" />
             <span className="text-sm">{m.name}</span>
-            <Badge variant="secondary" className="ml-auto shrink-0 rounded-lg text-[10px] uppercase">
+            <Badge
+              variant="secondary"
+              className="ml-auto shrink-0 rounded-lg text-[10px] uppercase"
+            >
               Locked
             </Badge>
           </li>

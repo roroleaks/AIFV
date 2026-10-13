@@ -409,8 +409,12 @@ export function TriggerReadinessCard({ result }: { result: TriggerResult }) {
         ))}
       </dl>
       <div className="mt-4 grid gap-2 rounded-xl border border-amber-500/40 bg-amber-500/5 p-4 text-xs">
-        <p className="font-semibold text-amber-700 dark:text-amber-400">{result.triggerTypeStatus}</p>
-        <p className="font-semibold text-amber-700 dark:text-amber-400">{result.triggerDoseStatus}</p>
+        <p className="font-semibold text-amber-700 dark:text-amber-400">
+          {result.triggerTypeStatus}
+        </p>
+        <p className="font-semibold text-amber-700 dark:text-amber-400">
+          {result.triggerDoseStatus}
+        </p>
         <p className="font-semibold text-amber-700 dark:text-amber-400">
           {result.triggerTimingStatus}
         </p>
@@ -504,7 +508,9 @@ export function TriggerGuardrailCard({ result }: { result: TriggerResult }) {
       </ul>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-border/70 bg-muted/30 p-3">
-          <p className="text-xs font-semibold">CONSORT firewall — {result.consortFirewall.statusLabel}</p>
+          <p className="text-xs font-semibold">
+            CONSORT firewall — {result.consortFirewall.statusLabel}
+          </p>
           <ul className="mt-1 grid list-disc gap-1 pl-4 text-[11px] text-muted-foreground">
             {result.consortFirewall.statements.map((s) => (
               <li key={s}>{s}</li>
@@ -596,7 +602,9 @@ export function TriggerDecisionCard({
               .join(" · ") || "No trigger detail entered"}
           </p>
           {decision.plannedDateTime && (
-            <p className="mt-1 text-muted-foreground">Planned trigger: {decision.plannedDateTime}</p>
+            <p className="mt-1 text-muted-foreground">
+              Planned trigger: {decision.plannedDateTime}
+            </p>
           )}
           {decision.plannedRetrievalDateTime && (
             <p className="text-muted-foreground">
@@ -730,8 +738,8 @@ export function TriggerDecisionCard({
                 {a.rationale && <span>Rationale: {a.rationale}</span>}
                 <span className="text-muted-foreground">
                   {a.origin} · {a.decidedBy} · {new Date(a.decidedAt).toLocaleString()}
-                  {a.monitoringDay === null ? "" : ` · stimulation day ${a.monitoringDay}`} · engine v
-                  {a.engineVersion}
+                  {a.monitoringDay === null ? "" : ` · stimulation day ${a.monitoringDay}`} · engine
+                  v{a.engineVersion}
                 </span>
               </li>
             ))}

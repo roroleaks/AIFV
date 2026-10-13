@@ -30,7 +30,11 @@ import { buildProtocolSelection } from "../src/lib/engine/protocol-selection";
 import { buildGonadotropinSelection } from "../src/lib/engine/gonadotropin-selection";
 import { calculateConsortDose } from "../src/lib/engine/consort-dose";
 import { buildStartingDoseAssessment } from "../src/lib/engine/starting-dose";
-import { buildMonitoringContext, analyzeMonitoring, type MonitoringVisit } from "../src/lib/engine/monitoring";
+import {
+  buildMonitoringContext,
+  analyzeMonitoring,
+  type MonitoringVisit,
+} from "../src/lib/engine/monitoring";
 import { evaluateDoseAdjustment } from "../src/lib/engine/dose-adjustment";
 import { buildCycleCompletion } from "../src/lib/engine/cycle-completion";
 import { buildTriggerAssessment } from "../src/lib/engine/trigger";
@@ -78,8 +82,10 @@ export const virtualPatients: VirtualPatient[] = [
     id: "VP-001",
     name: "Elena Rostova",
     fileNumber: "AIFV-2026-001",
-    clinicalProfile: "Age 31, Secondary Infertility, Tubal factor, Normal Reserve (AMH 2.8, AFC 16, BMI 22.5)",
-    expectedClassification: "Expected Normal Responder, Not Low-Prognosis (Non-POSEIDON, Bologna Negative)",
+    clinicalProfile:
+      "Age 31, Secondary Infertility, Tubal factor, Normal Reserve (AMH 2.8, AFC 16, BMI 22.5)",
+    expectedClassification:
+      "Expected Normal Responder, Not Low-Prognosis (Non-POSEIDON, Bologna Negative)",
     values: {
       fullName: "Elena Rostova",
       fileNumber: "AIFV-2026-001",
@@ -189,7 +195,8 @@ export const virtualPatients: VirtualPatient[] = [
     id: "VP-002",
     name: "Margaret Sullivan",
     fileNumber: "AIFV-2026-002",
-    clinicalProfile: "Age 41, Primary Infertility, DOR + AMA (AMH 0.38, AFC 4, FSH 14.8, prev 2 oocytes)",
+    clinicalProfile:
+      "Age 41, Primary Infertility, DOR + AMA (AMH 0.38, AFC 4, FSH 14.8, prev 2 oocytes)",
     expectedClassification: "POSEIDON Group 4, Bologna Criteria FULFILLED, Expected Poor Responder",
     values: {
       fullName: "Margaret Sullivan",
@@ -298,8 +305,10 @@ export const virtualPatients: VirtualPatient[] = [
     id: "VP-003",
     name: "Amina Al-Mansoor",
     fileNumber: "AIFV-2026-003",
-    clinicalProfile: "Age 27, Primary Infertility, Severe PCOS Rotterdam A (AMH 7.4, AFC 34, BMI 23.1, prev 24 oocytes / OHSS)",
-    expectedClassification: "Expected High Responder, Extreme OHSS Risk, Freeze-All Mandatory, GnRH Agonist Trigger Required",
+    clinicalProfile:
+      "Age 27, Primary Infertility, Severe PCOS Rotterdam A (AMH 7.4, AFC 34, BMI 23.1, prev 24 oocytes / OHSS)",
+    expectedClassification:
+      "Expected High Responder, Extreme OHSS Risk, Freeze-All Mandatory, GnRH Agonist Trigger Required",
     values: {
       fullName: "Amina Al-Mansoor",
       fileNumber: "AIFV-2026-003",
@@ -403,7 +412,8 @@ export const virtualPatients: VirtualPatient[] = [
         endometrium: 12.0,
         dailyDose: 125,
         medication: "rFSH (125 IU) + GnRH Antagonist (0.25mg)",
-        notes: "Stimulation day 10: Estradiol 5950 pg/mL, 28 follicles >= 10mm. Strict Freeze-All & GnRH agonist trigger required!",
+        notes:
+          "Stimulation day 10: Estradiol 5950 pg/mL, 28 follicles >= 10mm. Strict Freeze-All & GnRH agonist trigger required!",
       }),
     ],
   },
@@ -419,7 +429,11 @@ interface EngineResult {
 export function executeFullEngineSuite(patient: VirtualPatient): EngineResult[] {
   const results: EngineResult[] = [];
 
-  const runStep = <T,>(engine: string, fn: () => T, summarize: (v: T) => { output: string; details: Record<string, unknown> }): T | null => {
+  const runStep = <T>(
+    engine: string,
+    fn: () => T,
+    summarize: (v: T) => { output: string; details: Record<string, unknown> },
+  ): T | null => {
     try {
       const val = fn();
       const s = summarize(val);
@@ -442,32 +456,59 @@ export function executeFullEngineSuite(patient: VirtualPatient): EngineResult[] 
   };
 
   // 1. POSEIDON Classifier
-  const poseidon = runStep("1. POSEIDON Classifier", () => classifyPoseidon(patient.values, patient.cycles), (r) => ({
-    output: `Group: ${r.groupLabel} | Status: ${r.status} | Criteria met: ${r.criteria?.length ?? 0}`,
-    details: { group: r.group, groupLabel: r.groupLabel, status: r.status, criteria: r.criteria, missing: r.missing },
-  }));
+  const poseidon = runStep(
+    "1. POSEIDON Classifier",
+    () => classifyPoseidon(patient.values, patient.cycles),
+    (r) => ({
+      output: `Group: ${r.groupLabel} | Status: ${r.status} | Criteria met: ${r.criteria?.length ?? 0}`,
+      details: {
+        group: r.group,
+        groupLabel: r.groupLabel,
+        status: r.status,
+        criteria: r.criteria,
+        missing: r.missing,
+      },
+    }),
+  );
 
   // 2. Bologna POR Criteria
-  const bologna = runStep("2. Bologna POR Criteria", () => assessBologna(patient.values, patient.cycles), (r) => ({
-    output: `${r.headline} | Fulfilled: ${r.fulfilled} | Criteria met: ${r.criteriaMet?.length ?? 0}`,
-    details: { headline: r.headline, fulfilled: r.fulfilled, criteriaMet: r.criteriaMet, missing: r.missing },
-  }));
+  const bologna = runStep(
+    "2. Bologna POR Criteria",
+    () => assessBologna(patient.values, patient.cycles),
+    (r) => ({
+      output: `${r.headline} | Fulfilled: ${r.fulfilled} | Criteria met: ${r.criteriaMet?.length ?? 0}`,
+      details: {
+        headline: r.headline,
+        fulfilled: r.fulfilled,
+        criteriaMet: r.criteriaMet,
+        missing: r.missing,
+      },
+    }),
+  );
 
   if (!poseidon || !bologna) return results;
 
   // 3. Reserve Phenotyping
-  const phenotype = runStep("3. Reserve Phenotyping", () => buildPhenotype(patient.values, patient.cycles), (r) => ({
-    output: `Reserve AMH: ${r.reserve.amh} ng/mL, AFC: ${r.reserve.afc} | POSEIDON: ${r.poseidon.groupLabel} | Bologna: ${r.bologna.headline}`,
-    details: { reserve: r.reserve, poseidon: r.poseidon.groupLabel, bologna: r.bologna.headline },
-  }));
+  const phenotype = runStep(
+    "3. Reserve Phenotyping",
+    () => buildPhenotype(patient.values, patient.cycles),
+    (r) => ({
+      output: `Reserve AMH: ${r.reserve.amh} ng/mL, AFC: ${r.reserve.afc} | POSEIDON: ${r.poseidon.groupLabel} | Bologna: ${r.bologna.headline}`,
+      details: { reserve: r.reserve, poseidon: r.poseidon.groupLabel, bologna: r.bologna.headline },
+    }),
+  );
 
   if (!phenotype) return results;
 
   // 4. Ovarian Response Prediction
-  const response = runStep("4. Ovarian Response Prediction", () => predictOvarianResponse(patient.values, patient.cycles, poseidon, bologna), (r) => ({
-    output: `Predicted Category: ${r.category.toUpperCase()} | Yield Headline: ${r.headline} | Active Risk Flags: ${r.risks.length}`,
-    details: { category: r.category, headline: r.headline, risks: r.risks.map((k) => k.title) },
-  }));
+  const response = runStep(
+    "4. Ovarian Response Prediction",
+    () => predictOvarianResponse(patient.values, patient.cycles, poseidon, bologna),
+    (r) => ({
+      output: `Predicted Category: ${r.category.toUpperCase()} | Yield Headline: ${r.headline} | Active Risk Flags: ${r.risks.length}`,
+      details: { category: r.category, headline: r.headline, risks: r.risks.map((k) => k.title) },
+    }),
+  );
 
   if (!response) return results;
 
@@ -475,86 +516,231 @@ export function executeFullEngineSuite(patient: VirtualPatient): EngineResult[] 
   const ctx = buildPatientContext(patient.values, patient.cycles, response);
 
   // 6. Protocol Recommendation Engine
-  const protocolRec = runStep("6. Protocol Recommendation", () => buildProtocolRecommendation(patient.id, patient.name, patient.values, patient.cycles, phenotype, response), (r) => ({
-    output: `Recommendation Status: ${r.recommendation.status} | Primary Protocol: ${JSON.stringify(r.recommendation.primary ?? "None")} | Clinical Considerations: ${r.considerations.length}`,
-    details: { status: r.recommendation.status, primary: r.recommendation.primary, considerations: r.considerations },
-  }));
+  const protocolRec = runStep(
+    "6. Protocol Recommendation",
+    () =>
+      buildProtocolRecommendation(
+        patient.id,
+        patient.name,
+        patient.values,
+        patient.cycles,
+        phenotype,
+        response,
+      ),
+    (r) => ({
+      output: `Recommendation Status: ${r.recommendation.status} | Primary Protocol: ${JSON.stringify(r.recommendation.primary ?? "None")} | Clinical Considerations: ${r.considerations.length}`,
+      details: {
+        status: r.recommendation.status,
+        primary: r.recommendation.primary,
+        considerations: r.considerations,
+      },
+    }),
+  );
 
   if (!protocolRec) return results;
 
   // 7. Protocol Selection & Evidence Gating
-  runStep("7. Protocol Selection & Options", () => buildProtocolSelection(patient.id, patient.name, patient.values, patient.cycles, phenotype, response, ctx, null), (r) => ({
-    output: `Available Clinical Options: ${r.options.length} | Cautions: ${r.cautions.length} | CONSORT Firewall: ${r.consortFirewall.status}`,
-    details: { optionsCount: r.options.length, cautions: r.cautions, firewallStatus: r.consortFirewall.status },
-  }));
+  runStep(
+    "7. Protocol Selection & Options",
+    () =>
+      buildProtocolSelection(
+        patient.id,
+        patient.name,
+        patient.values,
+        patient.cycles,
+        phenotype,
+        response,
+        ctx,
+        null,
+      ),
+    (r) => ({
+      output: `Available Clinical Options: ${r.options.length} | Cautions: ${r.cautions.length} | CONSORT Firewall: ${r.consortFirewall.status}`,
+      details: {
+        optionsCount: r.options.length,
+        cautions: r.cautions,
+        firewallStatus: r.consortFirewall.status,
+      },
+    }),
+  );
 
   // 8. Gonadotropin Selection Engine
-  const gonado = runStep("8. Gonadotropin Selection", () => buildGonadotropinSelection(patient.id, patient.name, patient.values, patient.cycles, phenotype, response, protocolRec), (r) => ({
-    output: `Selection Status: ${r.selection.status} | Recommended Drug Regimen: ${JSON.stringify(r.selection.recommended ?? "None")} | Cycle History Review: ${r.cycleReview.length}`,
-    details: { status: r.selection.status, recommended: r.selection.recommended, justifications: r.selection.justification },
-  }));
+  const gonado = runStep(
+    "8. Gonadotropin Selection",
+    () =>
+      buildGonadotropinSelection(
+        patient.id,
+        patient.name,
+        patient.values,
+        patient.cycles,
+        phenotype,
+        response,
+        protocolRec,
+      ),
+    (r) => ({
+      output: `Selection Status: ${r.selection.status} | Recommended Drug Regimen: ${JSON.stringify(r.selection.recommended ?? "None")} | Cycle History Review: ${r.cycleReview.length}`,
+      details: {
+        status: r.selection.status,
+        recommended: r.selection.recommended,
+        justifications: r.selection.justification,
+      },
+    }),
+  );
 
   if (!gonado) return results;
 
   // 9. CONSORT Nomogram Dosing
-  const consort = runStep("9. CONSORT Nomogram Dosing", () => calculateConsortDose(patient.id, patient.name, patient.values, patient.cycles, phenotype, response), (r) => ({
-    output: `Status: ${r.status} | Dose: ${JSON.stringify(r.dose)} | Safety Validation: ${r.validation.state ?? "None"} | Missing Params: ${r.validation.missingParams?.length ?? 0}`,
-    details: { status: r.status, dose: r.dose, validation: r.validation.state },
-  }));
+  const consort = runStep(
+    "9. CONSORT Nomogram Dosing",
+    () =>
+      calculateConsortDose(
+        patient.id,
+        patient.name,
+        patient.values,
+        patient.cycles,
+        phenotype,
+        response,
+      ),
+    (r) => ({
+      output: `Status: ${r.status} | Dose: ${JSON.stringify(r.dose)} | Safety Validation: ${r.validation.state ?? "None"} | Missing Params: ${r.validation.missingParams?.length ?? 0}`,
+      details: { status: r.status, dose: r.dose, validation: r.validation.state },
+    }),
+  );
 
   // 10. Starting Dose Determination
-  runStep("10. Starting Dose Assessment", () => buildStartingDoseAssessment(patient.id, patient.name, patient.values, patient.cycles, phenotype, response), (r) => ({
-    output: `Engine State: ${r.state} | Dose Output: ${r.doseDisplay} | Evidence Algorithms: ${r.algorithms.length} | Comparative RCT Doses: ${r.evidenceReportedDoses.length}`,
-    details: { state: r.state, doseDisplay: r.doseDisplay, algorithmsCount: r.algorithms.length },
-  }));
+  runStep(
+    "10. Starting Dose Assessment",
+    () =>
+      buildStartingDoseAssessment(
+        patient.id,
+        patient.name,
+        patient.values,
+        patient.cycles,
+        phenotype,
+        response,
+      ),
+    (r) => ({
+      output: `Engine State: ${r.state} | Dose Output: ${r.doseDisplay} | Evidence Algorithms: ${r.algorithms.length} | Comparative RCT Doses: ${r.evidenceReportedDoses.length}`,
+      details: { state: r.state, doseDisplay: r.doseDisplay, algorithmsCount: r.algorithms.length },
+    }),
+  );
 
   // 11. Stimulation Monitoring & Kinetic Analysis
-  const mctx = buildMonitoringContext(patient.id, patient.name, patient.values, patient.cycles, phenotype, response, protocolRec, gonado, null);
-  const monitoring = runStep("11. Stimulation Monitoring Engine", () => analyzeMonitoring(mctx, patient.visits), (r) => ({
-    output: `Total Recorded Visits: ${r.visits.length} | Monitoring Status: ${JSON.stringify(r.status)} | Clinical Alerts: ${r.alerts.length} | Trends Computed: ${r.trends.length}`,
-    details: { visitCount: r.visits.length, status: r.status, alerts: r.alerts.map((a) => a.message), trends: r.trends.length },
-  }));
+  const mctx = buildMonitoringContext(
+    patient.id,
+    patient.name,
+    patient.values,
+    patient.cycles,
+    phenotype,
+    response,
+    protocolRec,
+    gonado,
+    null,
+  );
+  const monitoring = runStep(
+    "11. Stimulation Monitoring Engine",
+    () => analyzeMonitoring(mctx, patient.visits),
+    (r) => ({
+      output: `Total Recorded Visits: ${r.visits.length} | Monitoring Status: ${JSON.stringify(r.status)} | Clinical Alerts: ${r.alerts.length} | Trends Computed: ${r.trends.length}`,
+      details: {
+        visitCount: r.visits.length,
+        status: r.status,
+        alerts: r.alerts.map((a) => a.message),
+        trends: r.trends.length,
+      },
+    }),
+  );
 
   if (!monitoring) return results;
 
   // 12. Mid-Cycle Dose Adjustment
-  runStep("12. Mid-Cycle Dose Adjustment", () => evaluateDoseAdjustment(monitoring.visits.at(-1) ?? null), (r) => ({
-    output: `Adjustment Status: ${r.status} | Proposed Dose: ${JSON.stringify(r.proposedDose)} | Observed Parameters: ${r.observedValues.length}`,
-    details: { status: r.status, proposedDose: r.proposedDose, rationale: r.rationale },
-  }));
+  runStep(
+    "12. Mid-Cycle Dose Adjustment",
+    () => evaluateDoseAdjustment(monitoring.visits.at(-1) ?? null),
+    (r) => ({
+      output: `Adjustment Status: ${r.status} | Proposed Dose: ${JSON.stringify(r.proposedDose)} | Observed Parameters: ${r.observedValues.length}`,
+      details: { status: r.status, proposedDose: r.proposedDose, rationale: r.rationale },
+    }),
+  );
 
   // 13. Cycle Completion / Safety / OHSS / Freeze-All
-  const cycleC = runStep("13. Cycle Completion & Safety Audit", () => buildCycleCompletion(patient.id, patient.name, phenotype, response, protocolRec, gonado, null, monitoring), (r) => ({
-    output: `Safety Status: ${r.safetyStatus} | Freeze-All Strategy: ${r.freezeAll.status} | Trigger Readiness: ${r.trigger.status} | Safety Alerts: ${r.alerts.length}`,
-    details: { safetyStatus: r.safetyStatus, freezeAll: r.freezeAll.status, trigger: r.trigger.status, alerts: r.alerts.map((a) => a.title) },
-  }));
+  const cycleC = runStep(
+    "13. Cycle Completion & Safety Audit",
+    () =>
+      buildCycleCompletion(
+        patient.id,
+        patient.name,
+        phenotype,
+        response,
+        protocolRec,
+        gonado,
+        null,
+        monitoring,
+      ),
+    (r) => ({
+      output: `Safety Status: ${r.safetyStatus} | Freeze-All Strategy: ${r.freezeAll.status} | Trigger Readiness: ${r.trigger.status} | Safety Alerts: ${r.alerts.length}`,
+      details: {
+        safetyStatus: r.safetyStatus,
+        freezeAll: r.freezeAll.status,
+        trigger: r.trigger.status,
+        alerts: r.alerts.map((a) => a.title),
+      },
+    }),
+  );
 
   if (!cycleC) return results;
 
   // 14. Trigger Strategy & Ovulation Induction
-  runStep("14. Trigger Strategy Engine", () => buildTriggerAssessment(patient.id, patient.name, phenotype, response, monitoring, cycleC, null), (r) => ({
-    output: `Trigger Safety: ${r.safetyStatus} | Readiness Status: ${JSON.stringify(r.readiness.status ?? r.readiness)} | Trigger Protocol Options: ${r.options.length} | Dose Status: ${r.triggerDoseStatus}`,
-    details: { safetyStatus: r.safetyStatus, readiness: r.readiness, optionsCount: r.options.length, triggerDoseStatus: r.triggerDoseStatus },
-  }));
+  runStep(
+    "14. Trigger Strategy Engine",
+    () =>
+      buildTriggerAssessment(
+        patient.id,
+        patient.name,
+        phenotype,
+        response,
+        monitoring,
+        cycleC,
+        null,
+      ),
+    (r) => ({
+      output: `Trigger Safety: ${r.safetyStatus} | Readiness Status: ${JSON.stringify(r.readiness.status ?? r.readiness)} | Trigger Protocol Options: ${r.options.length} | Dose Status: ${r.triggerDoseStatus}`,
+      details: {
+        safetyStatus: r.safetyStatus,
+        readiness: r.readiness,
+        optionsCount: r.options.length,
+        triggerDoseStatus: r.triggerDoseStatus,
+      },
+    }),
+  );
 
   // 15. Clinical Intelligence Report Generation
   if (consort) {
-    runStep("15. Clinical Intelligence Report", () => buildIntelligenceReport({
-      patientId: patient.id,
-      patientName: patient.name,
-      values: patient.values,
-      cycles: patient.cycles,
-      phenotype,
-      response,
-      protocol: protocolRec,
-      gonadotropin: gonado,
-      consort,
-      monitoring,
-      cycle: cycleC,
-    }), (r) => ({
-      output: `Generated Sections: ${r.sections.length} | Quality Review Score: ${r.qualityIssues.length === 0 ? "100% Complete" : `${r.qualityIssues.length} items flagged`} | Clinical Explanations: ${r.explanations.length}`,
-      details: { sectionsCount: r.sections.length, qualityScore: r.qualityScore, evidenceCount: r.evidence.length, explanationsCount: r.explanations.length },
-    }));
+    runStep(
+      "15. Clinical Intelligence Report",
+      () =>
+        buildIntelligenceReport({
+          patientId: patient.id,
+          patientName: patient.name,
+          values: patient.values,
+          cycles: patient.cycles,
+          phenotype,
+          response,
+          protocol: protocolRec,
+          gonadotropin: gonado,
+          consort,
+          monitoring,
+          cycle: cycleC,
+        }),
+      (r) => ({
+        output: `Generated Sections: ${r.sections.length} | Quality Review Score: ${r.qualityIssues.length === 0 ? "100% Complete" : `${r.qualityIssues.length} items flagged`} | Clinical Explanations: ${r.explanations.length}`,
+        details: {
+          sectionsCount: r.sections.length,
+          qualityScore: r.qualityScore,
+          evidenceCount: r.evidence.length,
+          explanationsCount: r.explanations.length,
+        },
+      }),
+    );
   }
 
   return results;
@@ -571,7 +757,9 @@ export function runCheckup() {
   let totalFailed = 0;
 
   for (const patient of virtualPatients) {
-    console.log(`\n--------------------------------------------------------------------------------`);
+    console.log(
+      `\n--------------------------------------------------------------------------------`,
+    );
     console.log(`PATIENT [${patient.id}] — ${patient.name}`);
     console.log(`Profile: ${patient.clinicalProfile}`);
     console.log(`Expected: ${patient.expectedClassification}`);
@@ -600,6 +788,9 @@ export function runCheckup() {
 }
 
 // Execute immediately when run directly
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("test-3-virtual-patients.ts")) {
+if (
+  import.meta.url === `file://${process.argv[1]}` ||
+  process.argv[1]?.endsWith("test-3-virtual-patients.ts")
+) {
   runCheckup();
 }

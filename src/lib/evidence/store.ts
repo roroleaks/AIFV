@@ -86,7 +86,8 @@ export const historyLabels: Record<EvidenceHistoryItem["action"], string> = {
 };
 
 export interface ImportDraft {
-  sourceKind: "PDF" | "DOI" | "PubMed" | "Journal URL" | "Conference Statement" | "Clinical Guideline";
+  sourceKind:
+    "PDF" | "DOI" | "PubMed" | "Journal URL" | "Conference Statement" | "Clinical Guideline";
   title: string;
   authors: string;
   journal: string;

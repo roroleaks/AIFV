@@ -11,10 +11,7 @@ import { buildPhenotype } from "@/lib/engine/phenotype";
 import { predictOvarianResponse } from "@/lib/engine/ovarian-response";
 import { logAudit } from "@/lib/engine/audit";
 import { STARTING_DOSE_VERSION, buildStartingDoseAssessment } from "@/lib/engine/starting-dose";
-import {
-  StartingDoseActions,
-  StartingDoseSection,
-} from "@/components/engine/starting-dose-panel";
+import { StartingDoseActions, StartingDoseSection } from "@/components/engine/starting-dose-panel";
 import { getProtocolDecision, protocolDecisionLabel } from "@/lib/engine/protocol-decision-store";
 import {
   getGonadotropinDecision,

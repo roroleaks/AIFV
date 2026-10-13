@@ -17,11 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { FieldDef } from "@/lib/assessment/schema";
 import type { FieldValue } from "@/lib/assessment/use-assessment";
-import {
-  interpretDerived,
-  interpretField,
-  toneClasses,
-} from "@/lib/assessment/interpretations";
+import { interpretDerived, interpretField, toneClasses } from "@/lib/assessment/interpretations";
 
 function SearchableSelect({
   id,
@@ -137,7 +133,11 @@ export function AssessmentField({
 }) {
   const id = `${idPrefix}-${field.key}`;
   const span =
-    field.colSpan === 3 ? "sm:col-span-2 lg:col-span-3" : field.colSpan === 2 ? "sm:col-span-2" : "";
+    field.colSpan === 3
+      ? "sm:col-span-2 lg:col-span-3"
+      : field.colSpan === 2
+        ? "sm:col-span-2"
+        : "";
 
   const invalid =
     field.type === "number" &&
@@ -197,7 +197,10 @@ export function AssessmentField({
           max={field.max}
           step={field.step}
           aria-invalid={invalid || undefined}
-          className={cn("h-10 rounded-xl", invalid && "border-destructive focus-visible:ring-destructive")}
+          className={cn(
+            "h-10 rounded-xl",
+            invalid && "border-destructive focus-visible:ring-destructive",
+          )}
           placeholder={field.placeholder}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
@@ -226,4 +229,3 @@ export function AssessmentField({
     </div>
   );
 }
-

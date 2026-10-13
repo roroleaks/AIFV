@@ -101,7 +101,6 @@ export function extractBolognaInputs(
     riskFactors.push(`Female karyotype abnormality (${genetic})`);
   }
 
-
   const poorEpisodes = cycles.filter((c) => {
     const r = toNum(c["retrieved"]);
     return r !== null && r <= BOLOGNA_POOR_OOCYTES;

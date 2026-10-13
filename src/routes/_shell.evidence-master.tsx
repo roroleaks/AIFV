@@ -114,13 +114,21 @@ function EvidenceMaster() {
       >
         <p className="text-sm font-medium">{CONSORT_POPULATION_RESTRICTION.statement}</p>
         <p className="mt-3 text-xs text-muted-foreground">
-          Must NOT be generalized to: {CONSORT_POPULATION_RESTRICTION.mustNotGeneralizeTo.join(" · ")}.
-          Outside the validated population the recorded status is{" "}
-          <span className="font-mono">{CONSORT_POPULATION_RESTRICTION.outsidePopulationStatus}</span>.
+          Must NOT be generalized to:{" "}
+          {CONSORT_POPULATION_RESTRICTION.mustNotGeneralizeTo.join(" · ")}. Outside the validated
+          population the recorded status is{" "}
+          <span className="font-mono">
+            {CONSORT_POPULATION_RESTRICTION.outsidePopulationStatus}
+          </span>
+          .
         </p>
       </SectionCard>
 
-      <SectionCard title="Indexed sources" description="Full provenance retained for every record." contentClassName="p-0">
+      <SectionCard
+        title="Indexed sources"
+        description="Full provenance retained for every record."
+        contentClassName="p-0"
+      >
         <ul className="divide-y divide-border/60">
           {masterEvidenceRecords.map((r) => (
             <li key={r.evidenceId} className="grid gap-2 px-5 py-4">
@@ -161,7 +169,8 @@ function EvidenceMaster() {
                 ))}
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Evidence ID: <span className="font-mono">{r.evidenceId}</span> · Source: {r.provenance}
+                Evidence ID: <span className="font-mono">{r.evidenceId}</span> · Source:{" "}
+                {r.provenance}
                 {r.linkedLibraryId ? ` · Library entry: ${r.linkedLibraryId}` : ""}
               </p>
             </li>
@@ -223,7 +232,9 @@ function EvidenceMaster() {
           ))}
         </ul>
         <div className="border-t border-border/60 bg-muted/40 px-5 py-4">
-          <p className="text-sm font-semibold">CONSORT implementation readiness: {consortReadiness.status}</p>
+          <p className="text-sm font-semibold">
+            CONSORT implementation readiness: {consortReadiness.status}
+          </p>
           <ul className="mt-2 grid gap-1">
             {consortReadiness.checklist.map((c) => (
               <li key={c.item} className="text-xs text-muted-foreground">
@@ -235,7 +246,11 @@ function EvidenceMaster() {
       </SectionCard>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <SectionCard title="Evidence conflicts" description="Recorded, never auto-resolved." contentClassName="p-0">
+        <SectionCard
+          title="Evidence conflicts"
+          description="Recorded, never auto-resolved."
+          contentClassName="p-0"
+        >
           <ul className="divide-y divide-border/60">
             {evidenceConflicts.map((c) => (
               <li key={c.label} className="grid gap-1.5 px-5 py-4">

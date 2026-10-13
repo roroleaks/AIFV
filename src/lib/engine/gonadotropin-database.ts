@@ -9,11 +9,7 @@
  */
 
 export type GonadotropinId =
-  | "recombinant-fsh"
-  | "urinary-fsh"
-  | "hp-hmg"
-  | "recombinant-lh"
-  | "fsh-lh-combination";
+  "recombinant-fsh" | "urinary-fsh" | "hp-hmg" | "recombinant-lh" | "fsh-lh-combination";
 
 export type GonadotropinType =
   | "Recombinant FSH"
@@ -88,15 +84,12 @@ export const gonadotropinDatabase: GonadotropinEntry[] = [
     name: "Urinary FSH (purified / highly purified)",
     type: "Urinary FSH",
     route: "Subcutaneous or intramuscular injection",
-    mechanism:
-      "Urine-derived follicle stimulating hormone acting on granulosa cell FSH receptors.",
+    mechanism: "Urine-derived follicle stimulating hormone acting on granulosa cell FSH receptors.",
     indications: [
       "Ovarian stimulation in GnRH agonist protocol — equally recommended to r-hFSH (ESHRE Rec 26, 27, Strong, ⊕⊕)",
       "General IVF population where urinary preparations are selected.",
     ],
-    contraindications: [
-      "Co-administration with hMG is probably not recommended (ESHRE Rec 31)",
-    ],
+    contraindications: ["Co-administration with hMG is probably not recommended (ESHRE Rec 31)"],
     clinicalUse:
       "Purified (p-FSH) or highly purified (hp-FSH) urinary preparation used in long agonist or antagonist protocols.",
     advantages: [
@@ -134,9 +127,7 @@ export const gonadotropinDatabase: GonadotropinEntry[] = [
       "Delivers both FSH and theca-stimulating LH activity without requiring separate injections.",
       "Equally recommended to r-hFSH in efficacy and live birth outcomes (ESHRE Rec 25).",
     ],
-    limitations: [
-      "Fixed 1:1 activity ratio; FSH and LH cannot be titrated independently.",
-    ],
+    limitations: ["Fixed 1:1 activity ratio; FSH and LH cannot be titrated independently."],
     clinicalNotes:
       "In women ≥ 35 years and low responders, preparations with LH activity (hMG or rLH addition) offer physiological theca support.",
     availability: "widely-available",
@@ -161,9 +152,7 @@ export const gonadotropinDatabase: GonadotropinEntry[] = [
     ],
     clinicalUse:
       "Adjunctive LH supplementation (typically 75 IU/day) added to r-hFSH from stimulation start or mid-stimulation (day 6).",
-    advantages: [
-      "LH dose can be titrated completely independently of FSH dose.",
-    ],
+    advantages: ["LH dose can be titrated completely independently of FSH dose."],
     limitations: [
       "Requires a second separate injection unless fixed combo is used.",
       "Additional financial cost.",
@@ -189,14 +178,9 @@ export const gonadotropinDatabase: GonadotropinEntry[] = [
       "Not recommended over hMG in GnRH agonist protocols with regards to safety (ESHRE Rec 35)",
       "Routine use in normal responders without LH indication (ESHRE Rec 28)",
     ],
-    clinicalUse:
-      "Single daily injection delivering 150 IU r-hFSH + 75 IU r-hLH.",
-    advantages: [
-      "Single injection delivering both recombinant FSH and recombinant LH.",
-    ],
-    limitations: [
-      "Fixed 2:1 ratio does not allow independent titration of the LH component.",
-    ],
+    clinicalUse: "Single daily injection delivering 150 IU r-hFSH + 75 IU r-hLH.",
+    advantages: ["Single injection delivering both recombinant FSH and recombinant LH."],
+    limitations: ["Fixed 2:1 ratio does not allow independent titration of the LH component."],
     clinicalNotes:
       "Equally recommended to r-hFSH alone in low responders (Rec 29) and women ≥ 35 years (Rec 30).",
     availability: "region-dependent",

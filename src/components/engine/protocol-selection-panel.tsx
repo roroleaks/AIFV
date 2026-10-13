@@ -216,13 +216,23 @@ function ProtocolCard({ option }: { option: ProtocolOptionAssessment }) {
                       {c.mainStatement}
                     </p>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      <Button asChild size="sm" variant="outline" className="h-7 gap-1.5 text-[11px]">
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="outline"
+                        className="h-7 gap-1.5 text-[11px]"
+                      >
                         <Link to="/evidence/$id" params={{ id: c.evidenceId }}>
                           <BookOpen className="size-3.5" /> View source
                         </Link>
                       </Button>
                       {c.url && (
-                        <Button asChild size="sm" variant="ghost" className="h-7 gap-1.5 text-[11px]">
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 gap-1.5 text-[11px]"
+                        >
                           <a href={c.url} target="_blank" rel="noreferrer noopener">
                             <ExternalLink className="size-3.5" /> {c.doi ?? "Publisher"}
                           </a>
@@ -365,7 +375,12 @@ export function ProtocolSelectionSection({ result }: { result: ProtocolSelection
                 {g.items.map((it) => (
                   <div key={it.id} className="flex items-start justify-between gap-3 text-xs">
                     <dt className="text-muted-foreground">{it.label}</dt>
-                    <dd className={cn("text-right font-medium", !it.present && "text-muted-foreground/70 font-normal")}>
+                    <dd
+                      className={cn(
+                        "text-right font-medium",
+                        !it.present && "text-muted-foreground/70 font-normal",
+                      )}
+                    >
                       {it.value}
                     </dd>
                   </div>
@@ -377,17 +392,15 @@ export function ProtocolSelectionSection({ result }: { result: ProtocolSelection
       </Card>
 
       {/* previous response */}
-      <Card
-        icon={History}
-        title="Previous stimulation response"
-        badge={<HistoricalBadge />}
-      >
+      <Card icon={History} title="Previous stimulation response" badge={<HistoricalBadge />}>
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-border/60 bg-muted/30 p-3.5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Predicted poor response (model output)
             </p>
-            <p className="mt-1 text-sm font-semibold">{result.predictedVsObserved.predictedCategory}</p>
+            <p className="mt-1 text-sm font-semibold">
+              {result.predictedVsObserved.predictedCategory}
+            </p>
             <ul className="mt-2 grid gap-1 text-[11px] text-muted-foreground">
               {result.predictedVsObserved.predictedBasis.map((b) => (
                 <li key={b}>• {b}</li>
@@ -604,8 +617,8 @@ export function ProtocolSelectionSection({ result }: { result: ProtocolSelection
         }
       >
         <p className="mb-3 text-xs text-muted-foreground">
-          Everything above is an <strong>evidence review</strong>. The <strong>clinical decision</strong>{" "}
-          below is made and recorded by the treating physician.
+          Everything above is an <strong>evidence review</strong>. The{" "}
+          <strong>clinical decision</strong> below is made and recorded by the treating physician.
         </p>
 
         {decision && !editing && (

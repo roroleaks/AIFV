@@ -30,11 +30,7 @@ import {
 export const PHENOTYPE_ENGINE_VERSION = "1.0.0";
 
 export type ReserveCategory =
-  | "high"
-  | "normal"
-  | "reduced"
-  | "severely-reduced"
-  | "insufficient-data";
+  "high" | "normal" | "reduced" | "severely-reduced" | "insufficient-data";
 
 export const reserveCategoryLabel: Record<ReserveCategory, string> = {
   high: "High ovarian reserve markers",
@@ -72,14 +68,15 @@ export const phenotypeLabels: Record<PhenotypeLabel, string> = {
   "insufficient-data": "Insufficient Data",
 };
 
-export const phenotypeTone: Record<PhenotypeLabel, "green" | "amber" | "red" | "blue" | "violet"> = {
-  "normal-prognosis": "green",
-  "low-prognosis": "amber",
-  "reduced-reserve": "amber",
-  "expected-poor-response": "red",
-  "high-response-risk": "violet",
-  "insufficient-data": "blue",
-};
+export const phenotypeTone: Record<PhenotypeLabel, "green" | "amber" | "red" | "blue" | "violet"> =
+  {
+    "normal-prognosis": "green",
+    "low-prognosis": "amber",
+    "reduced-reserve": "amber",
+    "expected-poor-response": "red",
+    "high-response-risk": "violet",
+    "insufficient-data": "blue",
+  };
 
 export interface PhenotypeMissingItem {
   id: string;
@@ -141,13 +138,16 @@ function buildReservePanel(
   const severe =
     (amh !== null && amh < BOLOGNA_AMH_THRESHOLD) || (afc !== null && afc < BOLOGNA_AFC_THRESHOLD);
   const reduced =
-    (amh !== null && amh < POSEIDON_AMH_THRESHOLD) || (afc !== null && afc < POSEIDON_AFC_THRESHOLD);
+    (amh !== null && amh < POSEIDON_AMH_THRESHOLD) ||
+    (afc !== null && afc < POSEIDON_AFC_THRESHOLD);
   const high = (amh !== null && amh > 3.5) || (afc !== null && afc >= 24);
 
   if (severe) {
     category = "severely-reduced";
     if (amh !== null && amh < BOLOGNA_AMH_THRESHOLD)
-      contributors.push(`AMH ${amh} ng/mL is below the Bologna abnormal-ORT range (0.5–1.1 ng/mL).`);
+      contributors.push(
+        `AMH ${amh} ng/mL is below the Bologna abnormal-ORT range (0.5–1.1 ng/mL).`,
+      );
     if (afc !== null && afc < BOLOGNA_AFC_THRESHOLD)
       contributors.push(`AFC ${afc} is below the Bologna abnormal-ORT range (5–7 follicles).`);
   } else if (reduced) {
@@ -162,8 +162,10 @@ function buildReservePanel(
     if (afc !== null && afc >= 24) contributors.push(`AFC ${afc} is 24 or above.`);
   } else {
     category = "normal";
-    if (amh !== null) contributors.push(`AMH ${amh} ng/mL is at or above the POSEIDON threshold of 1.2 ng/mL.`);
-    if (afc !== null) contributors.push(`AFC ${afc} is at or above the POSEIDON threshold of 5 follicles.`);
+    if (amh !== null)
+      contributors.push(`AMH ${amh} ng/mL is at or above the POSEIDON threshold of 1.2 ng/mL.`);
+    if (afc !== null)
+      contributors.push(`AFC ${afc} is at or above the POSEIDON threshold of 5 follicles.`);
   }
 
   if (fsh !== null) {
@@ -173,7 +175,8 @@ function buildReservePanel(
         : `Basal FSH ${fsh} IU/L is recorded (shown for context).`,
     );
   }
-  if (age !== null) contributors.push(`Female age ${age} years is recorded alongside the biomarkers.`);
+  if (age !== null)
+    contributors.push(`Female age ${age} years is recorded alongside the biomarkers.`);
 
   return { age, amh, afc, fsh, category, contributors, missing };
 }
@@ -246,11 +249,15 @@ export function buildPhenotype(
       `Recorded ovarian reserve biomarkers fall below the published thresholds: ${reserve.contributors[0] ?? "see the ovarian reserve panel"}`,
     );
     if (bologna.status === "incomplete")
-      rationale.push("The Bologna assessment is incomplete, so poor-responder status is not assigned.");
+      rationale.push(
+        "The Bologna assessment is incomplete, so poor-responder status is not assigned.",
+      );
   } else if (context.hyperResponseHistory || reserve.category === "high") {
     phenotype = "high-response-risk";
     if (reserve.category === "high")
-      rationale.push(`Ovarian reserve markers are in the high range: ${reserve.contributors[0] ?? ""}`);
+      rationale.push(
+        `Ovarian reserve markers are in the high range: ${reserve.contributors[0] ?? ""}`,
+      );
     if (context.hyperResponseHistory)
       rationale.push(
         "A previous hyper-response or OHSS episode is documented in the recorded cycle history.",

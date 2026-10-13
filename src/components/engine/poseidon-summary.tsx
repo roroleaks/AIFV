@@ -110,9 +110,19 @@ export function PoseidonSummary({
       </section>
 
       {/* Data validation */}
-      <section className={cn("animate-rise rounded-2xl border p-5", q.tone.replace(/text-[^\s]+/g, ""))}>
+      <section
+        className={cn("animate-rise rounded-2xl border p-5", q.tone.replace(/text-[^\s]+/g, ""))}
+      >
         <div className="flex items-center gap-2">
-          <QIcon className={cn("size-4", q.tone.split(" ").filter((x) => x.startsWith("text-")).join(" "))} />
+          <QIcon
+            className={cn(
+              "size-4",
+              q.tone
+                .split(" ")
+                .filter((x) => x.startsWith("text-"))
+                .join(" "),
+            )}
+          />
           <h3 className="text-sm font-semibold">Data validation — {q.label}</h3>
         </div>
         <p className="mt-2 text-sm text-foreground/80">{q.note}</p>

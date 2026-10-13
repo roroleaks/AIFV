@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { evidenceLibrary, type EvidenceEntry } from "./library";
-import {
-  logHistory,
-  readEvidenceState,
-  writeEvidenceState,
-  type EvidenceUserState,
-} from "./store";
+import { logHistory, readEvidenceState, writeEvidenceState, type EvidenceUserState } from "./store";
 
 /** Shared client-side Evidence Manager state (favorites, notes, imports). */
 export function useEvidenceManager() {

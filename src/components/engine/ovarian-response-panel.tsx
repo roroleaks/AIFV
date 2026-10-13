@@ -92,7 +92,9 @@ function Expandable({
         className="flex w-full items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground print:hidden"
       >
         {label}
-        <ChevronDown className={cn("size-4 transition-transform duration-300", open && "rotate-180")} />
+        <ChevronDown
+          className={cn("size-4 transition-transform duration-300", open && "rotate-180")}
+        />
       </button>
       <div
         className={cn(
@@ -127,7 +129,10 @@ export function ResponseSpectrum({ result }: { result: OvarianResponseResult }) 
       icon={TrendingUp}
       title="Expected response spectrum"
       badge={
-        <Badge variant="outline" className={cn("rounded-full", toneClass[responseCategoryTone[result.category]])}>
+        <Badge
+          variant="outline"
+          className={cn("rounded-full", toneClass[responseCategoryTone[result.category]])}
+        >
           {responseCategoryLabel[result.category]}
         </Badge>
       }
@@ -177,7 +182,12 @@ export function ResponseSpectrum({ result }: { result: OvarianResponseResult }) 
 export function ResponseProfileCard({ result }: { result: OvarianResponseResult }) {
   const tone = responseCategoryTone[result.category];
   return (
-    <section className={cn("animate-rise relative overflow-hidden rounded-2xl border p-6 shadow-soft", toneClass[tone])}>
+    <section
+      className={cn(
+        "animate-rise relative overflow-hidden rounded-2xl border p-6 shadow-soft",
+        toneClass[tone],
+      )}
+    >
       <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-current/10 blur-3xl" />
       <div className="relative">
         <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em]">
@@ -250,7 +260,9 @@ export function ResponseValidationCard({ result }: { result: OvarianResponseResu
           )}
           {v.abnormal.length > 0 && (
             <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 px-3.5 py-2.5">
-              <p className="text-xs font-semibold text-rose-600 dark:text-rose-400">Abnormal values</p>
+              <p className="text-xs font-semibold text-rose-600 dark:text-rose-400">
+                Abnormal values
+              </p>
               <ul className="mt-1 grid gap-1 text-xs text-foreground/80">
                 {v.abnormal.map((c, i) => (
                   <li key={i}>• {c}</li>
@@ -318,7 +330,10 @@ export function ResponseRiskCard({ result }: { result: OvarianResponseResult }) 
       ) : (
         <ul className="grid gap-2">
           {result.risks.map((r) => (
-            <li key={r.id} className={cn("rounded-xl border px-3.5 py-2.5", severityClass[r.severity])}>
+            <li
+              key={r.id}
+              className={cn("rounded-xl border px-3.5 py-2.5", severityClass[r.severity])}
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-foreground">{r.label}</p>
                 <Badge variant="secondary" className="rounded-lg text-[10px] uppercase">
@@ -417,7 +432,10 @@ export function ResponseHandoffCard({ result }: { result: OvarianResponseResult 
             className="flex items-center gap-2 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5 text-sm"
           >
             {m.name}
-            <Badge variant="secondary" className="ml-auto shrink-0 rounded-lg text-[10px] uppercase">
+            <Badge
+              variant="secondary"
+              className="ml-auto shrink-0 rounded-lg text-[10px] uppercase"
+            >
               Pending
             </Badge>
           </li>

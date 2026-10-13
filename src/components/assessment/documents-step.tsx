@@ -1,13 +1,5 @@
 import { useRef, useState } from "react";
-import {
-  Download,
-  FileImage,
-  FileText,
-  Files,
-  Pencil,
-  Trash2,
-  UploadCloud,
-} from "lucide-react";
+import { Download, FileImage, FileText, Files, Pencil, Trash2, UploadCloud } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,8 +45,7 @@ export function DocumentsStep({
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const visible =
-    filter === "All" ? documents : documents.filter((d) => d.category === filter);
+  const visible = filter === "All" ? documents : documents.filter((d) => d.category === filter);
 
   const handleFiles = (list: FileList | null) => {
     if (!list || list.length === 0) return;
@@ -126,7 +117,8 @@ export function DocumentsStep({
           {documents.length === 1 ? "" : "s"}
         </Badge>
         {["All", ...documentCategories].map((c) => {
-          const count = c === "All" ? documents.length : documents.filter((d) => d.category === c).length;
+          const count =
+            c === "All" ? documents.length : documents.filter((d) => d.category === c).length;
           if (c !== "All" && count === 0) return null;
           return (
             <button
@@ -135,7 +127,9 @@ export function DocumentsStep({
               onClick={() => setFilter(c)}
               className={cn(
                 "rounded-lg px-2.5 py-1 text-xs font-medium transition-colors",
-                filter === c ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-accent",
+                filter === c
+                  ? "bg-primary-soft text-primary"
+                  : "text-muted-foreground hover:bg-accent",
               )}
             >
               {c} ({count})

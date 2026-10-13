@@ -88,7 +88,11 @@ export function useDoseEvents(patientId: string) {
     (event: Omit<DoseEvent, "id" | "recordedAt">) => {
       const store = read();
       const list = store[patientId] ?? [];
-      const next: DoseEvent = { ...event, id: newDoseEventId(), recordedAt: new Date().toISOString() };
+      const next: DoseEvent = {
+        ...event,
+        id: newDoseEventId(),
+        recordedAt: new Date().toISOString(),
+      };
       write({ ...store, [patientId]: [...list, next] });
     },
     [patientId],

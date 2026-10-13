@@ -27,10 +27,7 @@ export const executionModeLabel: Record<ExecutionMode, string> = {
 
 export type EngineCategory = "classification" | "prediction" | "treatment" | "reporting";
 
-export type EngineEvidenceStatus =
-  | "EVIDENCE_TRANSCRIBED"
-  | "EVIDENCE_PENDING"
-  | "PARTIAL_EVIDENCE";
+export type EngineEvidenceStatus = "EVIDENCE_TRANSCRIBED" | "EVIDENCE_PENDING" | "PARTIAL_EVIDENCE";
 
 export const engineEvidenceStatusLabel: Record<EngineEvidenceStatus, string> = {
   EVIDENCE_TRANSCRIBED: "Published algorithm transcribed",
@@ -120,7 +117,8 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     category: "treatment",
     gateId: "protocol-recommendation",
     testImplementation: true,
-    logicSource: "ESHRE 2025 (Rec 14, 18, 19, 21, 22, 23, 24) and Cochrane 2016 protocol recommendation rules.",
+    logicSource:
+      "ESHRE 2025 (Rec 14, 18, 19, 21, 22, 23, 24) and Cochrane 2016 protocol recommendation rules.",
     evidenceStatus: "EVIDENCE_TRANSCRIBED",
     evidenceIds: ["eshre-2025-ovarian-stimulation-update", "asrm-2016-ohss-prevention"],
     outputs: ["Recommended protocol", "Alternative protocols", "Clinical rationale"],
@@ -200,8 +198,18 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     logicSource:
       "ESHRE 2025 (Rec 43, 44), ASRM 2016, and POSEIDON mid-cycle dose adjustment & kinetic response rules.",
     evidenceStatus: "EVIDENCE_TRANSCRIBED",
-    evidenceIds: ["eshre-2025-ovarian-stimulation-update", "asrm-2016-ohss-prevention", "poseidon-2016-alviggi"],
-    outputs: ["Dose maintenance", "Dose step-up", "Dose step-down", "Coasting", "Trigger transition"],
+    evidenceIds: [
+      "eshre-2025-ovarian-stimulation-update",
+      "asrm-2016-ohss-prevention",
+      "poseidon-2016-alviggi",
+    ],
+    outputs: [
+      "Dose maintenance",
+      "Dose step-up",
+      "Dose step-down",
+      "Coasting",
+      "Trigger transition",
+    ],
     missingForProduction: [],
     version: "1.0.0",
   },
@@ -212,9 +220,14 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     category: "treatment",
     gateId: "trigger-strategy",
     testImplementation: true,
-    logicSource: "Evidence-based trigger readiness criteria and selection matrix (ESHRE 2025 / ASRM 2016 / Cochrane 2014).",
+    logicSource:
+      "Evidence-based trigger readiness criteria and selection matrix (ESHRE 2025 / ASRM 2016 / Cochrane 2014).",
     evidenceStatus: "EVIDENCE_TRANSCRIBED",
-    evidenceIds: ["cochrane-2014-agonist-trigger", "asrm-2016-ohss-prevention", "eshre-2025-ovarian-stimulation-update"],
+    evidenceIds: [
+      "cochrane-2014-agonist-trigger",
+      "asrm-2016-ohss-prevention",
+      "eshre-2025-ovarian-stimulation-update",
+    ],
     outputs: ["Trigger agent", "Trigger timing", "Trigger dose"],
     missingForProduction: [],
     version: "1.0.0",
@@ -226,9 +239,14 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     category: "treatment",
     gateId: "freeze-all",
     testImplementation: true,
-    logicSource: "ASRM 2016 and ESHRE 2025 OHSS risk stratification cutoffs and elective freeze-all decision algorithm.",
+    logicSource:
+      "ASRM 2016 and ESHRE 2025 OHSS risk stratification cutoffs and elective freeze-all decision algorithm.",
     evidenceStatus: "EVIDENCE_TRANSCRIBED",
-    evidenceIds: ["asrm-2016-ohss-prevention", "nejm-2016-freeze-all-pcos", "eshre-2025-ovarian-stimulation-update"],
+    evidenceIds: [
+      "asrm-2016-ohss-prevention",
+      "nejm-2016-freeze-all-pcos",
+      "eshre-2025-ovarian-stimulation-update",
+    ],
     outputs: ["Freeze-all indication", "OHSS risk decision"],
     missingForProduction: [],
     version: "1.0.0",
@@ -251,8 +269,9 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
 export const engineActivationById = (id: string): EngineActivationRecord | undefined =>
   engineActivationRegistry.find((e) => e.id === id);
 
-export const engineActivationByGate = (gate: TreatmentAlgorithmId): EngineActivationRecord | undefined =>
-  engineActivationRegistry.find((e) => e.gateId === gate);
+export const engineActivationByGate = (
+  gate: TreatmentAlgorithmId,
+): EngineActivationRecord | undefined => engineActivationRegistry.find((e) => e.gateId === gate);
 
 /* ------------------------------------------------------------------ store */
 
@@ -366,10 +385,7 @@ export function useEngineActivation() {
     () => initial,
   );
 
-  const setMode = useCallback(
-    (mode: ExecutionMode, by?: string) => setExecutionMode(mode, by),
-    [],
-  );
+  const setMode = useCallback((mode: ExecutionMode, by?: string) => setExecutionMode(mode, by), []);
   const toggleEngine = useCallback(
     (id: string, enabled: boolean) => setEngineEnabled(id, enabled),
     [],

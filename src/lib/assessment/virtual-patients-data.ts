@@ -1,4 +1,5 @@
 import type { PatientRecord } from "./patients";
+import type { CycleRecord } from "./use-assessment";
 import type { MonitoringVisit } from "../engine/monitoring";
 
 export const DEFAULT_VIRTUAL_PATIENTS: PatientRecord[] = [
@@ -71,7 +72,7 @@ export const DEFAULT_VIRTUAL_PATIENTS: PatientRecord[] = [
         transferred: 1,
         frozen: 3,
         outcome: "Biochemical pregnancy",
-      } as any,
+      } as CycleRecord,
     ],
   },
   {
@@ -141,7 +142,7 @@ export const DEFAULT_VIRTUAL_PATIENTS: PatientRecord[] = [
         transferred: 1,
         frozen: 0,
         outcome: "Negative hCG",
-      } as any,
+      } as CycleRecord,
     ],
   },
   {
@@ -219,7 +220,7 @@ export const DEFAULT_VIRTUAL_PATIENTS: PatientRecord[] = [
         frozen: 10,
         ohss: "Moderate",
         outcome: "Freeze-all due to OHSS risk",
-      } as any,
+      } as CycleRecord,
     ],
   },
 ];
@@ -381,7 +382,8 @@ export const DEFAULT_VIRTUAL_MONITORING: Record<string, MonitoringVisit[]> = {
       endometrium: 12.0,
       dailyDose: 125,
       medication: "rFSH (125 IU) + Antagonist",
-      notes: "Day 10: E2 5950 pg/mL, 8 follicles >= 17mm. Mandatory Freeze-all & GnRH agonist trigger",
+      notes:
+        "Day 10: E2 5950 pg/mL, 8 follicles >= 17mm. Mandatory Freeze-all & GnRH agonist trigger",
     },
   ],
 };

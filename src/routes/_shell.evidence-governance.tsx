@@ -42,7 +42,8 @@ export const Route = createFileRoute("/_shell/evidence-governance")({
       { property: "og:title", content: "Update Evidence Center & Governance | IVF Ai Calc" },
       {
         property: "og:description",
-        content: "Continuous evidence update, versioning, impact analysis and physician-approved activation.",
+        content:
+          "Continuous evidence update, versioning, impact analysis and physician-approved activation.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -76,7 +77,9 @@ function EvidenceGovernancePage() {
         description: `Matches “${result.duplicate.title}”. The record was queued and flagged.`,
       });
     } else {
-      toast.success("Document captured", { description: "Queued at stage E2 for physician review." });
+      toast.success("Document captured", {
+        description: "Queued at stage E2 for physician review.",
+      });
     }
   };
 
@@ -147,7 +150,10 @@ function EvidenceGovernancePage() {
 
       <ClinicalSafetyBanner />
 
-      <SectionCard title="Capture a document" description="PDF upload, URL / DOI import, manual entry or assisted search.">
+      <SectionCard
+        title="Capture a document"
+        description="PDF upload, URL / DOI import, manual entry or assisted search."
+      >
         <Tabs defaultValue="pdf">
           <TabsList>
             <TabsTrigger value="pdf">PDF upload</TabsTrigger>
@@ -193,20 +199,36 @@ function EvidenceGovernancePage() {
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="sm:col-span-3">
                 <Label htmlFor="t">Title</Label>
-                <Input id="t" value={manual.title} onChange={(e) => setManual({ ...manual, title: e.target.value })} />
+                <Input
+                  id="t"
+                  value={manual.title}
+                  onChange={(e) => setManual({ ...manual, title: e.target.value })}
+                />
               </div>
               <div>
                 <Label htmlFor="s">Society / journal</Label>
-                <Input id="s" value={manual.society} onChange={(e) => setManual({ ...manual, society: e.target.value })} />
+                <Input
+                  id="s"
+                  value={manual.society}
+                  onChange={(e) => setManual({ ...manual, society: e.target.value })}
+                />
               </div>
               <div>
                 <Label htmlFor="y">Year</Label>
-                <Input id="y" value={manual.year} onChange={(e) => setManual({ ...manual, year: e.target.value })} />
+                <Input
+                  id="y"
+                  value={manual.year}
+                  onChange={(e) => setManual({ ...manual, year: e.target.value })}
+                />
               </div>
             </div>
             <div>
               <Label htmlFor="n">Scope notes</Label>
-              <Textarea id="n" value={manual.notes} onChange={(e) => setManual({ ...manual, notes: e.target.value })} />
+              <Textarea
+                id="n"
+                value={manual.notes}
+                onChange={(e) => setManual({ ...manual, notes: e.target.value })}
+              />
             </div>
             <Button
               disabled={busy || manual.title.trim().length < 3}
@@ -239,10 +261,15 @@ function EvidenceGovernancePage() {
             <Button onClick={() => void onSearch()} disabled={busy} className="gap-2">
               <Search className="size-4" /> Find candidate references
             </Button>
-            {searchMessage ? <p className="text-xs text-muted-foreground">{searchMessage}</p> : null}
+            {searchMessage ? (
+              <p className="text-xs text-muted-foreground">{searchMessage}</p>
+            ) : null}
             <ul className="grid gap-2">
               {candidates.map((c) => (
-                <li key={`${c.title}-${c.sourceUrl}`} className="rounded-xl border border-border/70 p-3 text-sm">
+                <li
+                  key={`${c.title}-${c.sourceUrl}`}
+                  className="rounded-xl border border-border/70 p-3 text-sm"
+                >
                   <p className="font-medium">{c.title}</p>
                   <p className="text-xs text-muted-foreground">
                     {c.society} {c.year ? `· ${c.year}` : ""} · {c.reason}
@@ -268,7 +295,8 @@ function EvidenceGovernancePage() {
                           channel: "ASSISTED_SEARCH",
                           sourceRef: c.sourceUrl,
                           contentHash: hash,
-                          notes: "Unverified candidate — verify against the publisher before review.",
+                          notes:
+                            "Unverified candidate — verify against the publisher before review.",
                         });
                       }}
                     >
@@ -303,7 +331,9 @@ function EvidenceGovernancePage() {
 
       <SectionCard
         title="Review queue"
-        description={hydrated ? `${pending.length} document(s) awaiting physician review.` : "Loading…"}
+        description={
+          hydrated ? `${pending.length} document(s) awaiting physician review.` : "Loading…"
+        }
       >
         {state.records.length === 0 ? (
           <EmptyPlaceholder
@@ -314,7 +344,10 @@ function EvidenceGovernancePage() {
           <ul className="grid gap-3">
             {state.records.map((record) => {
               const impact = analyseImpact(record, []);
-              const nextIndex = Math.min(lifecycleIndex(record.stage) + 1, evidenceLifecycle.length - 1);
+              const nextIndex = Math.min(
+                lifecycleIndex(record.stage) + 1,
+                evidenceLifecycle.length - 1,
+              );
               const nextStage = evidenceLifecycle[nextIndex]!.id as LifecycleStage;
               return (
                 <li key={record.id} className="rounded-xl border border-border/70 p-4">
@@ -334,7 +367,10 @@ function EvidenceGovernancePage() {
                         {record.decision}
                       </Badge>
                       {record.duplicateOf ? (
-                        <Badge variant="outline" className="rounded-lg border-amber-500/50 text-[10px] uppercase">
+                        <Badge
+                          variant="outline"
+                          className="rounded-lg border-amber-500/50 text-[10px] uppercase"
+                        >
                           Duplicate
                         </Badge>
                       ) : null}
@@ -381,18 +417,27 @@ function EvidenceGovernancePage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => decide(record.id, "rejected", "Rejected by the reviewing physician.")}
+                      onClick={() =>
+                        decide(record.id, "rejected", "Rejected by the reviewing physician.")
+                      }
                     >
                       Reject
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => decide(record.id, "superseded", "Marked as superseded by a newer version.")}
+                      onClick={() =>
+                        decide(record.id, "superseded", "Marked as superseded by a newer version.")
+                      }
                     >
                       Mark superseded
                     </Button>
-                    <Button size="sm" variant="ghost" className="gap-1" onClick={() => remove(record.id)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="gap-1"
+                      onClick={() => remove(record.id)}
+                    >
                       <Trash2 className="size-3.5" /> Remove
                     </Button>
                   </div>
@@ -403,7 +448,10 @@ function EvidenceGovernancePage() {
         )}
       </SectionCard>
 
-      <SectionCard title="Governance log" description="Append-only record of every governance action.">
+      <SectionCard
+        title="Governance log"
+        description="Append-only record of every governance action."
+      >
         {state.log.length === 0 ? (
           <EmptyPlaceholder label="No governance action recorded yet" />
         ) : (

@@ -16,10 +16,7 @@ const LIMIT = 200;
 const AUDIT_LIMIT = 400;
 
 export type StartingDoseDecisionKind =
-  | "physician-selected"
-  | "defer"
-  | "evidence-insufficient"
-  | "need-more-information";
+  "physician-selected" | "defer" | "evidence-insufficient" | "need-more-information";
 
 export const startingDoseDecisionLabel: Record<StartingDoseDecisionKind, string> = {
   "physician-selected": "Physician-selected starting dose",

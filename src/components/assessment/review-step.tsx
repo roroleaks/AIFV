@@ -41,8 +41,8 @@ export function ReviewStep({
             <div>
               <h2 className="text-xl font-bold">Assessment Complete</h2>
               <p className="mt-1 max-w-xl text-sm text-muted-foreground">
-                All collected information is stored and ready for the future Clinical Decision Engine.
-                No calculations, scores or recommendations are produced in this release.
+                All collected information is stored and ready for the future Clinical Decision
+                Engine. No calculations, scores or recommendations are produced in this release.
               </p>
             </div>
           </div>
@@ -91,7 +91,11 @@ export function ReviewStep({
                         pct === 100 && "bg-emerald-soft text-emerald",
                       )}
                     >
-                      {pct === 100 ? <CheckCircle2 className="mr-1 size-3" /> : <CircleDot className="mr-1 size-3" />}
+                      {pct === 100 ? (
+                        <CheckCircle2 className="mr-1 size-3" />
+                      ) : (
+                        <CircleDot className="mr-1 size-3" />
+                      )}
                       {prog?.filled ?? 0}/{prog?.total ?? 0} fields
                     </Badge>
                   </div>
@@ -117,7 +121,10 @@ export function ReviewStep({
                   <li key={step.id} className="flex flex-wrap items-center gap-2 text-xs">
                     <span className="font-semibold">{step.title}:</span>
                     <span className="text-muted-foreground">
-                      {missing.slice(0, 6).map((m) => m.label).join(", ")}
+                      {missing
+                        .slice(0, 6)
+                        .map((m) => m.label)
+                        .join(", ")}
                       {missing.length > 6 ? ` +${missing.length - 6} more` : ""}
                     </span>
                     <Button
@@ -202,17 +209,21 @@ export function ReviewStep({
             ) : (
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {draft.cycles.map((cycle, i) => (
-                  <div key={cycle.id} className="rounded-xl border border-border/70 bg-background/60 p-4">
+                  <div
+                    key={cycle.id}
+                    className="rounded-xl border border-border/70 bg-background/60 p-4"
+                  >
                     <p className="text-sm font-semibold">
                       Cycle {i + 1}
                       {cycle["cycleDate"] ? ` — ${String(cycle["cycleDate"])}` : ""}
                     </p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      {[cycle["clinic"], cycle["protocol"]].filter(Boolean).join(" · ") || "Details pending"}
+                      {[cycle["clinic"], cycle["protocol"]].filter(Boolean).join(" · ") ||
+                        "Details pending"}
                     </p>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Retrieved: {cycle["retrieved"] ?? "—"} · MII: {cycle["mii"] ?? "—"} · Blastocysts:{" "}
-                      {cycle["blastocysts"] ?? "—"}
+                      Retrieved: {cycle["retrieved"] ?? "—"} · MII: {cycle["mii"] ?? "—"} ·
+                      Blastocysts: {cycle["blastocysts"] ?? "—"}
                     </p>
                   </div>
                 ))}

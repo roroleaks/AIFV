@@ -83,7 +83,6 @@ export const reportSections: ReportSection[] = [
     sourceModuleId: "dose-adjustment",
   },
 
-
   {
     id: "cycle-completion",
     title: "Cycle Completion & Safety",
@@ -111,6 +110,16 @@ export const reportSections: ReportSection[] = [
     description: "Full citation list in the clinic's chosen format.",
     sourceModuleId: "evidence-explanation",
   },
-  { id: "doctor-notes", title: "Doctor Notes", description: "Free-text consultant commentary.", manual: true },
-  { id: "signature", title: "Signature", description: "Consultant signature and date.", manual: true },
+  {
+    id: "doctor-notes",
+    title: "Doctor Notes",
+    description: "Free-text consultant commentary.",
+    manual: true,
+  },
+  {
+    id: "signature",
+    title: "Signature",
+    description: "Consultant signature and date.",
+    manual: true,
+  },
 ];

@@ -8,7 +8,6 @@ import {
   ClipboardCopy,
   ExternalLink,
   FileDown,
-
   Info,
   Printer,
   ShieldCheck,
@@ -86,7 +85,11 @@ export function PoseidonCard({
 
   const section = useMemo(() => buildPoseidonReportSection(result), [result]);
   const citations = useMemo(
-    () => result.evidence.map((id) => { const e = findEvidence(id); return e ? formatCitation(e) : id; }),
+    () =>
+      result.evidence.map((id) => {
+        const e = findEvidence(id);
+        return e ? formatCitation(e) : id;
+      }),
     [result.evidence],
   );
 
@@ -120,12 +123,13 @@ export function PoseidonCard({
         <div className="relative grid gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className={cn("rounded-full", poseidonToneClass[result.tone])}>
+              <Badge
+                variant="outline"
+                className={cn("rounded-full", poseidonToneClass[result.tone])}
+              >
                 {poseidonStatusLabels[result.status]}
               </Badge>
-              {patientName && (
-                <span className="text-xs text-muted-foreground">{patientName}</span>
-              )}
+              {patientName && <span className="text-xs text-muted-foreground">{patientName}</span>}
             </div>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
               {result.headline}
@@ -160,7 +164,6 @@ export function PoseidonCard({
               </span>
             </p>
           </div>
-
         </div>
 
         <div className="relative mt-5 flex flex-wrap gap-2 print:hidden">
@@ -177,7 +180,6 @@ export function PoseidonCard({
           <Button size="sm" variant="outline" onClick={copy}>
             <ClipboardCopy className="size-4" /> {copied ? "Copied" : "Copy to final report"}
           </Button>
-
         </div>
       </section>
 
@@ -270,11 +272,15 @@ export function PoseidonCard({
                 ["Previous stimulations", String(result.inputs.previousCycles)],
                 [
                   "Lowest oocyte yield",
-                  result.inputs.lowestRetrieved === null ? "—" : String(result.inputs.lowestRetrieved),
+                  result.inputs.lowestRetrieved === null
+                    ? "—"
+                    : String(result.inputs.lowestRetrieved),
                 ],
                 [
                   "Most recent yield",
-                  result.inputs.latestRetrieved === null ? "—" : String(result.inputs.latestRetrieved),
+                  result.inputs.latestRetrieved === null
+                    ? "—"
+                    : String(result.inputs.latestRetrieved),
                 ],
                 ["Last cycle outcome", result.inputs.latestOutcome ?? "—"],
                 [
@@ -282,7 +288,10 @@ export function PoseidonCard({
                   result.inputs.documentedPoorResponse ? "Yes" : "No",
                 ],
               ].map(([label, value]) => (
-                <div key={label} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
+                <div
+                  key={label}
+                  className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
+                >
                   <dt className="text-xs text-muted-foreground">{label}</dt>
                   <dd className="text-sm font-medium">{value}</dd>
                 </div>

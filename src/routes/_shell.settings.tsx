@@ -55,7 +55,11 @@ function SettingsPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="clinic-name">Clinic name</Label>
-              <Input id="clinic-name" placeholder="e.g. Nile Fertility Centre" className="rounded-xl" />
+              <Input
+                id="clinic-name"
+                placeholder="e.g. Nile Fertility Centre"
+                className="rounded-xl"
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="country">Country</Label>

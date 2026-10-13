@@ -23,7 +23,12 @@ export const Route = createFileRoute("/_shell/calculator")({
   component: CalculatorPage,
 });
 
-const modules = ["Ovarian Reserve Inputs", "Stimulation Parameters", "Response Projection", "Risk Panel"];
+const modules = [
+  "Ovarian Reserve Inputs",
+  "Stimulation Parameters",
+  "Response Projection",
+  "Risk Panel",
+];
 
 function CalculatorPage() {
   return (

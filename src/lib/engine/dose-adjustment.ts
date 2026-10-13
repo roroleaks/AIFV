@@ -94,9 +94,11 @@ export const doseAdjustmentRules: DoseAdjustmentRule[] = [
     gonadotropin: "r-hFSH or hMG",
     stimulationDay: "Day 5 onwards",
     requiredVariables: ["Stimulation day", "Largest follicle", "Follicles >= 10 mm", "Estradiol"],
-    threshold: "Steady follicular cohort growth (4–15 follicles >= 10 mm, E2 progressing 150–300 pg/mL per mature follicle)",
+    threshold:
+      "Steady follicular cohort growth (4–15 follicles >= 10 mm, E2 progressing 150–300 pg/mL per mature follicle)",
     comparisonOperator: "range",
-    action: "Maintain current daily gonadotropin dose. Routine dose adjustment is not recommended per ESHRE 2025 Rec 43.",
+    action:
+      "Maintain current daily gonadotropin dose. Routine dose adjustment is not recommended per ESHRE 2025 Rec 43.",
     doseChange: "0 IU/day (No change)",
     maximumChange: "0 IU/day",
     minimumDose: "100 IU/day",
@@ -110,7 +112,8 @@ export const doseAdjustmentRules: DoseAdjustmentRule[] = [
   },
   {
     ruleId: "hypo-response-dose-titration",
-    ruleName: "Hypo-Response / Slow Follicular Recruitment — Step-Up Titration (POSEIDON / ESHRE Rec 20)",
+    ruleName:
+      "Hypo-Response / Slow Follicular Recruitment — Step-Up Titration (POSEIDON / ESHRE Rec 20)",
     source: "POSEIDON Group Stratification (Alviggi et al., 2016) / ESHRE 2025 Rec 20",
     publication: "Fertility and Sterility / Human Reproduction",
     year: 2016,
@@ -121,7 +124,8 @@ export const doseAdjustmentRules: DoseAdjustmentRule[] = [
     gonadotropin: "r-hFSH or hMG (or addition of LH activity)",
     stimulationDay: "Day 5 to Day 8",
     requiredVariables: ["Stimulation day", "Largest follicle", "Follicles >= 10 mm", "Estradiol"],
-    threshold: "Stimulation Day >= 5 with lead follicle < 10 mm OR <= 2 follicles >= 10 mm OR E2 < 180 pg/mL",
+    threshold:
+      "Stimulation Day >= 5 with lead follicle < 10 mm OR <= 2 follicles >= 10 mm OR E2 < 180 pg/mL",
     comparisonOperator: "<",
     action:
       "Increase gonadotropin dose by +50 to +75 IU/day up to maximum ceiling of 300 IU/day (never exceed 300 IU/day per ESHRE Rec 20). If already at 300 IU/day, maintain dose and assess follicular viability.",
@@ -138,18 +142,21 @@ export const doseAdjustmentRules: DoseAdjustmentRule[] = [
   },
   {
     ruleId: "hyper-response-dose-reduction",
-    ruleName: "Excessive Follicular Cohort / Rapid Estradiol Surge — Step-Down / Coasting (ASRM 2016 / ESHRE 2025)",
+    ruleName:
+      "Excessive Follicular Cohort / Rapid Estradiol Surge — Step-Down / Coasting (ASRM 2016 / ESHRE 2025)",
     source: "ASRM OHSS Prevention Guideline (2016) / ESHRE 2025 Guideline Update",
     publication: "Fertility and Sterility / Human Reproduction",
     year: 2016,
     doi: "10.1016/j.fertnstert.2016.08.048",
     link: "https://doi.org/10.1016/j.fertnstert.2016.08.048",
-    population: "Predicted high responders and patients exhibiting explosive follicular kinetics or OHSS hazard",
+    population:
+      "Predicted high responders and patients exhibiting explosive follicular kinetics or OHSS hazard",
     protocol: "GnRH antagonist protocol",
     gonadotropin: "r-hFSH or hMG",
     stimulationDay: "Day 5 onwards",
     requiredVariables: ["Follicles >= 10 mm", "Estradiol", "Daily dose"],
-    threshold: ">= 18 follicles >= 10 mm OR Estradiol > 3000 pg/mL on Day 6–8 (or > 4000 pg/mL approaching trigger)",
+    threshold:
+      ">= 18 follicles >= 10 mm OR Estradiol > 3000 pg/mL on Day 6–8 (or > 4000 pg/mL approaching trigger)",
     comparisonOperator: ">=",
     action:
       "Reduce daily gonadotropin dose by 25–50 IU/day (floor 75–100 IU/day). If E2 > 4000–5000 pg/mL, consider coasting for 1–2 days while continuing antagonist. Prepare GnRH agonist trigger and elective freeze-all.",
@@ -168,7 +175,8 @@ export const doseAdjustmentRules: DoseAdjustmentRule[] = [
   },
   {
     ruleId: "trigger-readiness-completion",
-    ruleName: "Cohort Maturation Reached — Discontinue Gonadotropins & Trigger (ESHRE 2025 Rec 83/84)",
+    ruleName:
+      "Cohort Maturation Reached — Discontinue Gonadotropins & Trigger (ESHRE 2025 Rec 83/84)",
     source: "ESHRE Ovarian Stimulation Guideline 2025 (Rec 83, 84)",
     publication: "Human Reproduction",
     year: 2025,
@@ -242,7 +250,8 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
       currentDoseSource: "not-recorded",
       currentMedication: "Not recorded",
       stimulationDay: null,
-      message: "No monitoring visit data available to evaluate follicular kinetics or dose adjustments.",
+      message:
+        "No monitoring visit data available to evaluate follicular kinetics or dose adjustments.",
       registeredRules: doseAdjustmentRules,
       version: DOSE_ADJUSTMENT_ENGINE_VERSION,
     };
@@ -263,7 +272,7 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
   const day = latest.day;
   const currDose = latest.dailyDose;
   const largest = latest.largestFollicle;
-  const f10 = latest.follicles10 ?? (latest.follicleCount ?? null);
+  const f10 = latest.follicles10 ?? latest.follicleCount ?? null;
   const f14 = latest.follicles14 ?? 0;
   const f17 = latest.follicles17 ?? 0;
   const e2 = latest.estradiol;
@@ -301,10 +310,12 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
       (e2 !== null && e2 < 180 && day >= 5));
 
   // 4. Initial phase (Day < 5)
-  const isTooEarly = !isTriggerReady && !isHyperResponse && !isHypoResponse && day !== null && day < 5;
+  const isTooEarly =
+    !isTriggerReady && !isHyperResponse && !isHypoResponse && day !== null && day < 5;
 
   if (isTriggerReady) {
-    firedRule = doseAdjustmentRules.find((r) => r.ruleId === "trigger-readiness-completion") ?? null;
+    firedRule =
+      doseAdjustmentRules.find((r) => r.ruleId === "trigger-readiness-completion") ?? null;
     proposedAction = "PROCEED TO TRIGGER — Discontinue daily gonadotropins";
     actionCategory = "TRIGGER";
     calculatedProposedDose = 0;
@@ -313,7 +324,8 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
     message =
       "Trigger readiness achieved: Discontinue gonadotropin stimulation and proceed to final oocyte maturation trigger.";
   } else if (isHyperResponse) {
-    firedRule = doseAdjustmentRules.find((r) => r.ruleId === "hyper-response-dose-reduction") ?? null;
+    firedRule =
+      doseAdjustmentRules.find((r) => r.ruleId === "hyper-response-dose-reduction") ?? null;
     if (e2 !== null && e2 >= 4500 && (largest === null || largest < 17)) {
       proposedAction = "COASTING (1–2 days) & STEP-DOWN DOSE";
       actionCategory = "COAST";
@@ -332,7 +344,8 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
         "Excessive follicular recruitment detected. Step-down daily gonadotropin dose by 25–50 IU/day to control follicular velocity.";
     }
   } else if (isHypoResponse) {
-    firedRule = doseAdjustmentRules.find((r) => r.ruleId === "hypo-response-dose-titration") ?? null;
+    firedRule =
+      doseAdjustmentRules.find((r) => r.ruleId === "hypo-response-dose-titration") ?? null;
     if (currDose !== null && currDose >= 300) {
       proposedAction = "MAINTAIN 300 IU/DAY CEILING (Do not exceed per ESHRE Rec 20)";
       actionCategory = "MAINTAIN";
@@ -351,7 +364,8 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
         "Suboptimal response: Slow follicular recruitment. Step-up dose titration (+50 to +75 IU/day, capped at 300 IU/day) recommended.";
     }
   } else if (isTooEarly) {
-    firedRule = doseAdjustmentRules.find((r) => r.ruleId === "eshre-steady-response-maintain-dose") ?? null;
+    firedRule =
+      doseAdjustmentRules.find((r) => r.ruleId === "eshre-steady-response-maintain-dose") ?? null;
     proposedAction = "MAINTAIN CURRENT DOSE (Initial recruitment phase)";
     actionCategory = "MAINTAIN";
     calculatedProposedDose = currDose;
@@ -361,13 +375,15 @@ export function evaluateDoseAdjustment(latest: MonitoringVisit | null): DoseAdju
       "Initial recruitment phase: Maintain current starting dose until first formal folliculometry review on Day 5/6.";
   } else {
     // Steady Appropriate Progression
-    firedRule = doseAdjustmentRules.find((r) => r.ruleId === "eshre-steady-response-maintain-dose") ?? null;
+    firedRule =
+      doseAdjustmentRules.find((r) => r.ruleId === "eshre-steady-response-maintain-dose") ?? null;
     proposedAction = "MAINTAIN CURRENT DOSE (Steady follicular kinetics)";
     actionCategory = "MAINTAIN";
     calculatedProposedDose = currDose;
     rationale =
       "Follicular recruitment and estradiol kinetics are progressing steadily within expected therapeutic targets. Per ESHRE 2025 Rec 43 ('Adjustment of the gonadotrophin dose in the mid-stimulation phase is probably not recommended'), routine dose adjustment is not advised when response is appropriate. Maintain current daily dose.";
-    message = "Steady follicular progression: Maintain current gonadotropin dose per ESHRE 2025 Rec 43.";
+    message =
+      "Steady follicular progression: Maintain current gonadotropin dose per ESHRE 2025 Rec 43.";
   }
 
   const proposedDose = isGateActive

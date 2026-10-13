@@ -42,7 +42,10 @@ export function TimelineStep({
     <div className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-6">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-2xl border border-border/70 bg-card p-4 shadow-soft">
+          <div
+            key={s.label}
+            className="rounded-2xl border border-border/70 bg-card p-4 shadow-soft"
+          >
             <p className="text-xs text-muted-foreground">{s.label}</p>
             <p className="mt-1 text-xl font-semibold tracking-tight">{s.value}</p>
           </div>
@@ -55,7 +58,8 @@ export function TimelineStep({
             <CalendarClock className="mx-auto size-6 text-muted-foreground" />
             <p className="mt-3 text-sm font-medium">Timeline is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Events appear automatically as reproductive history, procedures and cycles are entered.
+              Events appear automatically as reproductive history, procedures and cycles are
+              entered.
             </p>
           </div>
         </div>

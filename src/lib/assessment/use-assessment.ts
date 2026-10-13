@@ -60,7 +60,6 @@ const serialise = (draft: AssessmentDraft, updatedAt: string) =>
     updatedAt,
   });
 
-
 const isFilled = (v: FieldValue) =>
   Array.isArray(v) ? v.length > 0 : v !== undefined && v !== null && String(v).trim() !== "";
 
@@ -238,4 +237,3 @@ export function useAssessment() {
     isFilled,
   };
 }
-

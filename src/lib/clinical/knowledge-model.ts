@@ -27,7 +27,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "ovarian-reserve",
     name: "Ovarian Reserve Classification",
-    scope: "Descriptive classification of ovarian reserve markers against published reference ranges.",
+    scope:
+      "Descriptive classification of ovarian reserve markers against published reference ranges.",
     inputs: ["age", "amh", "afcTotal", "fsh", "lh", "estradiol"],
     outputs: ["Reserve category", "Marker concordance flags"],
     evidence: ["eshre-2020-ovarian-stimulation"],
@@ -36,7 +37,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "poseidon",
     name: "POSEIDON Classification",
-    scope: "Grouping of low-prognosis patients by age, reserve markers and previous ovarian response.",
+    scope:
+      "Grouping of low-prognosis patients by age, reserve markers and previous ovarian response.",
     inputs: ["age", "amh", "afcTotal", "previousRetrieved", "previousCycles"],
     outputs: ["POSEIDON group"],
     evidence: [],
@@ -63,7 +65,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "protocol-selection",
     name: "Stimulation Protocol Framework",
-    scope: "Evidence map of agonist, antagonist, mild and duostim regimens and the patient variables that differentiate them.",
+    scope:
+      "Evidence map of agonist, antagonist, mild and duostim regimens and the patient variables that differentiate them.",
     inputs: ["age", "amh", "afcTotal", "pcos", "endometriosis", "previousProtocol", "previousOhss"],
     outputs: ["Protocol evidence summary"],
     evidence: ["eshre-2020-ovarian-stimulation"],
@@ -72,7 +75,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "stimulation-dose",
     name: "Gonadotropin Dose Framework",
-    scope: "Variables used by published individualised starting-dose models. No dose is computed by this application.",
+    scope:
+      "Variables used by published individualised starting-dose models. No dose is computed by this application.",
     inputs: ["age", "amh", "afcTotal", "bmi", "fsh", "weight"],
     outputs: ["Dose-model input readiness"],
     evidence: ["rbmo-2015-consort-fsh-dose", "eshre-2020-ovarian-stimulation"],
@@ -81,7 +85,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "trigger-selection",
     name: "Trigger Framework",
-    scope: "Evidence map of hCG, agonist and dual trigger and the factors reported to influence the choice.",
+    scope:
+      "Evidence map of hCG, agonist and dual trigger and the factors reported to influence the choice.",
     inputs: ["protocolType", "ohssRiskMarkers", "afcTotal", "amh"],
     outputs: ["Trigger evidence summary"],
     evidence: ["eshre-2020-ovarian-stimulation"],
@@ -90,7 +95,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "ohss-risk",
     name: "OHSS Risk Factors",
-    scope: "Documented risk factors for ovarian hyperstimulation syndrome as reported in guidelines.",
+    scope:
+      "Documented risk factors for ovarian hyperstimulation syndrome as reported in guidelines.",
     inputs: ["age", "amh", "afcTotal", "pcos", "previousOhss", "bmi"],
     outputs: ["Documented risk factor list"],
     evidence: ["eshre-2020-ovarian-stimulation"],
@@ -99,7 +105,8 @@ export const knowledgeModules: KnowledgeModule[] = [
   {
     id: "endometrial-factor",
     name: "Endometrial Factor",
-    scope: "Endometrial thickness, pattern and cavity findings relevant to transfer planning literature.",
+    scope:
+      "Endometrial thickness, pattern and cavity findings relevant to transfer planning literature.",
     inputs: ["endometrium", "endometrialPattern", "cavityFindings", "polyps", "fibroids"],
     outputs: ["Endometrial documentation status"],
     evidence: [],

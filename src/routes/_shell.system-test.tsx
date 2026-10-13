@@ -17,7 +17,11 @@ import {
   executionModeLabel,
   useEngineActivation,
 } from "@/lib/engine/activation-registry";
-import { goldenPatients, runFullSystemTest, type SystemTestReport } from "@/lib/engine/test-battery";
+import {
+  goldenPatients,
+  runFullSystemTest,
+  type SystemTestReport,
+} from "@/lib/engine/test-battery";
 
 export const Route = createFileRoute("/_shell/system-test")({
   component: SystemTestPage,
@@ -32,7 +36,8 @@ export const Route = createFileRoute("/_shell/system-test")({
       { property: "og:title", content: "Full Engine Test & Activation Registry | IVF Ai Calc" },
       {
         property: "og:description",
-        content: "Engine activation registry, execution-mode control and the full synthetic system test battery.",
+        content:
+          "Engine activation registry, execution-mode control and the full synthetic system test battery.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -131,7 +136,9 @@ function SystemTestPage() {
                     ) : null}
                   </td>
                   <td className="py-3 pr-3 text-xs">
-                    {engine.testImplementation ? "Yes — labelled test output" : "No — nothing to run"}
+                    {engine.testImplementation
+                      ? "Yes — labelled test output"
+                      : "No — nothing to run"}
                   </td>
                   <td className="py-3 pr-3 text-xs text-muted-foreground">{engine.logicSource}</td>
                   <td className="py-3 pr-3">
@@ -159,8 +166,8 @@ function SystemTestPage() {
       >
         {!report ? (
           <p className="text-sm text-muted-foreground">
-            No test has been run in this session. Synthetic patients are fixtures only and produce no
-            clinical conclusion.
+            No test has been run in this session. Synthetic patients are fixtures only and produce
+            no clinical conclusion.
           </p>
         ) : (
           <div className="space-y-5">

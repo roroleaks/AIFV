@@ -180,12 +180,48 @@ export function buildTimeline(
     }
   });
 
-  const historic: { key: string; title: string; icon: LucideIcon; tone: TimelineEvent["tone"]; category: string }[] = [
-    { key: "gravidity", title: "Pregnancy", icon: Baby, tone: "emerald", category: "Obstetric history" },
-    { key: "liveBirth", title: "Delivery — live birth", icon: Baby, tone: "emerald", category: "Obstetric history" },
-    { key: "abortions", title: "Miscarriage", icon: HeartCrack, tone: "warning", category: "Obstetric history" },
-    { key: "ectopic", title: "Ectopic pregnancy", icon: Droplets, tone: "warning", category: "Obstetric history" },
-    { key: "cesarean", title: "Cesarean delivery", icon: Scissors, tone: "purple", category: "Surgical history" },
+  const historic: {
+    key: string;
+    title: string;
+    icon: LucideIcon;
+    tone: TimelineEvent["tone"];
+    category: string;
+  }[] = [
+    {
+      key: "gravidity",
+      title: "Pregnancy",
+      icon: Baby,
+      tone: "emerald",
+      category: "Obstetric history",
+    },
+    {
+      key: "liveBirth",
+      title: "Delivery — live birth",
+      icon: Baby,
+      tone: "emerald",
+      category: "Obstetric history",
+    },
+    {
+      key: "abortions",
+      title: "Miscarriage",
+      icon: HeartCrack,
+      tone: "warning",
+      category: "Obstetric history",
+    },
+    {
+      key: "ectopic",
+      title: "Ectopic pregnancy",
+      icon: Droplets,
+      tone: "warning",
+      category: "Obstetric history",
+    },
+    {
+      key: "cesarean",
+      title: "Cesarean delivery",
+      icon: Scissors,
+      tone: "purple",
+      category: "Surgical history",
+    },
   ];
 
   historic.forEach(({ key, title, icon, tone, category }) => {
@@ -270,21 +306,67 @@ export function buildAlerts(
   const causes = Array.isArray(values["causes"]) ? (values["causes"] as string[]) : [];
 
   const missing: { key: string; title: string; stepId: string; detail: string }[] = [
-    { key: "amh", title: "Missing AMH", stepId: "reserve", detail: "Anti-Müllerian hormone not recorded." },
-    { key: "afcLeft", title: "Missing AFC (left)", stepId: "reserve", detail: "Left antral follicle count not recorded." },
-    { key: "afcRight", title: "Missing AFC (right)", stepId: "reserve", detail: "Right antral follicle count not recorded." },
-    { key: "fsh", title: "Missing basal FSH", stepId: "reserve", detail: "Basal FSH not recorded." },
-    { key: "tsh", title: "Missing TSH", stepId: "reserve", detail: "Thyroid-stimulating hormone not recorded." },
-    { key: "concentration", title: "Missing semen analysis", stepId: "male", detail: "Sperm concentration not recorded." },
-    { key: "dob", title: "Missing date of birth", stepId: "patient", detail: "Age cannot be derived." },
+    {
+      key: "amh",
+      title: "Missing AMH",
+      stepId: "reserve",
+      detail: "Anti-Müllerian hormone not recorded.",
+    },
+    {
+      key: "afcLeft",
+      title: "Missing AFC (left)",
+      stepId: "reserve",
+      detail: "Left antral follicle count not recorded.",
+    },
+    {
+      key: "afcRight",
+      title: "Missing AFC (right)",
+      stepId: "reserve",
+      detail: "Right antral follicle count not recorded.",
+    },
+    {
+      key: "fsh",
+      title: "Missing basal FSH",
+      stepId: "reserve",
+      detail: "Basal FSH not recorded.",
+    },
+    {
+      key: "tsh",
+      title: "Missing TSH",
+      stepId: "reserve",
+      detail: "Thyroid-stimulating hormone not recorded.",
+    },
+    {
+      key: "concentration",
+      title: "Missing semen analysis",
+      stepId: "male",
+      detail: "Sperm concentration not recorded.",
+    },
+    {
+      key: "dob",
+      title: "Missing date of birth",
+      stepId: "patient",
+      detail: "Age cannot be derived.",
+    },
     { key: "height", title: "Missing height", stepId: "patient", detail: "BMI cannot be derived." },
     { key: "weight", title: "Missing weight", stepId: "patient", detail: "BMI cannot be derived." },
-    { key: "endometrium", title: "Missing endometrial thickness", stepId: "ultrasound", detail: "Baseline endometrial measurement not recorded." },
+    {
+      key: "endometrium",
+      title: "Missing endometrial thickness",
+      stepId: "ultrasound",
+      detail: "Baseline endometrial measurement not recorded.",
+    },
   ];
 
   missing.forEach((m) => {
     if (!filled(values[m.key])) {
-      alerts.push({ id: `missing-${m.key}`, title: m.title, detail: m.detail, severity: "missing", stepId: m.stepId });
+      alerts.push({
+        id: `missing-${m.key}`,
+        title: m.title,
+        detail: m.detail,
+        severity: "missing",
+        stepId: m.stepId,
+      });
     }
   });
 
@@ -293,44 +375,90 @@ export function buildAlerts(
 
   const ohssHistory = String(values["ohssHistory"] ?? "");
   if (ohssHistory && !["No", "Unknown"].includes(ohssHistory)) {
-    documented("doc-ohss", "Previous OHSS documented", `Severity recorded as ${ohssHistory}.`, "reproductive");
+    documented(
+      "doc-ohss",
+      "Previous OHSS documented",
+      `Severity recorded as ${ohssHistory}.`,
+      "reproductive",
+    );
   }
   if (cycles.some((c) => String(c["ohss"] ?? "") !== "" && String(c["ohss"]) !== "No")) {
-    documented("doc-ohss-cycle", "OHSS in a previous cycle", "At least one previous cycle records OHSS.", "cycles");
+    documented(
+      "doc-ohss-cycle",
+      "OHSS in a previous cycle",
+      "At least one previous cycle records OHSS.",
+      "cycles",
+    );
   }
   const hydro = [values["gynHydrosalpinx"], values["usHydrosalpinx"]].map((v) => String(v ?? ""));
   if (hydro.some((v) => v && v !== "None" && v !== "Unknown")) {
-    documented("doc-hydro", "Hydrosalpinx documented", "Recorded in gynecological or ultrasound findings.", "gynecological");
+    documented(
+      "doc-hydro",
+      "Hydrosalpinx documented",
+      "Recorded in gynecological or ultrasound findings.",
+      "gynecological",
+    );
   }
-  if (causes.includes("Endometriosis") || String(values["endometriosisStage"] ?? "").startsWith("Stage")) {
-    documented("doc-endo", "History of endometriosis", "Documented in cause of infertility or gynecological history.", "gynecological");
+  if (
+    causes.includes("Endometriosis") ||
+    String(values["endometriosisStage"] ?? "").startsWith("Stage")
+  ) {
+    documented(
+      "doc-endo",
+      "History of endometriosis",
+      "Documented in cause of infertility or gynecological history.",
+      "gynecological",
+    );
   }
   if (String(values["ovarianSurgery"] ?? "") === "Yes") {
-    documented("doc-ovsurg", "History of ovarian surgery", "Previous ovarian surgery recorded.", "medical");
+    documented(
+      "doc-ovsurg",
+      "History of ovarian surgery",
+      "Previous ovarian surgery recorded.",
+      "medical",
+    );
   }
   if (causes.includes("PCOS")) {
     documented("doc-pcos", "PCOS documented", "Selected as a contributing factor.", "cause");
   }
   if (causes.includes("Recurrent Pregnancy Loss")) {
-    documented("doc-rpl", "Recurrent pregnancy loss documented", "Selected as a contributing factor.", "cause");
+    documented(
+      "doc-rpl",
+      "Recurrent pregnancy loss documented",
+      "Selected as a contributing factor.",
+      "cause",
+    );
   }
   const poor = cycles.some((c) => {
     const r = toNum(c["retrieved"]);
     return r !== null && r > 0 && r <= 3;
   });
-  if (poor) documented("doc-poor", "Previous poor response", "A previous cycle recorded ≤3 oocytes retrieved.", "cycles");
+  if (poor)
+    documented(
+      "doc-poor",
+      "Previous poor response",
+      "A previous cycle recorded ≤3 oocytes retrieved.",
+      "cycles",
+    );
   const hyper = cycles.some((c) => {
     const r = toNum(c["retrieved"]);
     return r !== null && r >= 20;
   });
-  if (hyper) documented("doc-hyper", "Previous hyper response", "A previous cycle recorded ≥20 oocytes retrieved.", "cycles");
+  if (hyper)
+    documented(
+      "doc-hyper",
+      "Previous hyper response",
+      "A previous cycle recorded ≥20 oocytes retrieved.",
+      "cycles",
+    );
 
   const dob = values["dob"];
   if (typeof dob === "string" && dob) {
     const d = new Date(dob);
     if (!Number.isNaN(d.getTime())) {
       const age = new Date().getFullYear() - d.getFullYear();
-      if (age >= 38) documented("doc-age", "Advanced maternal age", `Age recorded as ${age} years.`, "patient");
+      if (age >= 38)
+        documented("doc-age", "Advanced maternal age", `Age recorded as ${age} years.`, "patient");
     }
   }
   const smoking = String(values["smoking"] ?? "");

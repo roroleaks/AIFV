@@ -112,7 +112,6 @@ function ProtocolsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source.id, selection.options.length]);
 
-
   const guidelinePopulations = useMemo(() => {
     const ph = buildPhenotype(source.values, source.cycles);
     const resp = predictOvarianResponse(source.values, source.cycles, ph.poseidon, ph.bologna);
@@ -167,7 +166,10 @@ function ProtocolsPage() {
 
       <ProtocolSelectionSection result={selection} />
 
-      <GuidelineRecommendationsPanel module="protocol-recommendation" populations={guidelinePopulations} />
+      <GuidelineRecommendationsPanel
+        module="protocol-recommendation"
+        populations={guidelinePopulations}
+      />
 
       <ProtocolRecommendationSection result={result} />
     </>

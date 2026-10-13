@@ -156,8 +156,7 @@ function EvidenceViewer() {
 
   const citation = formatCitation(entry);
   const note = state.notes[entry.id] ?? "";
-  const localFile =
-    documentUrlFor(entry.fileName);
+  const localFile = documentUrlFor(entry.fileName);
 
   return (
     <>
@@ -277,7 +276,9 @@ function EvidenceViewer() {
                 onClick={() => setShowAbstract((s) => !s)}
                 aria-expanded={showAbstract}
               >
-                <ChevronDown className={cn("size-3.5 transition-transform", showAbstract && "rotate-180")} />
+                <ChevronDown
+                  className={cn("size-3.5 transition-transform", showAbstract && "rotate-180")}
+                />
                 {showAbstract ? "Collapse" : "Expand"}
               </Button>
             }
@@ -320,7 +321,8 @@ function EvidenceViewer() {
                 </p>
                 <p className="mt-1.5 text-xs text-muted-foreground">
                   Level {entry.level} · {entry.quality} quality · Source priority {entry.priority} ·{" "}
-                  {entry.type} · {entry.status === "indexed" ? "Validated record" : "Pending review"}
+                  {entry.type} ·{" "}
+                  {entry.status === "indexed" ? "Validated record" : "Pending review"}
                 </p>
               </div>
               <PendingBlock
@@ -347,7 +349,10 @@ function EvidenceViewer() {
           >
             <ul className="grid gap-2 sm:grid-cols-2">
               {explainabilityFields.map((f) => (
-                <li key={String(f.id)} className="rounded-xl border border-dashed border-border/70 p-3">
+                <li
+                  key={String(f.id)}
+                  className="rounded-xl border border-dashed border-border/70 p-3"
+                >
                   <p className="flex items-center gap-1.5 text-xs font-semibold">
                     <Sparkles className="size-3 text-primary" /> {f.label}
                   </p>
@@ -425,7 +430,9 @@ function EvidenceViewer() {
                 <p className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Keywords
                 </p>
-                <p className="mt-1 text-[11px] text-muted-foreground">{entry.keywords.join(" · ")}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  {entry.keywords.join(" · ")}
+                </p>
               </>
             )}
           </SectionCard>

@@ -195,7 +195,10 @@ function EvidenceUpdates() {
           ) : (
             <ul className="space-y-2">
               {state.history.slice(0, 20).map((h) => (
-                <li key={h.id} className="flex items-start gap-3 rounded-xl border border-border/70 p-3">
+                <li
+                  key={h.id}
+                  className="flex items-start gap-3 rounded-xl border border-border/70 p-3"
+                >
                   <History className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
                   <span className="min-w-0">
                     <span className="block text-xs font-medium">{historyLabels[h.action]}</span>

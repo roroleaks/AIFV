@@ -72,11 +72,43 @@ export const cases: Case[] = [
       infertilityType: "Primary",
       causes: ["Tubal factor"],
     },
-    cycles: [cyc("a1", { cycleNumber: 1, cycleYear: 2025, type: "IVF", protocol: "Antagonist", startingDose: 225, retrieved: 10, mii: 8 })],
+    cycles: [
+      cyc("a1", {
+        cycleNumber: 1,
+        cycleYear: 2025,
+        type: "IVF",
+        protocol: "Antagonist",
+        startingDose: 225,
+        retrieved: 10,
+        mii: 8,
+      }),
+    ],
     visits: [
-      visit(5, { largestFollicle: 11, follicles10: 8, estradiol: 620, endometrium: 7, dailyDose: 225 }),
-      visit(8, { largestFollicle: 16, follicles10: 11, follicles14: 6, estradiol: 1650, endometrium: 9, dailyDose: 225 }),
-      visit(10, { largestFollicle: 19, follicles10: 12, follicles14: 9, follicles17: 4, estradiol: 2400, progesterone: 0.9, endometrium: 10, dailyDose: 225 }),
+      visit(5, {
+        largestFollicle: 11,
+        follicles10: 8,
+        estradiol: 620,
+        endometrium: 7,
+        dailyDose: 225,
+      }),
+      visit(8, {
+        largestFollicle: 16,
+        follicles10: 11,
+        follicles14: 6,
+        estradiol: 1650,
+        endometrium: 9,
+        dailyDose: 225,
+      }),
+      visit(10, {
+        largestFollicle: 19,
+        follicles10: 12,
+        follicles14: 9,
+        follicles17: 4,
+        estradiol: 2400,
+        progesterone: 0.9,
+        endometrium: 10,
+        dailyDose: 225,
+      }),
     ],
   },
   {
@@ -93,7 +125,17 @@ export const cases: Case[] = [
       infertilityType: "Secondary",
       causes: ["Diminished ovarian reserve"],
     },
-    cycles: [cyc("b1", { cycleNumber: 1, cycleYear: 2025, type: "ICSI", protocol: "Antagonist", startingDose: 300, retrieved: 2, mii: 1 })],
+    cycles: [
+      cyc("b1", {
+        cycleNumber: 1,
+        cycleYear: 2025,
+        type: "ICSI",
+        protocol: "Antagonist",
+        startingDose: 300,
+        retrieved: 2,
+        mii: 1,
+      }),
+    ],
     visits: [visit(6, { largestFollicle: 12, follicles10: 3, estradiol: 380, dailyDose: 300 })],
   },
   {
@@ -110,10 +152,26 @@ export const cases: Case[] = [
       infertilityType: "Primary",
       causes: ["PCOS"],
     },
-    cycles: [cyc("c1", { cycleNumber: 1, cycleYear: 2025, type: "ICSI", protocol: "Antagonist", startingDose: 150, retrieved: 18, mii: 15 })],
+    cycles: [
+      cyc("c1", {
+        cycleNumber: 1,
+        cycleYear: 2025,
+        type: "ICSI",
+        protocol: "Antagonist",
+        startingDose: 150,
+        retrieved: 18,
+        mii: 15,
+      }),
+    ],
     visits: [
       visit(5, { largestFollicle: 10, follicles10: 16, estradiol: 1400, dailyDose: 150 }),
-      visit(8, { largestFollicle: 15, follicles10: 22, follicles14: 12, estradiol: 4800, dailyDose: 150 }),
+      visit(8, {
+        largestFollicle: 15,
+        follicles10: 22,
+        follicles14: 12,
+        estradiol: 4800,
+        dailyDose: 150,
+      }),
     ],
   },
   {
@@ -130,7 +188,17 @@ export const cases: Case[] = [
       infertilityType: "Primary",
       causes: ["Unexplained"],
     },
-    cycles: [cyc("d1", { cycleNumber: 1, cycleYear: 2024, type: "ICSI", protocol: "Long agonist", startingDose: 225, retrieved: 7, mii: 6 })],
+    cycles: [
+      cyc("d1", {
+        cycleNumber: 1,
+        cycleYear: 2024,
+        type: "ICSI",
+        protocol: "Long agonist",
+        startingDose: 225,
+        retrieved: 7,
+        mii: 6,
+      }),
+    ],
     visits: [visit(7, { largestFollicle: 14, follicles10: 7, estradiol: 1100, dailyDose: 225 })],
   },
   {
@@ -146,63 +214,148 @@ type Row = { engine: string; ok: boolean; summary: string };
 
 function run(c: Case): Row[] {
   const rows: Row[] = [];
-  const step = <T,>(engine: string, fn: () => T, describe: (v: T) => string): T | null => {
+  const step = <T>(engine: string, fn: () => T, describe: (v: T) => string): T | null => {
     try {
       const v = fn();
       rows.push({ engine, ok: true, summary: describe(v) });
       return v;
     } catch (e) {
-      rows.push({ engine, ok: false, summary: `THREW: ${e instanceof Error ? e.stack?.split("\n").slice(0, 3).join(" | ") : String(e)}` });
+      rows.push({
+        engine,
+        ok: false,
+        summary: `THREW: ${e instanceof Error ? e.stack?.split("\n").slice(0, 3).join(" | ") : String(e)}`,
+      });
       return null;
     }
   };
 
-  const poseidon = step("POSEIDON", () => classifyPoseidon(c.values, c.cycles), (r) => `${r.groupLabel} | status=${r.status} | criteria=${r.criteria?.length ?? 0} | missing=${r.missing?.length ?? 0}`);
-  const bologna = step("Bologna", () => assessBologna(c.values, c.cycles), (r) => `${r.headline} | fulfilled=${r.fulfilled}`);
-  const phenotype = step("Phenotype", () => buildPhenotype(c.values, c.cycles), (r) => `poseidon=${r.poseidon.groupLabel} | bologna=${r.bologna.headline} | amh=${r.reserve.amh} afc=${r.reserve.afc}`);
+  const poseidon = step(
+    "POSEIDON",
+    () => classifyPoseidon(c.values, c.cycles),
+    (r) =>
+      `${r.groupLabel} | status=${r.status} | criteria=${r.criteria?.length ?? 0} | missing=${r.missing?.length ?? 0}`,
+  );
+  const bologna = step(
+    "Bologna",
+    () => assessBologna(c.values, c.cycles),
+    (r) => `${r.headline} | fulfilled=${r.fulfilled}`,
+  );
+  const phenotype = step(
+    "Phenotype",
+    () => buildPhenotype(c.values, c.cycles),
+    (r) =>
+      `poseidon=${r.poseidon.groupLabel} | bologna=${r.bologna.headline} | amh=${r.reserve.amh} afc=${r.reserve.afc}`,
+  );
   if (!poseidon || !bologna || !phenotype) return rows;
 
-  const response = step("Ovarian response", () => predictOvarianResponse(c.values, c.cycles, poseidon, bologna), (r) => `${r.category} | ${r.headline} | risks=${r.risks.length}`);
+  const response = step(
+    "Ovarian response",
+    () => predictOvarianResponse(c.values, c.cycles, poseidon, bologna),
+    (r) => `${r.category} | ${r.headline} | risks=${r.risks.length}`,
+  );
   if (!response) return rows;
 
   const ctx = buildPatientContext(c.values, c.cycles, response);
 
-  const protocolRec = step("Protocol recommendation", () => buildProtocolRecommendation("t", "Test", c.values, c.cycles, phenotype, response), (r) => `recStatus=${r.recommendation.status} | primary=${JSON.stringify(r.recommendation.primary ?? null)} | considerations=${r.considerations.length}`);
+  const protocolRec = step(
+    "Protocol recommendation",
+    () => buildProtocolRecommendation("t", "Test", c.values, c.cycles, phenotype, response),
+    (r) =>
+      `recStatus=${r.recommendation.status} | primary=${JSON.stringify(r.recommendation.primary ?? null)} | considerations=${r.considerations.length}`,
+  );
   if (!protocolRec) return rows;
 
-  step("Protocol selection", () => buildProtocolSelection("t", "Test", c.values, c.cycles, phenotype, response, ctx, null), (r) => `options=${r.options.length} | cautions=${r.cautions.length} | missingInfo=${r.missingInformation.length} | consortFirewall=${r.consortFirewall.status}`);
+  step(
+    "Protocol selection",
+    () => buildProtocolSelection("t", "Test", c.values, c.cycles, phenotype, response, ctx, null),
+    (r) =>
+      `options=${r.options.length} | cautions=${r.cautions.length} | missingInfo=${r.missingInformation.length} | consortFirewall=${r.consortFirewall.status}`,
+  );
 
-  const gonado = step("Gonadotropin selection", () => buildGonadotropinSelection("t", "Test", c.values, c.cycles, phenotype, response, protocolRec), (r) => `status=${r.selection.status} | recommended=${JSON.stringify(r.selection.recommended)} | cycleReview=${r.cycleReview.length}`);
+  const gonado = step(
+    "Gonadotropin selection",
+    () =>
+      buildGonadotropinSelection("t", "Test", c.values, c.cycles, phenotype, response, protocolRec),
+    (r) =>
+      `status=${r.selection.status} | recommended=${JSON.stringify(r.selection.recommended)} | cycleReview=${r.cycleReview.length}`,
+  );
   if (!gonado) return rows;
 
-  step("CONSORT dose", () => calculateConsortDose("t", "Test", c.values, c.cycles, phenotype, response), (r) => `status=${r.status} | dose=${JSON.stringify(r.dose)} | variables=${r.variables.length} | validation=${r.validation.state ?? "-"}`);
+  step(
+    "CONSORT dose",
+    () => calculateConsortDose("t", "Test", c.values, c.cycles, phenotype, response),
+    (r) =>
+      `status=${r.status} | dose=${JSON.stringify(r.dose)} | variables=${r.variables.length} | validation=${r.validation.state ?? "-"}`,
+  );
 
-  step("Starting dose", () => buildStartingDoseAssessment("t", "Test", c.values, c.cycles, phenotype, response), (r) => `state=${r.state} | dose=${JSON.stringify(r.dose)} | display=${r.doseDisplay} | algorithms=${r.algorithms.length} | evidenceDoses=${r.evidenceReportedDoses.length}`);
+  step(
+    "Starting dose",
+    () => buildStartingDoseAssessment("t", "Test", c.values, c.cycles, phenotype, response),
+    (r) =>
+      `state=${r.state} | dose=${JSON.stringify(r.dose)} | display=${r.doseDisplay} | algorithms=${r.algorithms.length} | evidenceDoses=${r.evidenceReportedDoses.length}`,
+  );
 
-  const mctx = buildMonitoringContext("t", "Test", c.values, c.cycles, phenotype, response, protocolRec, gonado, null);
-  const monitoring = step("Monitoring", () => analyzeMonitoring(mctx, c.visits), (r) => `visits=${r.visits.length} | status=${JSON.stringify(r.status)} | alerts=${r.alerts.length} | trends=${r.trends.length}`);
-  if (!monitoring) return rows;
-
-  step("Dose adjustment", () => evaluateDoseAdjustment(monitoring.visits.at(-1) ?? null), (r) => `status=${r.status} | proposedDose=${JSON.stringify(r.proposedDose)} | observed=${r.observedValues.length}`);
-
-  const cycleC = step("Cycle completion / OHSS / freeze-all", () => buildCycleCompletion("t", "Test", phenotype, response, protocolRec, gonado, null, monitoring), (r) => `safety=${r.safetyStatus} | trigger=${r.trigger.status} | freezeAll=${r.freezeAll.status} | ohssLevel=${JSON.stringify(r.ohss.level ?? null)} | alerts=${r.alerts.length}`);
-  if (!cycleC) return rows;
-
-  step("Trigger strategy", () => buildTriggerAssessment("t", "Test", phenotype, response, monitoring, cycleC, null), (r) => `safety=${r.safetyStatus} | readiness=${JSON.stringify(r.readiness.status ?? r.readiness)} | options=${r.options.length} | dose=${r.triggerDoseStatus}`);
-
-  step("Intelligence report", () => buildIntelligenceReport({
-    patientId: "t",
-    patientName: "Test",
-    values: c.values,
-    cycles: c.cycles,
+  const mctx = buildMonitoringContext(
+    "t",
+    "Test",
+    c.values,
+    c.cycles,
     phenotype,
     response,
-    protocol: protocolRec,
-    gonadotropin: gonado,
-    consort: calculateConsortDose("t", "Test", c.values, c.cycles, phenotype, response),
-    monitoring,
-    cycle: cycleC,
-  }), (r) => `sections=${r.sections.length} | quality=${r.qualityIssues.length} | evidence=${r.evidence.length} | explanations=${r.explanations.length}`);
+    protocolRec,
+    gonado,
+    null,
+  );
+  const monitoring = step(
+    "Monitoring",
+    () => analyzeMonitoring(mctx, c.visits),
+    (r) =>
+      `visits=${r.visits.length} | status=${JSON.stringify(r.status)} | alerts=${r.alerts.length} | trends=${r.trends.length}`,
+  );
+  if (!monitoring) return rows;
+
+  step(
+    "Dose adjustment",
+    () => evaluateDoseAdjustment(monitoring.visits.at(-1) ?? null),
+    (r) =>
+      `status=${r.status} | proposedDose=${JSON.stringify(r.proposedDose)} | observed=${r.observedValues.length}`,
+  );
+
+  const cycleC = step(
+    "Cycle completion / OHSS / freeze-all",
+    () =>
+      buildCycleCompletion("t", "Test", phenotype, response, protocolRec, gonado, null, monitoring),
+    (r) =>
+      `safety=${r.safetyStatus} | trigger=${r.trigger.status} | freezeAll=${r.freezeAll.status} | ohssLevel=${JSON.stringify(r.ohss.level ?? null)} | alerts=${r.alerts.length}`,
+  );
+  if (!cycleC) return rows;
+
+  step(
+    "Trigger strategy",
+    () => buildTriggerAssessment("t", "Test", phenotype, response, monitoring, cycleC, null),
+    (r) =>
+      `safety=${r.safetyStatus} | readiness=${JSON.stringify(r.readiness.status ?? r.readiness)} | options=${r.options.length} | dose=${r.triggerDoseStatus}`,
+  );
+
+  step(
+    "Intelligence report",
+    () =>
+      buildIntelligenceReport({
+        patientId: "t",
+        patientName: "Test",
+        values: c.values,
+        cycles: c.cycles,
+        phenotype,
+        response,
+        protocol: protocolRec,
+        gonadotropin: gonado,
+        consort: calculateConsortDose("t", "Test", c.values, c.cycles, phenotype, response),
+        monitoring,
+        cycle: cycleC,
+      }),
+    (r) =>
+      `sections=${r.sections.length} | quality=${r.qualityIssues.length} | evidence=${r.evidence.length} | explanations=${r.explanations.length}`,
+  );
 
   return rows;
 }

@@ -33,10 +33,18 @@ export const evidencePriorityLevels: PriorityLevel[] = [
     description:
       "Landmark publications: CONSORT individualised FSH calculator, POSEIDON, Bologna criteria, OHSS prevention, ovarian stimulation, trigger strategy, freeze-all and embryo transfer.",
   },
-  { level: 4, label: "Randomized Controlled Trials", description: "Primary interventional trials." },
+  {
+    level: 4,
+    label: "Randomized Controlled Trials",
+    description: "Primary interventional trials.",
+  },
   { level: 5, label: "Systematic Reviews", description: "Structured qualitative syntheses." },
   { level: 6, label: "Meta-Analyses", description: "Quantitative pooled syntheses." },
-  { level: 7, label: "Observational Studies", description: "Cohort, case-control and registry data." },
+  {
+    level: 7,
+    label: "Observational Studies",
+    description: "Cohort, case-control and registry data.",
+  },
 ];
 
 export const priorityLabel = (level: EvidencePriority) =>
@@ -53,7 +61,15 @@ export const clinicalTopicGroups: TopicGroup[] = [
   {
     id: "reserve",
     label: "Ovarian Reserve & Prognosis",
-    topics: ["Ovarian Reserve", "AMH", "AFC", "POSEIDON", "Bologna", "Poor Response", "Hyper Response"],
+    topics: [
+      "Ovarian Reserve",
+      "AMH",
+      "AFC",
+      "POSEIDON",
+      "Bologna",
+      "Poor Response",
+      "Hyper Response",
+    ],
   },
   {
     id: "safety",
@@ -82,7 +98,14 @@ export const clinicalTopicGroups: TopicGroup[] = [
   {
     id: "trigger",
     label: "Trigger & Transfer",
-    topics: ["Trigger", "Dual Trigger", "Fresh Transfer", "Blastocyst Transfer", "Embryo Culture", "PGT"],
+    topics: [
+      "Trigger",
+      "Dual Trigger",
+      "Fresh Transfer",
+      "Blastocyst Transfer",
+      "Embryo Culture",
+      "PGT",
+    ],
   },
   {
     id: "populations",

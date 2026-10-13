@@ -12,10 +12,7 @@ const EVENT = "ivf-protocol-decision-changed";
 const LIMIT = 200;
 
 export type ProtocolDecisionKind =
-  | "select-protocol"
-  | "defer"
-  | "need-more-information"
-  | "evidence-insufficient";
+  "select-protocol" | "defer" | "need-more-information" | "evidence-insufficient";
 
 export const protocolDecisionLabel: Record<ProtocolDecisionKind, string> = {
   "select-protocol": "Protocol selected by physician",

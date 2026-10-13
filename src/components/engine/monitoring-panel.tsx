@@ -203,12 +203,11 @@ function parseFollicleRecords(raw: string): TrackedFollicle[] {
       const [id, sideRaw, sizeRaw] = chunk.split(":").map((x) => x.trim());
       const size = Number(sizeRaw);
       if (!id || !Number.isFinite(size) || size <= 0) return null;
-      const side: TrackedFollicle["side"] =
-        sideRaw?.toLowerCase().startsWith("r")
-          ? "right"
-          : sideRaw?.toLowerCase().startsWith("l")
-            ? "left"
-            : "unspecified";
+      const side: TrackedFollicle["side"] = sideRaw?.toLowerCase().startsWith("r")
+        ? "right"
+        : sideRaw?.toLowerCase().startsWith("l")
+          ? "left"
+          : "unspecified";
       return { followId: id, side, size };
     })
     .filter((x): x is TrackedFollicle => x !== null);
@@ -258,7 +257,10 @@ export function VisitForm({
     endometrialPattern: existing?.endometrialPattern ?? "",
     ultrasoundOther: existing?.ultrasoundOther ?? "",
     follicleRecords: (existing?.follicleRecords ?? [])
-      .map((f) => `${f.followId}:${f.side === "unspecified" ? "?" : f.side[0]!.toUpperCase()}:${f.size}`)
+      .map(
+        (f) =>
+          `${f.followId}:${f.side === "unspecified" ? "?" : f.side[0]!.toUpperCase()}:${f.size}`,
+      )
       .join(", "),
     symptoms: existing?.symptoms ?? "",
     adverseEvents: existing?.adverseEvents ?? "",
@@ -472,7 +474,11 @@ const chartConfigs = [
     title: "Follicle growth",
     unit: "mm / count",
     lines: [
-      { key: "largestFollicle", label: "Largest follicle (mm)", color: "var(--color-chart-1, #2563eb)" },
+      {
+        key: "largestFollicle",
+        label: "Largest follicle (mm)",
+        color: "var(--color-chart-1, #2563eb)",
+      },
       { key: "follicles10", label: "≥ 10 mm", color: "var(--color-chart-2, #10b981)" },
       { key: "follicles14", label: "≥ 14 mm", color: "var(--color-chart-3, #8b5cf6)" },
       { key: "follicles17", label: "≥ 17 mm", color: "var(--color-chart-4, #f59e0b)" },
@@ -506,7 +512,9 @@ const chartConfigs = [
     id: "cohort",
     title: "Follicular cohort",
     unit: "count",
-    lines: [{ key: "follicleCount", label: "Total follicles", color: "var(--color-chart-2, #10b981)" }],
+    lines: [
+      { key: "follicleCount", label: "Total follicles", color: "var(--color-chart-2, #10b981)" },
+    ],
   },
   {
     id: "endometrium",
@@ -616,7 +624,9 @@ export function VisitCards({
                   {v.triggerDay ? "Trigger day" : `Day ${v.day}`}
                 </Badge>
                 <span className="min-w-0 flex-1 truncate text-sm">
-                  {v.largestFollicle !== null ? `Largest ${v.largestFollicle} mm` : "No lead follicle"}
+                  {v.largestFollicle !== null
+                    ? `Largest ${v.largestFollicle} mm`
+                    : "No lead follicle"}
                   {v.estradiol !== null ? ` · E2 ${v.estradiol} pg/mL` : ""}
                   {v.dailyDose !== null ? ` · ${v.dailyDose} IU/day` : ""}
                 </span>
@@ -633,14 +643,28 @@ export function VisitCards({
                       ["Medication", v.medication || "Not recorded"],
                       ["Medication change", v.medicationChange || "None recorded"],
                       ["Follicle count", v.follicleCount ?? "Not recorded"],
-                      ["Follicle sizes", v.follicleSizes.length ? `${v.follicleSizes.join(", ")} mm` : "Not recorded"],
-                      ["Largest follicle", v.largestFollicle === null ? "Not recorded" : `${v.largestFollicle} mm`],
+                      [
+                        "Follicle sizes",
+                        v.follicleSizes.length
+                          ? `${v.follicleSizes.join(", ")} mm`
+                          : "Not recorded",
+                      ],
+                      [
+                        "Largest follicle",
+                        v.largestFollicle === null ? "Not recorded" : `${v.largestFollicle} mm`,
+                      ],
                       ["Follicles ≥ 10 mm", v.follicles10 ?? "Not recorded"],
                       ["Follicles ≥ 14 mm", v.follicles14 ?? "Not recorded"],
                       ["Follicles ≥ 17 mm", v.follicles17 ?? "Not recorded"],
-                      ["Endometrium", v.endometrium === null ? "Not recorded" : `${v.endometrium} mm`],
+                      [
+                        "Endometrium",
+                        v.endometrium === null ? "Not recorded" : `${v.endometrium} mm`,
+                      ],
                       ["Estradiol", v.estradiol === null ? "Not recorded" : `${v.estradiol} pg/mL`],
-                      ["Progesterone", v.progesterone === null ? "Not recorded" : `${v.progesterone} ng/mL`],
+                      [
+                        "Progesterone",
+                        v.progesterone === null ? "Not recorded" : `${v.progesterone} ng/mL`,
+                      ],
                       ["LH", v.lh === null ? "Not recorded" : `${v.lh} IU/L`],
                       ["Medication type", v.medicationType || "Not recorded"],
                       ["Route", v.route || "Not recorded"],
@@ -677,7 +701,10 @@ export function VisitCards({
                           : "None",
                       ],
                     ].map(([label, value]) => (
-                      <div key={String(label)} className="flex items-baseline justify-between gap-3">
+                      <div
+                        key={String(label)}
+                        className="flex items-baseline justify-between gap-3"
+                      >
                         <dt className="text-muted-foreground">{label}</dt>
                         <dd className="font-medium">{String(value)}</dd>
                       </div>
@@ -687,10 +714,20 @@ export function VisitCards({
                     <p className="mt-2 rounded-lg bg-background/60 p-2.5 text-xs">{v.notes}</p>
                   )}
                   <div className="mt-3 flex gap-2 print:hidden">
-                    <Button size="sm" variant="outline" className="rounded-xl" onClick={() => onEdit(v)}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="rounded-xl"
+                      onClick={() => onEdit(v)}
+                    >
                       <Pencil className="size-3.5" /> Edit
                     </Button>
-                    <Button size="sm" variant="ghost" className="rounded-xl" onClick={() => onDelete(v.id)}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="rounded-xl"
+                      onClick={() => onDelete(v.id)}
+                    >
                       <Trash2 className="size-3.5" /> Delete
                     </Button>
                   </div>
@@ -819,7 +856,10 @@ export function MonitoringAlertsCard({ result }: { result: MonitoringResult }) {
 export function MonitoringSummaryCard({ result }: { result: MonitoringResult }) {
   const s = result.summary;
   const rows: [string, string][] = [
-    ["Current stimulation day", s.currentDay === null ? "No visit recorded" : `Day ${s.currentDay}`],
+    [
+      "Current stimulation day",
+      s.currentDay === null ? "No visit recorded" : `Day ${s.currentDay}`,
+    ],
     ["Current dose", s.currentDose],
     ["Follicular development", s.follicularDevelopment],
     ["Hormone results", s.hormoneResults],
@@ -918,7 +958,9 @@ export function MonitoringIntegrationCard() {
         {monitoringConsumerInterfaces.map((c) => (
           <li key={c.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
             <p className="text-sm font-medium">{c.name}</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Receives: {c.receives.join(" · ")}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Receives: {c.receives.join(" · ")}
+            </p>
             <p className="mt-1 text-xs text-muted-foreground">{c.status}</p>
           </li>
         ))}

@@ -23,7 +23,6 @@ import type { GonadotropinSelectionResult } from "./gonadotropin-selection";
 import type { StoredConsortDose } from "./consort-store";
 import { gatedTreatmentValue } from "./algorithm-status";
 
-
 export const MONITORING_ENGINE_VERSION = "1.0.0";
 
 export const monitoringEvidenceIds = [
@@ -160,18 +159,80 @@ export interface MonitoringFieldSpec {
 
 export const monitoringFields: MonitoringFieldSpec[] = [
   { key: "date", label: "Visit date", kind: "date", group: "dose" },
-  { key: "dailyDose", label: "Current daily dose", unit: "IU", kind: "number", group: "dose", core: true },
+  {
+    key: "dailyDose",
+    label: "Current daily dose",
+    unit: "IU",
+    kind: "number",
+    group: "dose",
+    core: true,
+  },
   { key: "medication", label: "Medication", kind: "text", group: "dose" },
   { key: "medicationChange", label: "Medication changes", kind: "text", group: "dose" },
-  { key: "follicleCount", label: "Follicle count", unit: "n", kind: "number", group: "ultrasound", core: true },
+  {
+    key: "follicleCount",
+    label: "Follicle count",
+    unit: "n",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
   { key: "follicleSizes", label: "Follicle sizes", unit: "mm", kind: "sizes", group: "ultrasound" },
-  { key: "largestFollicle", label: "Largest follicle", unit: "mm", kind: "number", group: "ultrasound", core: true },
-  { key: "follicles10", label: "Follicles ≥ 10 mm", unit: "n", kind: "number", group: "ultrasound", core: true },
-  { key: "follicles14", label: "Follicles ≥ 14 mm", unit: "n", kind: "number", group: "ultrasound", core: true },
-  { key: "follicles17", label: "Follicles ≥ 17 mm", unit: "n", kind: "number", group: "ultrasound", core: true },
-  { key: "endometrium", label: "Endometrial thickness", unit: "mm", kind: "number", group: "ultrasound", core: true },
-  { key: "estradiol", label: "Estradiol (E2)", unit: "pg/mL", kind: "number", group: "laboratory", core: true },
-  { key: "progesterone", label: "Progesterone", unit: "ng/mL", kind: "number", group: "laboratory" },
+  {
+    key: "largestFollicle",
+    label: "Largest follicle",
+    unit: "mm",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
+  {
+    key: "follicles10",
+    label: "Follicles ≥ 10 mm",
+    unit: "n",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
+  {
+    key: "follicles14",
+    label: "Follicles ≥ 14 mm",
+    unit: "n",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
+  {
+    key: "follicles17",
+    label: "Follicles ≥ 17 mm",
+    unit: "n",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
+  {
+    key: "endometrium",
+    label: "Endometrial thickness",
+    unit: "mm",
+    kind: "number",
+    group: "ultrasound",
+    core: true,
+  },
+  {
+    key: "estradiol",
+    label: "Estradiol (E2)",
+    unit: "pg/mL",
+    kind: "number",
+    group: "laboratory",
+    core: true,
+  },
+  {
+    key: "progesterone",
+    label: "Progesterone",
+    unit: "ng/mL",
+    kind: "number",
+    group: "laboratory",
+  },
   { key: "lh", label: "LH", unit: "IU/L", kind: "number", group: "laboratory" },
   { key: "notes", label: "Clinical notes", kind: "textarea", group: "notes" },
   { key: "triggerDay", label: "Mark as trigger day", kind: "checkbox", group: "notes" },
@@ -240,16 +301,19 @@ export function buildMonitoringContext(
   const s = phenotype.patientSummary;
   const majorRisks = response.risks.filter((r) => r.severity !== "info").map((r) => r.label);
   const ohssRisks = response.risks
-    .filter((r) => r.label.toLowerCase().includes("ohss") || r.label.toLowerCase().includes("hyper"))
+    .filter(
+      (r) => r.label.toLowerCase().includes("ohss") || r.label.toLowerCase().includes("hyper"),
+    )
     .map((r) => r.label);
 
   const items: MonitoringContextItem[] = [
     {
       id: "demographics",
       label: "Patient demographics",
-      value: [s.age === null ? null : `${s.age} years`, s.bmi === null ? null : `BMI ${s.bmi}`]
-        .filter(Boolean)
-        .join(" · ") || "Not recorded",
+      value:
+        [s.age === null ? null : `${s.age} years`, s.bmi === null ? null : `BMI ${s.bmi}`]
+          .filter(Boolean)
+          .join(" · ") || "Not recorded",
       available: s.age !== null || s.bmi !== null,
     },
     {
@@ -280,8 +344,10 @@ export function buildMonitoringContext(
       id: "starting-dose",
       label: "Starting dose",
       value:
-        gatedTreatmentValue("consort-dose", consort && consort.dose !== null ? consort.dose : null) !==
-        null
+        gatedTreatmentValue(
+          "consort-dose",
+          consort && consort.dose !== null ? consort.dose : null,
+        ) !== null
           ? `${consort!.dose} IU/day (${consort!.medication})`
           : "CONSORT dose calculation unavailable — validated methodology not activated",
       available: false,
@@ -335,27 +401,32 @@ export function buildMonitoringContext(
     id: c.id,
     label: `Cycle ${c["cycleNumber"] ?? i + 1}${c["cycleYear"] ? ` (${c["cycleYear"]})` : ""}`,
     protocol: text(c, "protocol"),
-    gonadotropin: [text(c, "gonadotropinType"), c["medication"] ? String(c["medication"]) : null]
-      .filter((x) => x && x !== "Not recorded")
-      .join(" · ") || "Not recorded",
+    gonadotropin:
+      [text(c, "gonadotropinType"), c["medication"] ? String(c["medication"]) : null]
+        .filter((x) => x && x !== "Not recorded")
+        .join(" · ") || "Not recorded",
     startingDose: text(c, "startingDose", "IU/day"),
     maximumDose: text(c, "maxDose", "IU/day"),
     duration: text(c, "duration", "days"),
     retrieved: text(c, "retrieved"),
     mii: text(c, "mii"),
-    embryology: [
-      c["twoPn"] === undefined || c["twoPn"] === "" ? null : `2PN ${c["twoPn"]}`,
-      c["blastocysts"] === undefined || c["blastocysts"] === "" ? null : `Blastocysts ${c["blastocysts"]}`,
-      c["frozen"] === undefined || c["frozen"] === "" ? null : `Frozen ${c["frozen"]}`,
-    ]
-      .filter(Boolean)
-      .join(" · ") || "Not recorded",
-    pregnancy: [
-      c["clinicalPregnancy"] ? `Clinical pregnancy ${c["clinicalPregnancy"]}` : null,
-      c["liveBirth"] ? `Live birth ${c["liveBirth"]}` : null,
-    ]
-      .filter(Boolean)
-      .join(" · ") || "Not recorded",
+    embryology:
+      [
+        c["twoPn"] === undefined || c["twoPn"] === "" ? null : `2PN ${c["twoPn"]}`,
+        c["blastocysts"] === undefined || c["blastocysts"] === ""
+          ? null
+          : `Blastocysts ${c["blastocysts"]}`,
+        c["frozen"] === undefined || c["frozen"] === "" ? null : `Frozen ${c["frozen"]}`,
+      ]
+        .filter(Boolean)
+        .join(" · ") || "Not recorded",
+    pregnancy:
+      [
+        c["clinicalPregnancy"] ? `Clinical pregnancy ${c["clinicalPregnancy"]}` : null,
+        c["liveBirth"] ? `Live birth ${c["liveBirth"]}` : null,
+      ]
+        .filter(Boolean)
+        .join(" · ") || "Not recorded",
     ohss: text(c, "ohss"),
   }));
 
@@ -458,10 +529,7 @@ export const DESCRIPTIVE_BAND_DISCLAIMER =
 /* ---------------------------------------------------------------- outcome */
 
 export type MonitoringStatus =
-  | "no-data"
-  | "assessment-pending"
-  | "additional-monitoring-required"
-  | "appears-stable";
+  "no-data" | "assessment-pending" | "additional-monitoring-required" | "appears-stable";
 
 export const monitoringStatusLabel: Record<MonitoringStatus, string> = {
   "no-data": "No monitoring visit recorded",
@@ -702,12 +770,19 @@ export function analyzeMonitoring(
         label: "Medication changes recorded",
         ok: Boolean((v.medicationChange ?? "").trim()) || Boolean((v.medication ?? "").trim()),
       },
-      { label: "Clinical assessment recorded", ok: Boolean((v.notes ?? "").trim()) || Boolean((v.symptoms ?? "").trim()) },
+      {
+        label: "Clinical assessment recorded",
+        ok: Boolean((v.notes ?? "").trim()) || Boolean((v.symptoms ?? "").trim()),
+      },
     ];
     const present = checks.filter((c) => c.ok).map((c) => c.label);
     const missing = checks.filter((c) => !c.ok).map((c) => c.label);
     const level: VisitCompletenessLevel =
-      missing.length === 0 ? "COMPLETE" : present.length === 0 ? "INCOMPLETE" : "PARTIALLY COMPLETE";
+      missing.length === 0
+        ? "COMPLETE"
+        : present.length === 0
+          ? "INCOMPLETE"
+          : "PARTIALLY COMPLETE";
     return { visitId: v.id, day: v.day, level, present, missing, checks };
   });
 
@@ -715,17 +790,32 @@ export function analyzeMonitoring(
 
   const validation: MonitoringValidationIssue[] = [];
   const invalid = (day: number | null, field: string, message: string) =>
-    validation.push({ id: `${field}-${day ?? "x"}-${validation.length}`, day, severity: "invalid", field, message });
+    validation.push({
+      id: `${field}-${day ?? "x"}-${validation.length}`,
+      day,
+      severity: "invalid",
+      field,
+      message,
+    });
   const conflict = (day: number | null, field: string, message: string) =>
-    validation.push({ id: `${field}-${day ?? "x"}-${validation.length}`, day, severity: "conflict", field, message });
+    validation.push({
+      id: `${field}-${day ?? "x"}-${validation.length}`,
+      day,
+      severity: "conflict",
+      field,
+      message,
+    });
 
   const seenDays = new Set<number>();
   for (const v of visits) {
-    if (!Number.isFinite(v.day) || v.day < 1) invalid(v.day, "Stimulation day", "A stimulation day cannot precede day 1.");
-    if (seenDays.has(v.day)) conflict(v.day, "Stimulation day", `More than one visit is recorded for day ${v.day}.`);
+    if (!Number.isFinite(v.day) || v.day < 1)
+      invalid(v.day, "Stimulation day", "A stimulation day cannot precede day 1.");
+    if (seenDays.has(v.day))
+      conflict(v.day, "Stimulation day", `More than one visit is recorded for day ${v.day}.`);
     seenDays.add(v.day);
 
-    if (v.dailyDose !== null && v.dailyDose < 0) invalid(v.day, "Daily dose", "Dose cannot be negative.");
+    if (v.dailyDose !== null && v.dailyDose < 0)
+      invalid(v.day, "Daily dose", "Dose cannot be negative.");
     for (const [label, value] of [
       ["Largest follicle", v.largestFollicle],
       ["Endometrial thickness", v.endometrium],
@@ -736,7 +826,8 @@ export function analyzeMonitoring(
     ] as [string, number | null][]) {
       if (value !== null && value < 0) invalid(v.day, label, `${label} cannot be negative.`);
     }
-    if (v.follicleSizes.some((x) => x <= 0)) invalid(v.day, "Follicle sizes", "A follicle diameter must be greater than zero.");
+    if (v.follicleSizes.some((x) => x <= 0))
+      invalid(v.day, "Follicle sizes", "A follicle diameter must be greater than zero.");
 
     if (v.follicles14 !== null && v.follicles10 !== null && v.follicles14 > v.follicles10)
       conflict(v.day, "Follicle bands", "Follicles ≥ 14 mm exceed follicles ≥ 10 mm.");
@@ -744,13 +835,26 @@ export function analyzeMonitoring(
       conflict(v.day, "Follicle bands", "Follicles ≥ 17 mm exceed follicles ≥ 14 mm.");
     if (v.follicleCount !== null && v.follicles10 !== null && v.follicles10 > v.follicleCount)
       conflict(v.day, "Follicle count", "Follicles ≥ 10 mm exceed the total follicle count.");
-    if (v.largestFollicle !== null && v.follicleSizes.length && v.largestFollicle < Math.max(...v.follicleSizes))
-      conflict(v.day, "Largest follicle", "An individual measurement is larger than the recorded lead follicle.");
-    const sideSum = (v.rightFollicles ?? null) !== null && (v.leftFollicles ?? null) !== null
-      ? (v.rightFollicles as number) + (v.leftFollicles as number)
-      : null;
+    if (
+      v.largestFollicle !== null &&
+      v.follicleSizes.length &&
+      v.largestFollicle < Math.max(...v.follicleSizes)
+    )
+      conflict(
+        v.day,
+        "Largest follicle",
+        "An individual measurement is larger than the recorded lead follicle.",
+      );
+    const sideSum =
+      (v.rightFollicles ?? null) !== null && (v.leftFollicles ?? null) !== null
+        ? (v.rightFollicles as number) + (v.leftFollicles as number)
+        : null;
     if (sideSum !== null && v.follicleCount !== null && sideSum !== v.follicleCount)
-      conflict(v.day, "Follicles by ovary", `Right + left (${sideSum}) does not equal the total follicle count (${v.follicleCount}).`);
+      conflict(
+        v.day,
+        "Follicles by ovary",
+        `Right + left (${sideSum}) does not equal the total follicle count (${v.follicleCount}).`,
+      );
     if (v.carriedForward) {
       validation.push({
         id: `carried-${v.day}`,
@@ -771,12 +875,14 @@ export function analyzeMonitoring(
     const dose = v.dailyDose;
     let change = "Not recorded";
     if (dose !== null) {
-      if (lastDose === null) change = doseTimeline.length === 0 ? "First recorded dose" : "Dose recorded";
+      if (lastDose === null)
+        change = doseTimeline.length === 0 ? "First recorded dose" : "Dose recorded";
       else if (dose > lastDose) change = `Increased by ${round(dose - lastDose, 2)} IU`;
       else if (dose < lastDose) change = `Decreased by ${round(lastDose - dose, 2)} IU`;
       else change = "No change";
     }
-    const medicationChanged = Boolean(v.medication) && Boolean(lastMedication) && v.medication !== lastMedication;
+    const medicationChanged =
+      Boolean(v.medication) && Boolean(lastMedication) && v.medication !== lastMedication;
     doseTimeline.push({
       id: v.id,
       day: v.day,
@@ -963,7 +1069,11 @@ export function analyzeMonitoring(
 
   /* --------------------------------------------- descriptive response phenotype */
 
-  const descriptor = (id: string, label: string, t: MonitoringTrend | undefined): ResponseDescriptor | null => {
+  const descriptor = (
+    id: string,
+    label: string,
+    t: MonitoringTrend | undefined,
+  ): ResponseDescriptor | null => {
     if (!t || t.direction === "unknown") return null;
     const word =
       t.direction === "rising" ? "increasing" : t.direction === "falling" ? "decreasing" : "stable";
@@ -975,12 +1085,36 @@ export function analyzeMonitoring(
   };
 
   const descriptors = [
-    descriptor("cohort", "Follicular cohort", trends.find((t) => t.id === "f10")),
-    descriptor("lead", "Lead follicle", trends.find((t) => t.id === "largest")),
-    descriptor("e2", "Estradiol", trends.find((t) => t.id === "e2")),
-    descriptor("lh", "LH", trends.find((t) => t.id === "lh")),
-    descriptor("p4", "Progesterone", trends.find((t) => t.id === "p4")),
-    descriptor("endometrium", "Endometrium", trends.find((t) => t.id === "endometrium")),
+    descriptor(
+      "cohort",
+      "Follicular cohort",
+      trends.find((t) => t.id === "f10"),
+    ),
+    descriptor(
+      "lead",
+      "Lead follicle",
+      trends.find((t) => t.id === "largest"),
+    ),
+    descriptor(
+      "e2",
+      "Estradiol",
+      trends.find((t) => t.id === "e2"),
+    ),
+    descriptor(
+      "lh",
+      "LH",
+      trends.find((t) => t.id === "lh"),
+    ),
+    descriptor(
+      "p4",
+      "Progesterone",
+      trends.find((t) => t.id === "p4"),
+    ),
+    descriptor(
+      "endometrium",
+      "Endometrium",
+      trends.find((t) => t.id === "endometrium"),
+    ),
   ].filter((d): d is ResponseDescriptor => d !== null);
 
   const summary: MonitoringSummary = {
@@ -1090,7 +1224,9 @@ export function monitoringReportText(r: MonitoringResult): string {
     lines.push(
       `  Day ${v.day}${v.triggerDay ? " (trigger day)" : ""}${v.date ? ` — ${v.date}` : ""}`,
     );
-    lines.push(`    Dose: ${fmt(v.dailyDose, "IU/day")}${v.medication ? ` · ${v.medication}` : ""}`);
+    lines.push(
+      `    Dose: ${fmt(v.dailyDose, "IU/day")}${v.medication ? ` · ${v.medication}` : ""}`,
+    );
     if (v.medicationChange) lines.push(`    Medication change: ${v.medicationChange}`);
     lines.push(
       `    Ultrasound: ${fmt(v.follicleCount, "follicles")} · largest ${fmt(v.largestFollicle, "mm")} · ≥10mm ${fmt(v.follicles10)} · ≥14mm ${fmt(v.follicles14)} · ≥17mm ${fmt(v.follicles17)} · endometrium ${fmt(v.endometrium, "mm")}`,
@@ -1105,7 +1241,9 @@ export function monitoringReportText(r: MonitoringResult): string {
   lines.push(
     "",
     "RESPONSE TREND",
-    ...r.trends.map((t) => `  ${t.label}: latest ${t.latest} · previous ${t.previous} · ${t.perDay}`),
+    ...r.trends.map(
+      (t) => `  ${t.label}: latest ${t.latest} · previous ${t.previous} · ${t.perDay}`,
+    ),
     "",
     `MONITORING STATUS: ${monitoringStatusLabel[r.status]}`,
     `  ${r.statusDetail}`,
@@ -1120,7 +1258,8 @@ export function monitoringReportText(r: MonitoringResult): string {
     "DOSE TIMELINE",
     ...(r.doseTimeline.length
       ? r.doseTimeline.map(
-          (d) => `  Day ${d.day} — ${d.dose} — ${d.medication} — ${d.change} — ${d.physicianDecision}`,
+          (d) =>
+            `  Day ${d.day} — ${d.dose} — ${d.medication} — ${d.change} — ${d.physicianDecision}`,
         )
       : ["  No dose recorded."]),
     "",

@@ -314,9 +314,7 @@ export const protocolReferences: ProtocolReference[] = [
     exclusion: [
       "No exclusion criterion is transcribed from the indexed records; the guideline recommendation tables are not loaded.",
     ],
-    advantages: [
-      "Long-established comparator arm in the indexed randomised evidence.",
-    ],
+    advantages: ["Long-established comparator arm in the indexed randomised evidence."],
     limitations: [
       "The indexed record summarises the comparison at review level; no population-specific recommendation statement is transcribed.",
       "No subgroup statement for POSEIDON groups or Bologna poor responders is transcribed.",
@@ -433,11 +431,21 @@ export function buildProtocolSelection(
       item("fsh", "Basal FSH", i.fsh, "Assessment", "IU/L"),
       item("lh", "Basal LH", i.lh, "Assessment", "IU/L"),
       item("e2", "Basal estradiol", i.estradiol, "Assessment", "pg/mL"),
-      item("reserve", "Reserve category", reserveCategoryLabel[phenotype.reserve.category], "Phenotype Engine"),
+      item(
+        "reserve",
+        "Reserve category",
+        reserveCategoryLabel[phenotype.reserve.category],
+        "Phenotype Engine",
+      ),
     ]),
     group("phenotype", "Ovarian phenotype", [
       item("poseidon", "POSEIDON group", phenotype.poseidon.groupLabel, "POSEIDON Engine"),
-      item("bologna", "Bologna status", bolognaStatusLabel[phenotype.bologna.status], "Bologna Engine"),
+      item(
+        "bologna",
+        "Bologna status",
+        bolognaStatusLabel[phenotype.bologna.status],
+        "Bologna Engine",
+      ),
       item(
         "predicted",
         "Predicted ovarian response",
@@ -457,10 +465,15 @@ export function buildProtocolSelection(
       item(
         "endometriosis",
         "Endometriosis",
-        i.endometriosis ? s(values["endometriosisStage"]) ?? "Documented" : null,
+        i.endometriosis ? (s(values["endometriosisStage"]) ?? "Documented") : null,
         "Assessment",
       ),
-      item("tubal", "Tubal factor", causes.includes("Tubal Factor") ? "Documented" : null, "Assessment"),
+      item(
+        "tubal",
+        "Tubal factor",
+        causes.includes("Tubal Factor") ? "Documented" : null,
+        "Assessment",
+      ),
       item(
         "male",
         "Male factor",
@@ -493,7 +506,12 @@ export function buildProtocolSelection(
     ]),
     group("previous", "Previous IVF / ICSI", [
       item("count", "Number of previous cycles", cycles.length || null, "Cycle records"),
-      item("lastProtocol", "Previous protocol", i.cycleSignals.at(-1)?.protocol ?? null, "Cycle records"),
+      item(
+        "lastProtocol",
+        "Previous protocol",
+        i.cycleSignals.at(-1)?.protocol ?? null,
+        "Cycle records",
+      ),
       item(
         "lastDose",
         "Previous starting dose",
@@ -501,7 +519,12 @@ export function buildProtocolSelection(
         "Cycle records (historical)",
         "IU/day",
       ),
-      item("lastRetrieved", "Previous oocytes retrieved", i.cycleSignals.at(-1)?.retrieved ?? null, "Cycle records"),
+      item(
+        "lastRetrieved",
+        "Previous oocytes retrieved",
+        i.cycleSignals.at(-1)?.retrieved ?? null,
+        "Cycle records",
+      ),
     ]),
   ];
 
@@ -511,7 +534,8 @@ export function buildProtocolSelection(
     label: s(c["cycleNumber"]) ? `Cycle ${s(c["cycleNumber"])}` : `Cycle ${idx + 1}`,
     protocol: cell(c, "protocol"),
     gnrhAnalogue: cell(c, "gnrhAnalogue"),
-    gonadotropin: [s(c["gonadotropinType"]), s(c["medication"])].filter(Boolean).join(" · ") || NOT_RECORDED,
+    gonadotropin:
+      [s(c["gonadotropinType"]), s(c["medication"])].filter(Boolean).join(" · ") || NOT_RECORDED,
     startingDose: s(c["startingDose"]) ? `${s(c["startingDose"])} IU/day` : NOT_RECORDED,
     maxDose: s(c["maxDose"]) ? `${s(c["maxDose"])} IU/day` : NOT_RECORDED,
     doseChanges: cell(c, "doseChanges"),
@@ -593,7 +617,7 @@ export function buildProtocolSelection(
         evidencePopulation:
           "The indexed comparison does not print a rule linking a previous cycle outcome to a protocol change.",
         patientValue: predictedVsObserved.observedAvailable
-          ? predictedVsObserved.observedStatements[0] ?? NOT_RECORDED
+          ? (predictedVsObserved.observedStatements[0] ?? NOT_RECORDED)
           : "No completed previous cycle with a recorded oocyte yield",
         state: predictedVsObserved.observedAvailable
           ? "EVIDENCE_INSUFFICIENT"
@@ -870,7 +894,9 @@ export function protocolSelectionReportText(
     ]),
     "",
     "Cautions and evidence limitations",
-    ...(r.cautions.length ? r.cautions.map((c) => `- ${c.label} (${c.source})`) : ["- None recorded."]),
+    ...(r.cautions.length
+      ? r.cautions.map((c) => `- ${c.label} (${c.source})`)
+      : ["- None recorded."]),
     "",
     "Missing information",
     ...(r.missingInformation.length

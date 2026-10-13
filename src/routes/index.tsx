@@ -139,7 +139,6 @@ function Landing() {
           </p>
           <p className="text-[11px] tracking-wide">Created by Dr Raouf Roshdy</p>
         </div>
-
       </footer>
     </div>
   );

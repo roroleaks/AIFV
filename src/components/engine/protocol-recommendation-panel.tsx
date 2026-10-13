@@ -36,7 +36,6 @@ import {
   EvidencePendingGate,
 } from "@/components/engine/clinical-safety-banner";
 
-
 const severityClass: Record<ClinicalConsideration["severity"], string> = {
   high: "border-rose-500/40 bg-rose-500/10 text-rose-600 dark:text-rose-400",
   moderate: "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
@@ -96,10 +95,7 @@ export function ProtocolSummaryCard({ result }: { result: ProtocolRecommendation
         <Row label="BMI" value={s.bmi !== null ? `${s.bmi} kg/m²` : dash} />
         <Row label="AMH" value={s.amh !== null ? `${s.amh} ng/mL` : dash} />
         <Row label="AFC" value={s.afc !== null ? `${s.afc} follicles` : dash} />
-        <Row
-          label="Diagnosis"
-          value={s.diagnosis.length ? s.diagnosis.join(", ") : dash}
-        />
+        <Row label="Diagnosis" value={s.diagnosis.length ? s.diagnosis.join(", ") : dash} />
         <Row label="POSEIDON group" value={s.poseidonGroup ?? s.poseidonStatus} />
         <Row label="Bologna status" value={s.bolognaStatus} />
         <Row label="Expected response" value={s.expectedResponse} />
@@ -131,15 +127,13 @@ export function ProtocolSummaryCard({ result }: { result: ProtocolRecommendation
 
 /* ------------------------------------------- 2. protocol recommendation */
 
-export function ProtocolRecommendationCard({
-  result,
-}: {
-  result: ProtocolRecommendationResult;
-}) {
+export function ProtocolRecommendationCard({ result }: { result: ProtocolRecommendationResult }) {
   const [open, setOpen] = useState(false);
   const r = result.recommendation;
   const gate = evaluateTreatmentGate("protocol-recommendation", {
-    dataAvailable: result.dataSources.filter((d) => d.available).map((d) => `${d.label}: ${d.detail}`),
+    dataAvailable: result.dataSources
+      .filter((d) => d.available)
+      .map((d) => `${d.label}: ${d.detail}`),
   });
   return (
     <Card
@@ -177,7 +171,7 @@ export function ProtocolRecommendationCard({
           label="Recommended protocol"
           value={
             r.recommended
-              ? protocolDatabase.find((p) => p.id === r.recommended)?.name ?? r.recommended
+              ? (protocolDatabase.find((p) => p.id === r.recommended)?.name ?? r.recommended)
               : "None"
           }
         />
@@ -194,7 +188,6 @@ export function ProtocolRecommendationCard({
         <Row label="Engine version" value={`v${result.version}`} />
         <Row label="Evidence sources required" value={`${gate.requiredEvidence.length}`} />
       </div>
-
 
       <Button
         variant="outline"
@@ -245,11 +238,7 @@ export function ProtocolRecommendationCard({
 
 /* --------------------------------------------- 3. clinical considerations */
 
-export function ProtocolConsiderationsCard({
-  result,
-}: {
-  result: ProtocolRecommendationResult;
-}) {
+export function ProtocolConsiderationsCard({ result }: { result: ProtocolRecommendationResult }) {
   return (
     <Card
       icon={AlertTriangle}
@@ -288,10 +277,7 @@ export function ProtocolDataSourcesCard({ result }: { result: ProtocolRecommenda
     <Card icon={Database} title="Data sources">
       <ul className="grid gap-2 sm:grid-cols-2">
         {result.dataSources.map((d) => (
-          <li
-            key={d.id}
-            className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
-          >
+          <li key={d.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
             <div className="flex items-center gap-2">
               <span
                 className={cn(

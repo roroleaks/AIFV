@@ -105,7 +105,8 @@ function EvidenceSearch() {
     [library],
   );
   const years = useMemo(
-    () => Array.from(new Set(library.map((e) => String(e.year)))).sort((a, b) => Number(b) - Number(a)),
+    () =>
+      Array.from(new Set(library.map((e) => String(e.year)))).sort((a, b) => Number(b) - Number(a)),
     [library],
   );
 
@@ -176,7 +177,10 @@ function EvidenceSearch() {
           <Stat label="Guidelines" value={stats.guidelines} />
           <Stat label="RCTs" value={stats.rcts} />
           <Stat label="Meta-analyses" value={stats.metaAnalyses} />
-          <Stat label="Algorithms activated" value={`${stats.algorithmsActivated}/${stats.algorithmsTotal}`} />
+          <Stat
+            label="Algorithms activated"
+            value={`${stats.algorithmsActivated}/${stats.algorithmsTotal}`}
+          />
           <Stat label="Algorithms waiting" value={stats.algorithmsWaiting} />
         </div>
         <div className="mt-3 rounded-2xl border border-border/70 bg-muted/30 p-3">
@@ -395,7 +399,9 @@ function EvidenceSearch() {
               size="sm"
               variant="outline"
               className="rounded-xl"
-              onClick={() => downloadText(`evidence-${stamp}.csv`, evidenceToCsv(results), "text/csv")}
+              onClick={() =>
+                downloadText(`evidence-${stamp}.csv`, evidenceToCsv(results), "text/csv")
+              }
             >
               <Download className="size-3.5" /> CSV
             </Button>
@@ -694,8 +700,7 @@ function EvidenceCard({
     () => modules.flatMap((m) => m.missing.map((r) => ({ ...r, module: m.name }))),
     [modules],
   );
-  const localFile =
-    documentUrlFor(entry.fileName);
+  const localFile = documentUrlFor(entry.fileName);
   const doi = doiUrl(entry.doi);
   const journal = journalUrl(entry);
   const pubmed = pubmedUrl(entry.pmid);
@@ -820,7 +825,9 @@ function EvidenceCard({
           aria-expanded={showAbstract}
           className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
         >
-          <ChevronDown className={cn("size-3.5 transition-transform", showAbstract && "rotate-180")} />
+          <ChevronDown
+            className={cn("size-3.5 transition-transform", showAbstract && "rotate-180")}
+          />
           {showAbstract ? "Hide abstract" : "View abstract"}
         </button>
         {showAbstract && (
@@ -839,7 +846,9 @@ function EvidenceCard({
           aria-expanded={showDetails}
           className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
         >
-          <ChevronDown className={cn("size-3.5 transition-transform", showDetails && "rotate-180")} />
+          <ChevronDown
+            className={cn("size-3.5 transition-transform", showDetails && "rotate-180")}
+          />
           {showDetails ? "Hide clinical detail" : "Clinical detail, modules & impact"}
         </button>
         {showDetails && (
@@ -1040,7 +1049,9 @@ function ImportPanel({
     >
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <div className="space-y-1.5">
-          <Label className="text-[11px] uppercase tracking-wide text-muted-foreground">Source</Label>
+          <Label className="text-[11px] uppercase tracking-wide text-muted-foreground">
+            Source
+          </Label>
           <select
             value={draft.sourceKind}
             onChange={(e) => set("sourceKind", e.target.value as ImportDraft["sourceKind"])}
@@ -1053,9 +1064,22 @@ function ImportPanel({
             ))}
           </select>
         </div>
-        <Field label="Title *" value={draft.title} onChange={(v) => set("title", v)} className="lg:col-span-2" />
-        <Field label="Authors (comma separated)" value={draft.authors} onChange={(v) => set("authors", v)} />
-        <Field label="Journal / Society *" value={draft.journal} onChange={(v) => set("journal", v)} />
+        <Field
+          label="Title *"
+          value={draft.title}
+          onChange={(v) => set("title", v)}
+          className="lg:col-span-2"
+        />
+        <Field
+          label="Authors (comma separated)"
+          value={draft.authors}
+          onChange={(v) => set("authors", v)}
+        />
+        <Field
+          label="Journal / Society *"
+          value={draft.journal}
+          onChange={(v) => set("journal", v)}
+        />
         <Field label="Publisher" value={draft.publisher} onChange={(v) => set("publisher", v)} />
         <Field label="Year" value={draft.year} onChange={(v) => set("year", v)} />
         <Field label="Volume" value={draft.volume} onChange={(v) => set("volume", v)} />
@@ -1064,7 +1088,11 @@ function ImportPanel({
         <Field label="DOI" value={draft.doi} onChange={(v) => set("doi", v)} />
         <Field label="PubMed ID" value={draft.pmid} onChange={(v) => set("pmid", v)} />
         <Field label="External URL" value={draft.url} onChange={(v) => set("url", v)} />
-        <Field label="Keywords (comma separated)" value={draft.keywords} onChange={(v) => set("keywords", v)} />
+        <Field
+          label="Keywords (comma separated)"
+          value={draft.keywords}
+          onChange={(v) => set("keywords", v)}
+        />
         <div className="space-y-1.5">
           <Label className="text-[11px] uppercase tracking-wide text-muted-foreground">Type</Label>
           <select

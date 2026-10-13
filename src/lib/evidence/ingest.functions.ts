@@ -35,7 +35,11 @@ export const fetchSourceMetadata = createServerFn({ method: "POST" })
           headers: { Accept: "application/json" },
         });
         if (!res.ok) {
-          return { ok: false, url: raw, message: `Crossref returned ${res.status}. Enter the metadata manually.` };
+          return {
+            ok: false,
+            url: raw,
+            message: `Crossref returned ${res.status}. Enter the metadata manually.`,
+          };
         }
         const body = (await res.json()) as {
           message?: {
@@ -51,7 +55,8 @@ export const fetchSourceMetadata = createServerFn({ method: "POST" })
           ok: true,
           url: `https://doi.org/${doi}`,
           doi,
-          message: "Metadata retrieved from Crossref. Verify it against the publisher before accepting.",
+          message:
+            "Metadata retrieved from Crossref. Verify it against the publisher before accepting.",
         };
         if (m.title?.[0]) result.title = m.title[0];
         if (m["container-title"]?.[0] ?? m.publisher)
@@ -133,7 +138,7 @@ export const searchEvidenceCandidates = createServerFn({ method: "POST" })
           {
             role: "system",
             content:
-              "You list candidate published guidelines and trials for reproductive medicine specialists. Return bibliographic references only: no clinical rules, thresholds, doses or recommendations. If you are not certain a reference exists, omit it. Respond as JSON: {\"candidates\":[{\"title\":\"\",\"society\":\"\",\"year\":0,\"sourceUrl\":\"\",\"reason\":\"\"}]}.",
+              'You list candidate published guidelines and trials for reproductive medicine specialists. Return bibliographic references only: no clinical rules, thresholds, doses or recommendations. If you are not certain a reference exists, omit it. Respond as JSON: {"candidates":[{"title":"","society":"","year":0,"sourceUrl":"","reason":""}]}.',
           },
           { role: "user", content: `Topic: ${data.topic}` },
         ],

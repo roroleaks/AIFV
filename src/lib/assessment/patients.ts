@@ -66,7 +66,6 @@ const write = (records: PatientRecord[]) => {
 
 export const readPatients = read;
 
-
 export function recordFromDraft(draft: AssessmentDraft, completion: number): PatientRecord {
   const v = draft.values;
   const str = (k: string) => (v[k] === undefined ? "" : String(v[k]));
@@ -155,10 +154,8 @@ export function usePatients() {
     write(next);
   }, []);
 
-
   const togglePin = useCallback(
-    (id: string) =>
-      update(read().map((r) => (r.id === id ? { ...r, pinned: !r.pinned } : r))),
+    (id: string) => update(read().map((r) => (r.id === id ? { ...r, pinned: !r.pinned } : r))),
     [update],
   );
 

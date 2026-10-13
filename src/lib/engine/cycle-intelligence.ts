@@ -20,16 +20,16 @@ import {
 } from "@/lib/assessment/schema";
 import { toNum } from "@/lib/assessment/derived";
 import type { CycleRecord, FieldValue } from "@/lib/assessment/use-assessment";
-import {
-  responseCategoryLabel,
-  type OvarianResponseResult,
-} from "./ovarian-response";
+import { responseCategoryLabel, type OvarianResponseResult } from "./ovarian-response";
 
 export const CYCLE_INTELLIGENCE_VERSION = "1.0.0";
 
 export const NOT_PROVIDED = "Not provided";
 
-export const cycleIntelligenceEvidenceIds = ["eshre-2025-ovarian-stimulation-update", "eshre-2020-ovarian-stimulation"];
+export const cycleIntelligenceEvidenceIds = [
+  "eshre-2025-ovarian-stimulation-update",
+  "eshre-2020-ovarian-stimulation",
+];
 
 /** Descriptive observation vs validated recommendation — always explicit. */
 export const DESCRIPTIVE_NOTE =
@@ -100,7 +100,14 @@ export interface CycleOutcomeRow {
 export interface ExpectedObserved {
   expectedCategory: string;
   expectedBasis: string[];
-  observedRows: { label: string; retrieved: string; mii: string; fertilized: string; blastocysts: string; pregnancy: string }[];
+  observedRows: {
+    label: string;
+    retrieved: string;
+    mii: string;
+    fertilized: string;
+    blastocysts: string;
+    pregnancy: string;
+  }[];
   observedSummary: string[];
   bestRetrieved: number | null;
   lastRetrieved: number | null;
@@ -147,7 +154,8 @@ const str = (cycle: CycleRecord, key: string) => {
 
 function cycleLabel(cycle: CycleRecord, index: number): string {
   const n = num(cycle, "cycleNumber") ?? index + 1;
-  const year = str(cycle, "cycleYear") || (str(cycle, "cycleDate") ? str(cycle, "cycleDate").slice(0, 4) : "");
+  const year =
+    str(cycle, "cycleYear") || (str(cycle, "cycleDate") ? str(cycle, "cycleDate").slice(0, 4) : "");
   const type = str(cycle, "cycleType");
   return `Cycle ${n}${year ? ` (${year})` : ""}${type ? ` · ${type}` : ""}`;
 }
@@ -172,22 +180,65 @@ interface Comparison {
 
 /** Arithmetic impossibilities only — never a clinical judgement. */
 const COMPARISONS: Comparison[] = [
-  { a: "mii", b: "retrieved", message: "Mature (MII) oocytes cannot exceed the number of oocytes retrieved." },
-  { a: "fertilized", b: "mii", message: "Fertilized oocytes cannot exceed the number of mature (MII) oocytes." },
-  { a: "twoPn", b: "fertilized", message: "2PN zygotes cannot exceed the number of fertilized oocytes." },
-  { a: "blastocysts", b: "fertilized", message: "Blastocysts cannot exceed the number of fertilized oocytes." },
-  { a: "day3", b: "fertilized", message: "Day 3 embryos cannot exceed the number of fertilized oocytes." },
-  { a: "follicles17", b: "folliclesTotal", message: "Follicles ≥ 17 mm cannot exceed the total follicle count." },
-  { a: "follicles14", b: "folliclesTotal", message: "Follicles ≥ 14 mm cannot exceed the total follicle count." },
-  { a: "follicles17", b: "follicles14", message: "Follicles ≥ 17 mm cannot exceed follicles ≥ 14 mm." },
-  { a: "startingDose", b: "maxDose", message: "The starting dose cannot exceed the recorded maximum daily dose." },
+  {
+    a: "mii",
+    b: "retrieved",
+    message: "Mature (MII) oocytes cannot exceed the number of oocytes retrieved.",
+  },
+  {
+    a: "fertilized",
+    b: "mii",
+    message: "Fertilized oocytes cannot exceed the number of mature (MII) oocytes.",
+  },
+  {
+    a: "twoPn",
+    b: "fertilized",
+    message: "2PN zygotes cannot exceed the number of fertilized oocytes.",
+  },
+  {
+    a: "blastocysts",
+    b: "fertilized",
+    message: "Blastocysts cannot exceed the number of fertilized oocytes.",
+  },
+  {
+    a: "day3",
+    b: "fertilized",
+    message: "Day 3 embryos cannot exceed the number of fertilized oocytes.",
+  },
+  {
+    a: "follicles17",
+    b: "folliclesTotal",
+    message: "Follicles ≥ 17 mm cannot exceed the total follicle count.",
+  },
+  {
+    a: "follicles14",
+    b: "folliclesTotal",
+    message: "Follicles ≥ 14 mm cannot exceed the total follicle count.",
+  },
+  {
+    a: "follicles17",
+    b: "follicles14",
+    message: "Follicles ≥ 17 mm cannot exceed follicles ≥ 14 mm.",
+  },
+  {
+    a: "startingDose",
+    b: "maxDose",
+    message: "The starting dose cannot exceed the recorded maximum daily dose.",
+  },
 ];
 
 export function validateCycle(cycle: CycleRecord, index: number): CycleIssue[] {
   const label = cycleLabel(cycle, index);
   const issues: CycleIssue[] = [];
   const push = (level: CycleIssueLevel, field: string, message: string) =>
-    issues.push({ id: `${cycle.id}-${field}-${issues.length}`, cycleId: cycle.id, cycleLabel: label, level, field, message });
+    issues.push({
+      id: `${cycle.id}-${field}-${issues.length}`,
+      cycleId: cycle.id,
+      cycleLabel: label,
+      level,
+      field,
+      message,
+    });
 
   // numeric range and unit plausibility, taken from the declared field limits
   for (const field of cycleFields) {
@@ -195,9 +246,17 @@ export function validateCycle(cycle: CycleRecord, index: number): CycleIssue[] {
     const value = num(cycle, field.key);
     if (value === null) continue;
     if (field.min !== undefined && value < field.min)
-      push("range", field.label, `${field.label} is ${value}${field.unit ? ` ${field.unit}` : ""}, below the plausible minimum of ${field.min}${field.unit ? ` ${field.unit}` : ""}.`);
+      push(
+        "range",
+        field.label,
+        `${field.label} is ${value}${field.unit ? ` ${field.unit}` : ""}, below the plausible minimum of ${field.min}${field.unit ? ` ${field.unit}` : ""}.`,
+      );
     if (field.max !== undefined && value > field.max)
-      push("range", field.label, `${field.label} is ${value}${field.unit ? ` ${field.unit}` : ""}, above the plausible maximum of ${field.max}${field.unit ? ` ${field.unit}` : ""}.`);
+      push(
+        "range",
+        field.label,
+        `${field.label} is ${value}${field.unit ? ` ${field.unit}` : ""}, above the plausible maximum of ${field.max}${field.unit ? ` ${field.unit}` : ""}.`,
+      );
     if (value < 0) push("range", field.label, `${field.label} cannot be negative.`);
   }
 
@@ -213,25 +272,56 @@ export function validateCycle(cycle: CycleRecord, index: number): CycleIssue[] {
   const start = num(cycle, "startingDose");
   const days = num(cycle, "duration");
   if (total !== null && start !== null && days !== null && total < start) {
-    push("contradiction", "totalDose", "Total gonadotropin exposure is lower than a single starting dose; review the recorded units.");
+    push(
+      "contradiction",
+      "totalDose",
+      "Total gonadotropin exposure is lower than a single starting dose; review the recorded units.",
+    );
   }
   if (str(cycle, "cancelled") === "Yes" && retrieved !== null && retrieved > 0) {
-    push("contradiction", "cancelled", "The cycle is recorded as cancelled but oocytes were retrieved.");
+    push(
+      "contradiction",
+      "cancelled",
+      "The cycle is recorded as cancelled but oocytes were retrieved.",
+    );
   }
   if (str(cycle, "liveBirth") === "Yes" && str(cycle, "clinicalPregnancy") === "No") {
-    push("contradiction", "liveBirth", "A live birth is recorded while clinical pregnancy is recorded as No.");
+    push(
+      "contradiction",
+      "liveBirth",
+      "A live birth is recorded while clinical pregnancy is recorded as No.",
+    );
   }
   if (str(cycle, "liveBirth") === "Yes" && str(cycle, "miscarriage") === "Yes") {
-    push("contradiction", "liveBirth", "Both a live birth and a miscarriage are recorded for the same cycle.");
+    push(
+      "contradiction",
+      "liveBirth",
+      "Both a live birth and a miscarriage are recorded for the same cycle.",
+    );
   }
-  if (str(cycle, "clinicalPregnancy") === "Yes" && str(cycle, "transferType") === "Freeze-all — no transfer") {
-    push("contradiction", "clinicalPregnancy", "A clinical pregnancy is recorded although the cycle is marked as freeze-all with no transfer.");
+  if (
+    str(cycle, "clinicalPregnancy") === "Yes" &&
+    str(cycle, "transferType") === "Freeze-all — no transfer"
+  ) {
+    push(
+      "contradiction",
+      "clinicalPregnancy",
+      "A clinical pregnancy is recorded although the cycle is marked as freeze-all with no transfer.",
+    );
   }
-  if (str(cycle, "pgtPerformed") !== "" && str(cycle, "pgtPerformed") !== "No" && !str(cycle, "pgtResult")) {
+  if (
+    str(cycle, "pgtPerformed") !== "" &&
+    str(cycle, "pgtPerformed") !== "No" &&
+    !str(cycle, "pgtResult")
+  ) {
     push("incomplete", "pgtResult", "PGT is recorded as performed but no PGT result is entered.");
   }
   if (str(cycle, "cancelled") === "Yes" && !str(cycle, "cancellationReason")) {
-    push("incomplete", "cancellationReason", "The cycle is recorded as cancelled but no reason is documented.");
+    push(
+      "incomplete",
+      "cancellationReason",
+      "The cycle is recorded as cancelled but no reason is documented.",
+    );
   }
   return issues;
 }
@@ -253,20 +343,34 @@ const TRENDS: TrendDef[] = [
   { id: "totalDose", label: "Total gonadotropin exposure", unit: "IU", key: "totalDose" },
   { id: "duration", label: "Stimulation duration", unit: "days", key: "duration" },
   { id: "peakE2", label: "Peak estradiol", unit: "pg/mL", key: "peakE2" },
-  { id: "folliclesTotal", label: "Follicles at trigger", unit: "", key: "folliclesTotal", countLike: true },
+  {
+    id: "folliclesTotal",
+    label: "Follicles at trigger",
+    unit: "",
+    key: "folliclesTotal",
+    countLike: true,
+  },
   { id: "retrieved", label: "Oocytes retrieved", unit: "", key: "retrieved", countLike: true },
   { id: "mii", label: "Mature (MII) oocytes", unit: "", key: "mii", countLike: true },
   { id: "fertilized", label: "Fertilized oocytes", unit: "", key: "fertilized", countLike: true },
   { id: "twoPn", label: "2PN zygotes", unit: "", key: "twoPn", countLike: true },
   { id: "blastocysts", label: "Blastocysts", unit: "", key: "blastocysts", countLike: true },
   { id: "frozen", label: "Embryos frozen", unit: "", key: "frozen", countLike: true },
-  { id: "transferred", label: "Embryos transferred", unit: "", key: "transferred", countLike: true },
+  {
+    id: "transferred",
+    label: "Embryos transferred",
+    unit: "",
+    key: "transferred",
+    countLike: true,
+  },
 ];
 
 function buildTrends(cycles: CycleRecord[]): CycleTrend[] {
   return TRENDS.map((t) => {
     const raw = cycles.map((c) => num(c, t.key));
-    const values = raw.map((v) => (v === null ? NOT_PROVIDED : `${v}${t.unit ? ` ${t.unit}` : ""}`));
+    const values = raw.map((v) =>
+      v === null ? NOT_PROVIDED : `${v}${t.unit ? ` ${t.unit}` : ""}`,
+    );
     const recorded = raw.filter((v): v is number => v !== null);
     const firstIndex = raw.findIndex((v) => v !== null);
     const lastIndex = raw.map((v) => v !== null).lastIndexOf(true);
@@ -408,9 +512,12 @@ export function buildCycleIntelligence(
   const missingObserved: string[] = [];
   if (cycles.length === 0) missingObserved.push("No previous IVF/ICSI cycle has been recorded.");
   cycles.forEach((c, i) => {
-    if (num(c, "retrieved") === null) missingObserved.push(`${cycleLabel(c, i)}: oocytes retrieved not provided.`);
-    if (num(c, "mii") === null) missingObserved.push(`${cycleLabel(c, i)}: mature (MII) oocytes not provided.`);
-    if (num(c, "startingDose") === null) missingObserved.push(`${cycleLabel(c, i)}: starting gonadotropin dose not provided.`);
+    if (num(c, "retrieved") === null)
+      missingObserved.push(`${cycleLabel(c, i)}: oocytes retrieved not provided.`);
+    if (num(c, "mii") === null)
+      missingObserved.push(`${cycleLabel(c, i)}: mature (MII) oocytes not provided.`);
+    if (num(c, "startingDose") === null)
+      missingObserved.push(`${cycleLabel(c, i)}: starting gonadotropin dose not provided.`);
   });
 
   const expectedObserved: ExpectedObserved = {
@@ -426,7 +533,9 @@ export function buildCycleIntelligence(
         ]
       : [],
     bestRetrieved: recordedRetrieved.length ? Math.max(...recordedRetrieved) : null,
-    lastRetrieved: recordedRetrieved.length ? recordedRetrieved[recordedRetrieved.length - 1]! : null,
+    lastRetrieved: recordedRetrieved.length
+      ? recordedRetrieved[recordedRetrieved.length - 1]!
+      : null,
     statements,
     missing: missingObserved,
     pendingNote: EXPECTED_OBSERVED_PENDING,

@@ -64,10 +64,7 @@ export function ClinicalAlertsPanel({
 
   return (
     <section
-      className={cn(
-        "rounded-2xl border border-border/70 bg-card p-4 shadow-soft",
-        className,
-      )}
+      className={cn("rounded-2xl border border-border/70 bg-card p-4 shadow-soft", className)}
       aria-label="Clinical alerts"
     >
       <header className="mb-3 flex items-center justify-between gap-2">
@@ -105,13 +102,7 @@ export function ClinicalAlertsPanel({
   );
 }
 
-export function ClinicalAlertsTrigger({
-  count,
-  onClick,
-}: {
-  count: number;
-  onClick: () => void;
-}) {
+export function ClinicalAlertsTrigger({ count, onClick }: { count: number; onClick: () => void }) {
   return (
     <Button variant="outline" size="sm" className="rounded-xl" onClick={onClick}>
       <CircleAlert className="size-4 text-warning" />

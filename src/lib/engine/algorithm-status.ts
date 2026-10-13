@@ -38,8 +38,7 @@ export const algorithmStatusLabel: Record<AlgorithmStatus, string> = {
 
 export const algorithmStatusTone: Record<AlgorithmStatus, string> = {
   ACTIVE: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  TEST_IMPLEMENTATION:
-    "border-orange-500/50 bg-orange-500/10 text-orange-600 dark:text-orange-400",
+  TEST_IMPLEMENTATION: "border-orange-500/50 bg-orange-500/10 text-orange-600 dark:text-orange-400",
   EVIDENCE_PENDING: "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
   DATA_INCOMPLETE: "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400",
   VALIDATION_REQUIRED: "border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-400",
@@ -231,7 +230,10 @@ export function evaluateTreatmentGate(
   // engine that already carries internal, non-validated executable logic.
   const record = engineActivationByGate(id);
   const testUnlocked =
-    !activated && isFullTestMode() && Boolean(record?.testImplementation) && isEngineEnabled(record!.id);
+    !activated &&
+    isFullTestMode() &&
+    Boolean(record?.testImplementation) &&
+    isEngineEnabled(record!.id);
 
   let status: AlgorithmStatus = activated
     ? "ACTIVE"

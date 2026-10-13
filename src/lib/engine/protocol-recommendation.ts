@@ -164,9 +164,7 @@ export function buildProtocolRecommendation(
     poseidonStatus: phenotype.poseidon.headline,
     bolognaStatus: phenotype.bologna.headline,
     expectedResponse: responseCategoryLabel[response.category],
-    majorRisks: response.risks
-      .filter((r) => r.severity !== "info")
-      .map((r) => r.label),
+    majorRisks: response.risks.filter((r) => r.severity !== "info").map((r) => r.label),
   };
 
   /* Considerations are restatements of recorded data or of an already
@@ -292,25 +290,27 @@ export function buildProtocolRecommendation(
       id: "labs",
       label: "Laboratory results",
       available: i.amh !== null || i.fsh !== null || i.lh !== null || i.estradiol !== null,
-      detail: [
-        i.amh !== null ? `AMH ${i.amh}` : null,
-        i.fsh !== null ? `FSH ${i.fsh}` : null,
-        i.lh !== null ? `LH ${i.lh}` : null,
-        i.estradiol !== null ? `E2 ${i.estradiol}` : null,
-      ]
-        .filter(Boolean)
-        .join(" · ") || "Not recorded",
+      detail:
+        [
+          i.amh !== null ? `AMH ${i.amh}` : null,
+          i.fsh !== null ? `FSH ${i.fsh}` : null,
+          i.lh !== null ? `LH ${i.lh}` : null,
+          i.estradiol !== null ? `E2 ${i.estradiol}` : null,
+        ]
+          .filter(Boolean)
+          .join(" · ") || "Not recorded",
     },
     {
       id: "ultrasound",
       label: "Ultrasound findings",
       available: i.afc !== null || endoThickness !== null,
-      detail: [
-        i.afc !== null ? `AFC ${i.afc}` : null,
-        endoThickness !== null ? `Endometrium ${endoThickness} mm` : null,
-      ]
-        .filter(Boolean)
-        .join(" · ") || "Not recorded",
+      detail:
+        [
+          i.afc !== null ? `AFC ${i.afc}` : null,
+          endoThickness !== null ? `Endometrium ${endoThickness} mm` : null,
+        ]
+          .filter(Boolean)
+          .join(" · ") || "Not recorded",
     },
   ];
 
@@ -382,7 +382,8 @@ function determineProtocolRecommendation(
   if (isHighResponder) {
     return {
       status: "available",
-      message: "GnRH antagonist protocol recommended for high responder / PCOS / OHSS risk profile.",
+      message:
+        "GnRH antagonist protocol recommended for high responder / PCOS / OHSS risk profile.",
       recommended: "gnrh-antagonist",
       primary: "gnrh-antagonist",
       alternatives: ["ppos"],
@@ -417,7 +418,8 @@ function determineProtocolRecommendation(
   if (isPoorResponder) {
     return {
       status: "available",
-      message: "GnRH antagonist protocol recommended for poor ovarian responder / POSEIDON profile.",
+      message:
+        "GnRH antagonist protocol recommended for poor ovarian responder / POSEIDON profile.",
       recommended: "gnrh-antagonist",
       primary: "gnrh-antagonist",
       alternatives: ["microflare", "modified-natural-cycle"],
@@ -456,10 +458,7 @@ function determineProtocolRecommendation(
     recommended: "gnrh-antagonist",
     primary: "gnrh-antagonist",
     alternatives: ["long-gnrh-agonist"],
-    evidenceSource: [
-      "eshre-2025-ovarian-stimulation-update",
-      "cochrane-2016-antagonist",
-    ],
+    evidenceSource: ["eshre-2025-ovarian-stimulation-update", "cochrane-2016-antagonist"],
     explanation: {
       clinicalRationale:
         "GnRH antagonist protocol with fixed start on stimulation Day 5 or 6 (ESHRE 2025 Rec 22, 23 / Grade A) is recommended as first line for predicted normal responders. It achieves equivalent ongoing pregnancy and live birth rates to long agonist regimens while significantly reducing treatment duration, total gonadotropin consumption, and OHSS risk. Long GnRH agonist protocol remains an established alternative when precise cycle scheduling or clinic batching is required (Rec 21).",
@@ -475,7 +474,8 @@ function determineProtocolRecommendation(
       ],
       guideline: "ESHRE 2025 (Rec 22: Strong recommendation, Rec 23: Conditional)",
       publication: "Human Reproduction / Cochrane Database of Systematic Reviews",
-      notes: "Target follicular cohort: 8–14 oocytes. Conventional gonadotropin dose 150–225 IU/day.",
+      notes:
+        "Target follicular cohort: 8–14 oocytes. Conventional gonadotropin dose 150–225 IU/day.",
     },
   };
 }
@@ -484,7 +484,7 @@ function determineProtocolRecommendation(
 export function protocolReportText(r: ProtocolRecommendationResult): string {
   const s = r.summary;
   const rec = r.recommendation;
-  const pName = (id: ProtocolId | null) => (id ? findProtocol(id)?.name ?? id : "Not available");
+  const pName = (id: ProtocolId | null) => (id ? (findProtocol(id)?.name ?? id) : "Not available");
   return [
     "PROTOCOL RECOMMENDATION",
     `Patient: ${r.patientName}`,
@@ -501,7 +501,9 @@ export function protocolReportText(r: ProtocolRecommendationResult): string {
     `Recommended protocol: ${pName(rec.recommended)}`,
     `Alternative protocols: ${rec.alternatives.length ? rec.alternatives.map(pName).join(", ") : "None"}`,
     `Status: ${rec.message}`,
-    ...(rec.explanation.clinicalRationale ? [`Clinical rationale: ${rec.explanation.clinicalRationale}`] : []),
+    ...(rec.explanation.clinicalRationale
+      ? [`Clinical rationale: ${rec.explanation.clinicalRationale}`]
+      : []),
     "",
     "Clinical considerations",
     ...(r.considerations.length

@@ -227,7 +227,8 @@ export function calculateConsortDose(
     {
       id: "previous-retrieved",
       label: "Previous retrieved oocytes",
-      value: lastRetrieved === null ? "Not recorded" : `${lastRetrieved} oocyte(s) in the last cycle`,
+      value:
+        lastRetrieved === null ? "Not recorded" : `${lastRetrieved} oocyte(s) in the last cycle`,
       available: lastRetrieved !== null,
     },
   ];

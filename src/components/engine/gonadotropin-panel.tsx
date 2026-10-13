@@ -40,7 +40,6 @@ import {
   HistoricalValueNote,
 } from "@/components/engine/clinical-safety-banner";
 
-
 function Card({
   icon: Icon,
   title,
@@ -153,7 +152,9 @@ export function GonadotropinRecommendationCard({
     ].filter((v): v is string => v !== null),
   });
 
-  const recDrug = sel.recommended ? gonadotropinDatabase.find((g) => g.id === sel.recommended) : null;
+  const recDrug = sel.recommended
+    ? gonadotropinDatabase.find((g) => g.id === sel.recommended)
+    : null;
 
   return (
     <Card
@@ -177,12 +178,18 @@ export function GonadotropinRecommendationCard({
               </div>
               <div className="flex items-center gap-1.5">
                 {sel.recommendationStrength && (
-                  <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300">
+                  <Badge
+                    variant="outline"
+                    className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300"
+                  >
                     {sel.recommendationStrength}
                   </Badge>
                 )}
                 {sel.evidenceQuality && (
-                  <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300">
+                  <Badge
+                    variant="outline"
+                    className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300"
+                  >
                     Quality {sel.evidenceQuality}
                   </Badge>
                 )}
@@ -260,7 +267,10 @@ export function GonadotropinRecommendationCard({
         <Row label="Algorithm status" value={gate.statusLabel} />
         <Row label="Selection status" value={selectionStatusLabel[sel.status]} />
         <Row label="Engine version" value={`v${result.version}`} />
-        <Row label="Evidence sources active" value={`${gate.requiredEvidence.length} (ESHRE 2025)`} />
+        <Row
+          label="Evidence sources active"
+          value={`${gate.requiredEvidence.length} (ESHRE 2025)`}
+        />
       </div>
 
       <Button
@@ -650,7 +660,9 @@ export function GonadotropinIntegrationCard() {
                 Pending
               </Badge>
             </div>
-            <p className="mt-0.5 text-xs text-muted-foreground">Consumes: {m.consumes.join(", ")}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Consumes: {m.consumes.join(", ")}
+            </p>
           </li>
         ))}
       </ul>
@@ -687,11 +699,7 @@ export function GonadotropinActions({ result }: { result: GonadotropinSelectionR
   );
 }
 
-export function GonadotropinSelectionSection({
-  result,
-}: {
-  result: GonadotropinSelectionResult;
-}) {
+export function GonadotropinSelectionSection({ result }: { result: GonadotropinSelectionResult }) {
   return (
     <div className="grid gap-5">
       <ClinicalSafetyBanner />

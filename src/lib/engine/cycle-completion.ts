@@ -27,7 +27,6 @@ import {
 } from "./monitoring";
 import { HISTORICAL_VALUE_NOTICE, gatedTreatmentValue } from "./algorithm-status";
 
-
 export const CYCLE_COMPLETION_VERSION = "1.0.0";
 
 export const cycleCompletionEvidenceIds = [
@@ -203,7 +202,12 @@ export const cycleConsumerInterfaces: CycleConsumerInterface[] = [
   {
     id: "outcome-prediction",
     name: "Outcome Prediction",
-    receives: ["Follicular cohort at completion", "Hormone profile", "Phenotype", "Response category"],
+    receives: [
+      "Follicular cohort at completion",
+      "Hormone profile",
+      "Phenotype",
+      "Response category",
+    ],
     status: "Interface prepared — awaiting evidence activation.",
   },
   {
@@ -300,9 +304,10 @@ export function buildCycleCompletion(
     {
       id: "gonadotropin",
       label: "Gonadotropin in use (entered)",
-      value: latest && latest.medication
-        ? `${latest.medication} — entered monitoring data, not a recommendation`
-        : "Gonadotropin selection algorithm: Evidence Pending",
+      value:
+        latest && latest.medication
+          ? `${latest.medication} — entered monitoring data, not a recommendation`
+          : "Gonadotropin selection algorithm: Evidence Pending",
       available: Boolean(latest?.medication),
       detail: latest?.medication ? HISTORICAL_VALUE_NOTICE : undefined,
     },
@@ -332,15 +337,60 @@ export function buildCycleCompletion(
       available: visits.length > 1,
       detail: "Arithmetic change between the last two entered measurements.",
     },
-    { id: "largest", label: "Largest follicle", value: fmt(latest?.largestFollicle ?? null, "mm"), available: latest?.largestFollicle != null },
-    { id: "f10", label: "Follicles ≥ 10 mm", value: fmt(latest?.follicles10 ?? null), available: latest?.follicles10 != null },
-    { id: "f14", label: "Follicles ≥ 14 mm", value: fmt(latest?.follicles14 ?? null), available: latest?.follicles14 != null },
-    { id: "f17", label: "Follicles ≥ 17 mm", value: fmt(latest?.follicles17 ?? null), available: latest?.follicles17 != null },
-    { id: "e2", label: "Estradiol", value: fmt(latest?.estradiol ?? null, " pg/mL"), available: latest?.estradiol != null },
-    { id: "lh", label: "LH", value: fmt(latest?.lh ?? null, " IU/L"), available: latest?.lh != null },
-    { id: "p4", label: "Progesterone", value: fmt(latest?.progesterone ?? null, " ng/mL"), available: latest?.progesterone != null },
-    { id: "endometrium", label: "Endometrium", value: fmt(latest?.endometrium ?? null, " mm"), available: latest?.endometrium != null },
-    { id: "poseidon", label: "POSEIDON", value: phenotype.poseidon.groupLabel ?? "Not classified", available: true },
+    {
+      id: "largest",
+      label: "Largest follicle",
+      value: fmt(latest?.largestFollicle ?? null, "mm"),
+      available: latest?.largestFollicle != null,
+    },
+    {
+      id: "f10",
+      label: "Follicles ≥ 10 mm",
+      value: fmt(latest?.follicles10 ?? null),
+      available: latest?.follicles10 != null,
+    },
+    {
+      id: "f14",
+      label: "Follicles ≥ 14 mm",
+      value: fmt(latest?.follicles14 ?? null),
+      available: latest?.follicles14 != null,
+    },
+    {
+      id: "f17",
+      label: "Follicles ≥ 17 mm",
+      value: fmt(latest?.follicles17 ?? null),
+      available: latest?.follicles17 != null,
+    },
+    {
+      id: "e2",
+      label: "Estradiol",
+      value: fmt(latest?.estradiol ?? null, " pg/mL"),
+      available: latest?.estradiol != null,
+    },
+    {
+      id: "lh",
+      label: "LH",
+      value: fmt(latest?.lh ?? null, " IU/L"),
+      available: latest?.lh != null,
+    },
+    {
+      id: "p4",
+      label: "Progesterone",
+      value: fmt(latest?.progesterone ?? null, " ng/mL"),
+      available: latest?.progesterone != null,
+    },
+    {
+      id: "endometrium",
+      label: "Endometrium",
+      value: fmt(latest?.endometrium ?? null, " mm"),
+      available: latest?.endometrium != null,
+    },
+    {
+      id: "poseidon",
+      label: "POSEIDON",
+      value: phenotype.poseidon.groupLabel ?? "Not classified",
+      available: true,
+    },
     { id: "bologna", label: "Bologna", value: phenotype.bologna.headline, available: true },
     {
       id: "expected-response",
@@ -396,7 +446,11 @@ export function buildCycleCompletion(
     }
   }
 
-  if (latest && latest.follicles10 !== null && latest.follicles10 >= cycleDescriptiveBands.largeCohortFollicles10) {
+  if (
+    latest &&
+    latest.follicles10 !== null &&
+    latest.follicles10 >= cycleDescriptiveBands.largeCohortFollicles10
+  ) {
     alerts.push({
       id: "cohort",
       kind: "large-follicle-cohort",
@@ -458,29 +512,37 @@ export function buildCycleCompletion(
 
   /* ------------------------------------------------------- trigger card */
 
-  const protocolValue =
-    protocol.recommendation.recommended
-      ? String(protocol.recommendation.recommended)
-      : monitoring.context.currentProtocol && !monitoring.context.currentProtocol.includes("Pending")
-        ? monitoring.context.currentProtocol
-        : latest?.medication || null;
+  const protocolValue = protocol.recommendation.recommended
+    ? String(protocol.recommendation.recommended)
+    : monitoring.context.currentProtocol && !monitoring.context.currentProtocol.includes("Pending")
+      ? monitoring.context.currentProtocol
+      : latest?.medication || null;
 
   const triggerSupporting = [
-    present("Largest follicle", latest?.largestFollicle != null ? String(latest.largestFollicle) : null, " mm"),
+    present(
+      "Largest follicle",
+      latest?.largestFollicle != null ? String(latest.largestFollicle) : null,
+      " mm",
+    ),
     present("Follicles ≥ 14 mm", latest?.follicles14 != null ? String(latest.follicles14) : null),
     present("Follicles ≥ 17 mm", latest?.follicles17 != null ? String(latest.follicles17) : null),
     present("Estradiol", latest?.estradiol != null ? String(latest.estradiol) : null, " pg/mL"),
     present("LH", latest?.lh != null ? String(latest.lh) : null, " IU/L"),
-    present("Progesterone", latest?.progesterone != null ? String(latest.progesterone) : null, " ng/mL"),
+    present(
+      "Progesterone",
+      latest?.progesterone != null ? String(latest.progesterone) : null,
+      " ng/mL",
+    ),
     present("Endometrium", latest?.endometrium != null ? String(latest.endometrium) : null, " mm"),
     present("Protocol", protocolValue),
   ];
   const triggerMissing = triggerSupporting.filter((v) => !v.present).map((v) => v.label);
 
-  const latestFollicles17 = latest ? num(latest.follicles17) ?? 0 : 0;
-  const leadFollicle = latest ? num(latest.largestFollicle) ?? 0 : 0;
+  const latestFollicles17 = latest ? (num(latest.follicles17) ?? 0) : 0;
+  const leadFollicle = latest ? (num(latest.largestFollicle) ?? 0) : 0;
   const isPoseidonOrPoor =
-    (phenotype.poseidon.groupLabel !== null && phenotype.poseidon.groupLabel !== "Not low prognosis") ||
+    (phenotype.poseidon.groupLabel !== null &&
+      phenotype.poseidon.groupLabel !== "Not low prognosis") ||
     /poor|suboptimal/i.test(response.category);
 
   const triggerCriteriaMet = isPoseidonOrPoor
@@ -525,10 +587,34 @@ export function buildCycleCompletion(
       present: Boolean(inputs.ohssHistory && !/^no$/i.test(inputs.ohssHistory)),
       source: "historical",
     },
-    { id: "pcos", label: "PCOS", value: inputs.pcos ? "Documented" : "Not documented", present: Boolean(inputs.pcos), source: "historical" },
-    { id: "amh", label: "AMH", value: fmt(inputs.amh, " ng/mL"), present: inputs.amh !== null, source: "historical" },
-    { id: "afc", label: "AFC", value: fmt(inputs.afc, " follicles"), present: inputs.afc !== null, source: "historical" },
-    { id: "age", label: "Age", value: fmt(inputs.age, " years"), present: inputs.age !== null, source: "historical" },
+    {
+      id: "pcos",
+      label: "PCOS",
+      value: inputs.pcos ? "Documented" : "Not documented",
+      present: Boolean(inputs.pcos),
+      source: "historical",
+    },
+    {
+      id: "amh",
+      label: "AMH",
+      value: fmt(inputs.amh, " ng/mL"),
+      present: inputs.amh !== null,
+      source: "historical",
+    },
+    {
+      id: "afc",
+      label: "AFC",
+      value: fmt(inputs.afc, " follicles"),
+      present: inputs.afc !== null,
+      source: "historical",
+    },
+    {
+      id: "age",
+      label: "Age",
+      value: fmt(inputs.age, " years"),
+      present: inputs.age !== null,
+      source: "historical",
+    },
     {
       id: "hyper-history",
       label: "Previous hyper-response",
@@ -539,18 +625,50 @@ export function buildCycleCompletion(
   ];
 
   const current: OhssFactor[] = [
-    { id: "e2-current", label: "Estradiol (latest visit)", value: fmt(latest?.estradiol ?? null, " pg/mL"), present: latest?.estradiol != null, source: "current" },
-    { id: "f10-current", label: "Follicles ≥ 10 mm", value: fmt(latest?.follicles10 ?? null), present: latest?.follicles10 != null, source: "current" },
-    { id: "f14-current", label: "Follicles ≥ 14 mm", value: fmt(latest?.follicles14 ?? null), present: latest?.follicles14 != null, source: "current" },
-    { id: "count-current", label: "Total follicle count", value: fmt(latest?.follicleCount ?? null), present: latest?.follicleCount != null, source: "current" },
-    { id: "trend-e2", label: "Estradiol trend", value: monitoring.trends.find((t) => t.id === "e2")?.perDay ?? "—", present: e2Points.length > 1, source: "current" },
+    {
+      id: "e2-current",
+      label: "Estradiol (latest visit)",
+      value: fmt(latest?.estradiol ?? null, " pg/mL"),
+      present: latest?.estradiol != null,
+      source: "current",
+    },
+    {
+      id: "f10-current",
+      label: "Follicles ≥ 10 mm",
+      value: fmt(latest?.follicles10 ?? null),
+      present: latest?.follicles10 != null,
+      source: "current",
+    },
+    {
+      id: "f14-current",
+      label: "Follicles ≥ 14 mm",
+      value: fmt(latest?.follicles14 ?? null),
+      present: latest?.follicles14 != null,
+      source: "current",
+    },
+    {
+      id: "count-current",
+      label: "Total follicle count",
+      value: fmt(latest?.follicleCount ?? null),
+      present: latest?.follicleCount != null,
+      source: "current",
+    },
+    {
+      id: "trend-e2",
+      label: "Estradiol trend",
+      value: monitoring.trends.find((t) => t.id === "e2")?.perDay ?? "—",
+      present: e2Points.length > 1,
+      source: "current",
+    },
   ];
 
-  const documentedMarkers = [...historical, ...current].filter((f) => f.present).map((f) => f.label);
+  const documentedMarkers = [...historical, ...current]
+    .filter((f) => f.present)
+    .map((f) => f.label);
 
-  const latestE2 = latest ? num(latest.estradiol) ?? 0 : 0;
-  const latestF10 = latest ? num(latest.follicles10) ?? 0 : 0;
-  const totalFollicles = latest ? num(latest.follicleCount) ?? 0 : 0;
+  const latestE2 = latest ? (num(latest.estradiol) ?? 0) : 0;
+  const latestF10 = latest ? (num(latest.follicles10) ?? 0) : 0;
+  const totalFollicles = latest ? (num(latest.follicleCount) ?? 0) : 0;
   const pcos = Boolean(inputs.pcos);
   const historyOhss = Boolean(inputs.ohssHistory && !/^no$/i.test(inputs.ohssHistory));
   const amh = inputs.amh ?? 0;
@@ -558,13 +676,18 @@ export function buildCycleCompletion(
 
   let ohssLevel: OhssRiskLevel = "low";
   let ohssStatus = "Low OHSS Risk — Standard Stimulation Profile";
-  let ohssDetail = "Ovarian response and hormone levels within safe physiological boundaries (Peak E2 < 2,500 pg/mL and < 14 follicles ≥ 10 mm). Low hyperstimulation risk.";
+  let ohssDetail =
+    "Ovarian response and hormone levels within safe physiological boundaries (Peak E2 < 2,500 pg/mL and < 14 follicles ≥ 10 mm). Low hyperstimulation risk.";
 
   if (latestE2 >= 5000 || latestF10 >= 25 || totalFollicles >= 30) {
     ohssLevel = "critical";
     ohssStatus = "Critical OHSS Risk — Mandatory Preventative Action";
     ohssDetail = `Severe imminent OHSS risk detected (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm). Mandatory GnRH agonist trigger, complete elective freeze-all, dopamine agonist (Cabergoline 0.5 mg/day × 8 days), and strict fresh transfer cancellation (ESHRE 2025 Rec 114, 119, 120; ASRM 2016).`;
-  } else if (latestE2 >= 3500 || latestF10 >= 18 || (latestE2 >= 3000 && (pcos || historyOhss || amh >= 3.5))) {
+  } else if (
+    latestE2 >= 3500 ||
+    latestF10 >= 18 ||
+    (latestE2 >= 3000 && (pcos || historyOhss || amh >= 3.5))
+  ) {
     ohssLevel = "high";
     ohssStatus = "High OHSS Risk — Agonist Trigger & Freeze-All Strongly Advised";
     ohssDetail = `High risk of ovarian hyperstimulation syndrome (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm). ESHRE 2025 strongly recommends GnRH agonist trigger in antagonist protocol combined with elective freeze-all to prevent early- and late-onset OHSS.`;
@@ -587,10 +710,22 @@ export function buildCycleCompletion(
   /* ----------------------------------------------------- freeze-all card */
 
   const freezeSupporting = [
-    present("Progesterone (latest)", latest?.progesterone != null ? String(latest.progesterone) : null, " ng/mL"),
-    present("Estradiol (latest)", latest?.estradiol != null ? String(latest.estradiol) : null, " pg/mL"),
+    present(
+      "Progesterone (latest)",
+      latest?.progesterone != null ? String(latest.progesterone) : null,
+      " ng/mL",
+    ),
+    present(
+      "Estradiol (latest)",
+      latest?.estradiol != null ? String(latest.estradiol) : null,
+      " pg/mL",
+    ),
     present("Follicles ≥ 10 mm", latest?.follicles10 != null ? String(latest.follicles10) : null),
-    present("Endometrial thickness", latest?.endometrium != null ? String(latest.endometrium) : null, " mm"),
+    present(
+      "Endometrial thickness",
+      latest?.endometrium != null ? String(latest.endometrium) : null,
+      " mm",
+    ),
     present("PCOS documented", inputs.pcos ? "Yes" : "No"),
     present("Previous OHSS", inputs.ohssHistory || "No"),
     present("AMH", inputs.amh != null ? String(inputs.amh) : null, " ng/mL"),
@@ -598,18 +733,24 @@ export function buildCycleCompletion(
   ];
   const freezeMissing = freezeSupporting.filter((v) => !v.present).map((v) => v.label);
 
-  const latestP4 = latest ? num(latest.progesterone) ?? 0 : 0;
-  const latestEndometrium = latest ? num(latest.endometrium) ?? null : null;
+  const latestP4 = latest ? (num(latest.progesterone) ?? 0) : 0;
+  const latestEndometrium = latest ? (num(latest.endometrium) ?? null) : null;
 
   const freezeAllReasons: string[] = [];
   if (ohssLevel === "critical" || ohssLevel === "high") {
-    freezeAllReasons.push(`Elevated OHSS risk (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm)`);
+    freezeAllReasons.push(
+      `Elevated OHSS risk (Peak E2 ${latestE2} pg/mL, ${latestF10} follicles ≥ 10 mm)`,
+    );
   }
   if (latestP4 >= 1.5) {
-    freezeAllReasons.push(`Premature progesterone elevation (P4 = ${latestP4} ng/mL ≥ 1.5 ng/mL threshold on trigger day)`);
+    freezeAllReasons.push(
+      `Premature progesterone elevation (P4 = ${latestP4} ng/mL ≥ 1.5 ng/mL threshold on trigger day)`,
+    );
   }
   if (latestEndometrium !== null && latestEndometrium > 0 && latestEndometrium < 7.0) {
-    freezeAllReasons.push(`Suboptimal endometrial thickness (${latestEndometrium} mm < 7.0 mm minimum receptive threshold)`);
+    freezeAllReasons.push(
+      `Suboptimal endometrial thickness (${latestEndometrium} mm < 7.0 mm minimum receptive threshold)`,
+    );
   }
 
   const isFreezeAll = freezeAllReasons.length > 0;
@@ -637,7 +778,9 @@ export function buildCycleCompletion(
 
   const safetyStatus: SafetyStatus = !visits.length
     ? "no-data"
-    : ohssLevel === "critical" || ohssLevel === "high" || alerts.some((a) => a.kind === "rapid-estradiol-rise" || a.kind === "large-follicle-cohort")
+    : ohssLevel === "critical" ||
+        ohssLevel === "high" ||
+        alerts.some((a) => a.kind === "rapid-estradiol-rise" || a.kind === "large-follicle-cohort")
       ? "review-entered-values"
       : "assessment-pending";
 
@@ -666,7 +809,9 @@ export function buildCycleCompletion(
   const summary: CycleCompletionSummary = {
     monitoring: visits.length
       ? `${visits.length} visit(s) recorded, latest stimulation day ${latest!.day}, monitoring completeness ${monitoring.completeness.percent}%.${
-          progress.triggerDayRecorded ? ` Trigger day marked on day ${progress.triggerDayRecorded}.` : ""
+          progress.triggerDayRecorded
+            ? ` Trigger day marked on day ${progress.triggerDayRecorded}.`
+            : ""
         }`
       : "No monitoring visit recorded.",
     follicular: latest

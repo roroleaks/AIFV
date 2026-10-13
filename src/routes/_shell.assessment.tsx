@@ -103,7 +103,6 @@ function Assessment() {
     return () => clearTimeout(t);
   }, [hydrated, draft, completion]);
 
-
   const gotoId = (id: string) => {
     const idx = steps.findIndex((s) => s.id === id);
     if (idx >= 0) goto(idx);

@@ -26,8 +26,6 @@ import {
   Syringe,
   Activity,
   FileWarning,
-
-
   ShieldCheck,
 } from "lucide-react";
 
@@ -187,11 +185,18 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <div className="mt-auto px-3">
             <Button
               variant="ghost"
-              className={cn("w-full justify-start gap-3 text-muted-foreground", collapsed && "justify-center")}
+              className={cn(
+                "w-full justify-start gap-3 text-muted-foreground",
+                collapsed && "justify-center",
+              )}
               onClick={() => setCollapsed((c) => !c)}
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
-              {collapsed ? <PanelLeft className="size-4.5" /> : <PanelLeftClose className="size-4.5" />}
+              {collapsed ? (
+                <PanelLeft className="size-4.5" />
+              ) : (
+                <PanelLeftClose className="size-4.5" />
+              )}
               {!collapsed && <span className="text-sm">Collapse</span>}
             </Button>
             {!collapsed && (
@@ -215,9 +220,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
             Created by Dr Raouf Roshdy
           </footer>
         </main>
-
       </div>
     </div>
   );
 }
-

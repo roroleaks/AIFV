@@ -24,12 +24,7 @@ export type EvidenceLevel = "I" | "II" | "III" | "IV" | "Not graded";
 export type EvidenceQuality = "High" | "Moderate" | "Low" | "Not rated";
 
 export type EvidenceSourceKind =
-  | "PDF"
-  | "DOI"
-  | "PubMed"
-  | "Journal URL"
-  | "Conference Statement"
-  | "Clinical Guideline";
+  "PDF" | "DOI" | "PubMed" | "Journal URL" | "Conference Statement" | "Clinical Guideline";
 
 export interface EvidenceEntry {
   id: string;
@@ -353,13 +348,7 @@ export const evidenceLibrary: EvidenceEntry[] = [
     quality: "High",
     summary:
       "Phase IV randomised non-inferiority trial (n=200; 23 centres) comparing a CONSORT-calculated follitropin alfa starting dose with a fixed 150 IU dose in normo-ovulatory women aged 18-34 (BMI <30, basal FSH <=12 IU/L, long GnRH agonist protocol). Full text uploaded and verified: it confirms the four calculator inputs (age, height/weight for BMI, early follicular FSH, AFC of follicles 2 to <11 mm) and the permitted dose set of 112.5, 150, 187.5, 225, 300 and 450 IU/day. The calculator itself was embedded in the electronic case report form; the article prints NO variable bands, NO point assignments and NO score-to-dose crosswalk. CONSORT dosing gave fewer oocytes (10.0 vs 11.8; P=0.037, non-inferiority not met), lower total dose (1288.5 vs 1810.0 IU), similar clinical pregnancy rates (36.0% vs 35.5%) and less OHSS (6.3% vs 12.5%).",
-    keywords: [
-      "CONSORT",
-      "follitropin alfa",
-      "individualised dosing",
-      "non-inferiority",
-      "OHSS",
-    ],
+    keywords: ["CONSORT", "follitropin alfa", "individualised dosing", "non-inferiority", "OHSS"],
     topics: ["Recombinant FSH", "Ovarian Stimulation", "OHSS", "AFC"],
     modules: ["stimulation-dose", "response-prediction"],
     status: "indexed",
@@ -510,8 +499,7 @@ export const evidenceLibrary: EvidenceEntry[] = [
   },
   {
     id: "cochrane-2016-antagonist",
-    title:
-      "Gonadotrophin-releasing hormone antagonists for assisted reproductive technology",
+    title: "Gonadotrophin-releasing hormone antagonists for assisted reproductive technology",
     authors: [
       "Hesham G. Al-Inany",
       "Mohamed A. Youssef",
@@ -649,7 +637,12 @@ export const evidenceLibrary: EvidenceEntry[] = [
     id: "rbmo-2015-behre-lh-timing",
     title:
       "Randomized trial comparing luteinizing hormone supplementation timing strategies in older women undergoing ovarian stimulation",
-    authors: ["Hermann M Behre", "Colin M Howles", "Salvatore Longobardi", "PERSIST Study Investigators"],
+    authors: [
+      "Hermann M Behre",
+      "Colin M Howles",
+      "Salvatore Longobardi",
+      "PERSIST Study Investigators",
+    ],
     journal: "Reproductive BioMedicine Online",
     year: 2015,
     volume: "31",
@@ -666,7 +659,12 @@ export const evidenceLibrary: EvidenceEntry[] = [
       "In this open-label study, women aged 36–40 years undergoing ovarian stimulation were randomized to recombinant human FSH (rhFSH) plus recombinant human luteinizing hormone (rhLH) from stimulation day 1 (group A; n = 103), or rhFSH alone (days 1–5) followed by rhFSH plus rhLH from day 6 (group B; n = 99). Daily starting doses of total gonadotrophin were 300 IU in both groups, with dose adjustments permitted only from stimulation day 6.",
     summary:
       "Open-label randomized comparison of two r-hLH supplementation start times (day 1 versus day 6) in women aged 36–40 stimulated with a 300 IU daily starting dose of r-hFSH.",
-    keywords: ["luteinizing hormone", "LH supplementation", "ovarian stimulation", "advanced maternal age"],
+    keywords: [
+      "luteinizing hormone",
+      "LH supplementation",
+      "ovarian stimulation",
+      "advanced maternal age",
+    ],
     topics: ["LH Supplementation", "Recombinant FSH", "Poor Response"],
     modules: ["stimulation-dose", "protocol-selection"],
     status: "indexed",
@@ -714,7 +712,8 @@ export const evidenceLibrary: EvidenceEntry[] = [
   },
   {
     id: "rbmo-2015-heitmann-air-quality",
-    title: "Live births achieved via IVF are increased by improvements in air quality and laboratory environment",
+    title:
+      "Live births achieved via IVF are increased by improvements in air quality and laboratory environment",
     authors: [
       "Ryan J Heitmann",
       "Micah J Hill",
@@ -806,7 +805,13 @@ export const evidenceLibrary: EvidenceEntry[] = [
       "Review of nucleotide excision repair, base excision repair, DNA mismatch repair, double strand break repair and post-replication repair in male germline cells, and how defects in these mechanisms arrest spermatogenesis and cause male infertility.",
     summary:
       "Narrative review of sperm DNA damage and the germline DNA repair pathways implicated in male infertility.",
-    keywords: ["apoptosis", "DNA damage", "DNA repair mechanisms", "infertility", "spermatogenesis"],
+    keywords: [
+      "apoptosis",
+      "DNA damage",
+      "DNA repair mechanisms",
+      "infertility",
+      "spermatogenesis",
+    ],
     topics: ["Male Factor", "Sperm DNA"],
     modules: ["male-factor"],
     status: "indexed",
@@ -817,7 +822,15 @@ export const evidenceLibrary: EvidenceEntry[] = [
   {
     id: "rbmo-2015-feng-tp53-endometriosis",
     title: "The codon 72 polymorphism of the TP53 gene and endometriosis risk: a meta-analysis",
-    authors: ["Yi Feng", "Yuan-Yuan Wu", "Li Li", "Zhi-Juan Luo", "Zhong Lin", "Tao Yi", "Xia Zhao"],
+    authors: [
+      "Yi Feng",
+      "Yuan-Yuan Wu",
+      "Li Li",
+      "Zhi-Juan Luo",
+      "Zhong Lin",
+      "Tao Yi",
+      "Xia Zhao",
+    ],
     journal: "Reproductive BioMedicine Online",
     year: 2015,
     volume: "31",
@@ -843,7 +856,13 @@ export const evidenceLibrary: EvidenceEntry[] = [
   {
     id: "rbmo-2015-norton-surrogacy-survey",
     title: "A survey of UK fertility clinics' approach to surrogacy arrangements",
-    authors: ["Wendy Norton", "Marilyn Crawshaw", "Nicky Hudson", "Lorraine Culley", "Caroline Law"],
+    authors: [
+      "Wendy Norton",
+      "Marilyn Crawshaw",
+      "Nicky Hudson",
+      "Lorraine Culley",
+      "Caroline Law",
+    ],
     journal: "Reproductive BioMedicine Online",
     year: 2015,
     volume: "31",
@@ -901,7 +920,8 @@ export const evidenceLibrary: EvidenceEntry[] = [
   },
   {
     id: "rbmo-2015-chikhoune-thymol-sperm",
-    title: "In-vitro effects of Thymus munbyanus essential oil and thymol on human sperm motility and function",
+    title:
+      "In-vitro effects of Thymus munbyanus essential oil and thymol on human sperm motility and function",
     authors: [
       "Amirouche Chikhoune",
       "Laurence Stouvenel",
@@ -995,9 +1015,7 @@ export const evidenceSourceKinds: EvidenceSourceKind[] = [
   "Clinical Guideline",
 ];
 
-export const evidenceTopics = Array.from(
-  new Set(evidenceLibrary.flatMap((e) => e.topics)),
-).sort();
+export const evidenceTopics = Array.from(new Set(evidenceLibrary.flatMap((e) => e.topics))).sort();
 
 export const findEvidence = (id: string) => evidenceLibrary.find((e) => e.id === id);
 
@@ -1095,13 +1113,7 @@ export function matchesSource(e: EvidenceEntry, source: string): boolean {
 }
 
 export type EvidenceSort =
-  | "relevance"
-  | "year-desc"
-  | "year-asc"
-  | "title"
-  | "priority"
-  | "level"
-  | "journal";
+  "relevance" | "year-desc" | "year-asc" | "title" | "priority" | "level" | "journal";
 
 export const evidenceSortLabels: Record<EvidenceSort, string> = {
   relevance: "Best match",
@@ -1166,7 +1178,11 @@ export function filterAndSortEvidence(
   });
 
   const scored = (e: EvidenceEntry) =>
-    q && e.title.toLowerCase().includes(q) ? 0 : q && e.topics.join(" ").toLowerCase().includes(q) ? 1 : 2;
+    q && e.title.toLowerCase().includes(q)
+      ? 0
+      : q && e.topics.join(" ").toLowerCase().includes(q)
+        ? 1
+        : 2;
 
   return [...filtered].sort((a, b) => {
     switch (sort) {

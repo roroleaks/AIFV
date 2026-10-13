@@ -44,7 +44,14 @@ const mandatory: { key: string; label: string; stepId: string }[] = [
 ];
 
 /** Physiologically implausible ranges — data-entry protection only. */
-const plausible: { key: string; label: string; min: number; max: number; unit: string; stepId: string }[] = [
+const plausible: {
+  key: string;
+  label: string;
+  min: number;
+  max: number;
+  unit: string;
+  stepId: string;
+}[] = [
   { key: "height", label: "Height", min: 120, max: 220, unit: "cm", stepId: "patient" },
   { key: "weight", label: "Weight", min: 30, max: 250, unit: "kg", stepId: "patient" },
   { key: "partnerAge", label: "Partner age", min: 16, max: 90, unit: "years", stepId: "patient" },
@@ -53,14 +60,49 @@ const plausible: { key: string; label: string; min: number; max: number; unit: s
   { key: "lh", label: "Basal LH", min: 0, max: 100, unit: "IU/L", stepId: "reserve" },
   { key: "afcLeft", label: "AFC (left)", min: 0, max: 60, unit: "follicles", stepId: "reserve" },
   { key: "afcRight", label: "AFC (right)", min: 0, max: 60, unit: "follicles", stepId: "reserve" },
-  { key: "endometrium", label: "Endometrial thickness", min: 1, max: 30, unit: "mm", stepId: "ultrasound" },
+  {
+    key: "endometrium",
+    label: "Endometrial thickness",
+    min: 1,
+    max: 30,
+    unit: "mm",
+    stepId: "ultrasound",
+  },
   { key: "semenVolume", label: "Semen volume", min: 0, max: 15, unit: "mL", stepId: "male" },
-  { key: "concentration", label: "Sperm concentration", min: 0, max: 400, unit: "M/mL", stepId: "male" },
-  { key: "progressiveMotility", label: "Progressive motility", min: 0, max: 100, unit: "%", stepId: "male" },
+  {
+    key: "concentration",
+    label: "Sperm concentration",
+    min: 0,
+    max: 400,
+    unit: "M/mL",
+    stepId: "male",
+  },
+  {
+    key: "progressiveMotility",
+    label: "Progressive motility",
+    min: 0,
+    max: 100,
+    unit: "%",
+    stepId: "male",
+  },
   { key: "totalMotility", label: "Total motility", min: 0, max: 100, unit: "%", stepId: "male" },
   { key: "morphology", label: "Normal morphology", min: 0, max: 100, unit: "%", stepId: "male" },
-  { key: "dnaFragmentation", label: "DNA fragmentation", min: 0, max: 100, unit: "%", stepId: "male" },
-  { key: "infertilityDuration", label: "Duration of infertility", min: 0, max: 480, unit: "months", stepId: "reproductive" },
+  {
+    key: "dnaFragmentation",
+    label: "DNA fragmentation",
+    min: 0,
+    max: 100,
+    unit: "%",
+    stepId: "male",
+  },
+  {
+    key: "infertilityDuration",
+    label: "Duration of infertility",
+    min: 0,
+    max: 480,
+    unit: "months",
+    stepId: "reproductive",
+  },
 ];
 
 export function validateAssessment(

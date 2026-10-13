@@ -125,7 +125,6 @@ function TriggerPage() {
     );
   }, [draft, visits, decision, patientName]);
 
-
   const guidelinePopulations = useMemo(() => {
     const ph = buildPhenotype(draft.values, draft.cycles);
     const resp = predictOvarianResponse(draft.values, draft.cycles, ph.poseidon, ph.bologna);
@@ -173,7 +172,10 @@ function TriggerPage() {
         <TriggerAlertsCard result={result} />
         <TriggerGapsCard result={result} />
         <TriggerGuardrailCard result={result} />
-        <GuidelineRecommendationsPanel module="trigger-recommendation" populations={guidelinePopulations} />
+        <GuidelineRecommendationsPanel
+          module="trigger-recommendation"
+          populations={guidelinePopulations}
+        />
       </div>
     </>
   );

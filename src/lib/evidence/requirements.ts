@@ -10,12 +10,7 @@
 
 import { CONSORT_LOCK_NOTE } from "@/lib/engine/consort-model";
 
-export type RequirementKind =
-  | "table"
-  | "figure"
-  | "recommendation"
-  | "text"
-  | "appendix";
+export type RequirementKind = "table" | "figure" | "recommendation" | "text" | "appendix";
 
 export interface EvidenceRequirement {
   /** What is needed, as printed in the source. */
@@ -59,20 +54,24 @@ export const blockedModules: BlockedModule[] = [
       {
         item: "Complete individualized starting-dose algorithm: coefficients, score-to-dose crosswalk, rounding rule and dose floor/ceiling",
         kind: "table",
-        source: "Validated published dosing model (e.g. CONSORT original publication with numeric tables)",
-        blocks: "Without the full numeric model no starting dose can be calculated for any patient.",
+        source:
+          "Validated published dosing model (e.g. CONSORT original publication with numeric tables)",
+        blocks:
+          "Without the full numeric model no starting dose can be calculated for any patient.",
       },
       {
         item: "Guideline starting-dose rule with explicit population, required inputs and dose output",
         kind: "recommendation",
         source: "ESHRE / ASRM ovarian stimulation guideline",
-        blocks: "Without an explicit rule the engine cannot convert patient characteristics into a dose.",
+        blocks:
+          "Without an explicit rule the engine cannot convert patient characteristics into a dose.",
       },
       {
         item: "Starting-dose ranges reported per study population, with design, outcome and limitations",
         kind: "table",
         source: "Indexed randomised trials in the Evidence Master Index",
-        blocks: "Without transcribed ranges the engine cannot display evidence-reported dose information.",
+        blocks:
+          "Without transcribed ranges the engine cannot display evidence-reported dose information.",
       },
       {
         item: "Definition and measurement protocol for FOLL_LT11 (follicles < 11 mm at baseline screening)",
@@ -97,7 +96,8 @@ export const blockedModules: BlockedModule[] = [
         kind: "appendix",
         source:
           "Howles CM, Saunders H, Alam V, Engrand P. Curr Med Res Opin 2006;22(5):907–918 — supplementary/online appendix",
-        locator: "Appendix accompanying the model Y = α + β1AGE + β2AGE² + β3BMI + β4FSH + β5FOLL_LT11 + β6DOSE",
+        locator:
+          "Appendix accompanying the model Y = α + β1AGE + β2AGE² + β3BMI + β4FSH + β5FOLL_LT11 + β6DOSE",
         blocks:
           "The main article prints the model form and predictor ranking only. Without the numeric coefficients no dose can be computed and none may be reconstructed.",
       },
@@ -147,7 +147,8 @@ export const blockedModules: BlockedModule[] = [
         item: "Evidence grades and strength-of-recommendation labels attached to each statement",
         kind: "recommendation",
         source: "ESHRE Guideline: Ovarian Stimulation for IVF/ICSI",
-        blocks: "Every displayed recommendation must carry its published grade; grades cannot be assigned by the app.",
+        blocks:
+          "Every displayed recommendation must carry its published grade; grades cannot be assigned by the app.",
       },
       {
         item: "Patient-subgroup qualifiers printed with the recommendations (predicted poor, normal and hyper responders; PCOS; previous OHSS)",
@@ -169,7 +170,8 @@ export const blockedModules: BlockedModule[] = [
       {
         item: "ESHRE/ASRM recommendation tables for rFSH, hMG/HP-hMG, urinary FSH, rLH supplementation and combination therapy",
         kind: "recommendation",
-        source: "ESHRE Ovarian Stimulation Guideline and/or ASRM committee opinion on gonadotropin preparations",
+        source:
+          "ESHRE Ovarian Stimulation Guideline and/or ASRM committee opinion on gonadotropin preparations",
         blocks: "The engine has no published basis to prefer one preparation over another.",
       },
       {
@@ -181,8 +183,10 @@ export const blockedModules: BlockedModule[] = [
       {
         item: "Stated indications for rLH supplementation (age, hypogonadotropic hypogonadism, previous suboptimal response)",
         kind: "text",
-        source: "ESHRE Ovarian Stimulation Guideline; Behre et al. RBMO 2015 covers timing only, not selection",
-        blocks: "The indexed r-hLH RCT addresses supplementation timing, not who should receive LH activity.",
+        source:
+          "ESHRE Ovarian Stimulation Guideline; Behre et al. RBMO 2015 covers timing only, not selection",
+        blocks:
+          "The indexed r-hLH RCT addresses supplementation timing, not who should receive LH activity.",
       },
     ],
   },
@@ -198,7 +202,8 @@ export const blockedModules: BlockedModule[] = [
       {
         item: "Published OHSS risk-threshold table (AMH, AFC, oestradiol, follicle-count cut-offs defining low / moderate / high risk)",
         kind: "table",
-        source: "ASRM Practice Committee: Prevention and treatment of moderate and severe OHSS (2016)",
+        source:
+          "ASRM Practice Committee: Prevention and treatment of moderate and severe OHSS (2016)",
         blocks: "The app must not choose its own cut-offs for a safety-critical risk category.",
       },
       {
@@ -239,7 +244,6 @@ export const blockedModules: BlockedModule[] = [
         blocks: "Dose bounds are required before any evidence-derived dose can be displayed.",
       },
     ],
-
   },
   {
     engineId: "trigger-recommendation",

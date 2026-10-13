@@ -41,7 +41,6 @@ import {
   EvidencePendingGate,
 } from "@/components/engine/clinical-safety-banner";
 
-
 function Card({
   icon: Icon,
   title,
@@ -95,17 +94,14 @@ export function ConsortVariablesCard({ result }: { result: ConsortResult }) {
       title="Imported patient variables"
       badge={
         <Badge variant="outline" className="rounded-full">
-          {result.variables.filter((v) => v.status === "available").length}/{result.variables.length}{" "}
-          available
+          {result.variables.filter((v) => v.status === "available").length}/
+          {result.variables.length} available
         </Badge>
       }
     >
       <div className="grid gap-2 sm:grid-cols-2">
         {result.variables.map((v) => (
-          <div
-            key={v.id}
-            className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
-          >
+          <div key={v.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-muted-foreground">
                 {v.label}
@@ -129,7 +125,9 @@ export function ConsortVariablesCard({ result }: { result: ConsortResult }) {
         {result.history.map((h) => (
           <div key={h.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
             <p className="text-xs text-muted-foreground">{h.label}</p>
-            <p className={cn("mt-0.5 text-sm font-medium", !h.available && "text-muted-foreground")}>
+            <p
+              className={cn("mt-0.5 text-sm font-medium", !h.available && "text-muted-foreground")}
+            >
               {h.value}
             </p>
           </div>
@@ -154,7 +152,10 @@ export function ConsortValidationCard({ result }: { result: ConsortResult }) {
       badge={
         <Badge
           variant={ready ? "secondary" : "outline"}
-          className={cn("rounded-full", !ready && "border-amber-500/50 text-amber-600 dark:text-amber-400")}
+          className={cn(
+            "rounded-full",
+            !ready && "border-amber-500/50 text-amber-600 dark:text-amber-400",
+          )}
         >
           {ready ? "Validated" : "Action required"}
         </Badge>
@@ -162,8 +163,7 @@ export function ConsortValidationCard({ result }: { result: ConsortResult }) {
     >
       {ready && (
         <p className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-3.5 py-2.5 text-sm text-emerald-700 dark:text-emerald-400">
-          All mandatory variables are present, within physiological range and internally
-          consistent.
+          All mandatory variables are present, within physiological range and internally consistent.
         </p>
       )}
 
@@ -233,7 +233,6 @@ export function ConsortDoseCard({ result }: { result: ConsortResult }) {
      ACTIVE. No estimate, fallback or inferred dose is ever shown. */
   const completed = gate.active && result.status === "completed" && result.dose !== null;
 
-
   return (
     <section className="animate-rise overflow-hidden rounded-2xl border border-border/70 bg-card shadow-soft">
       <div className="border-b border-border/60 bg-gradient-to-br from-primary-soft/70 to-transparent p-6">
@@ -281,9 +280,10 @@ export function ConsortDoseCard({ result }: { result: ConsortResult }) {
           </p>
         )}
 
-
         <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground">
-          <span>Calculation date: {mounted ? new Date(result.computedAt).toLocaleString() : "—"}</span>
+          <span>
+            Calculation date: {mounted ? new Date(result.computedAt).toLocaleString() : "—"}
+          </span>
           <span>Calculation version: v{result.version}</span>
           <span>Method: {result.modelName}</span>
         </div>
@@ -449,7 +449,6 @@ const consumers = [
   { id: "report", name: "Final Clinical Report" },
 ];
 
-
 export function ConsortIntegrationCard({ result }: { result: ConsortResult }) {
   return (
     <Card icon={Database} title="Stored for downstream modules">
@@ -459,7 +458,9 @@ export function ConsortIntegrationCard({ result }: { result: ConsortResult }) {
             <p className="text-sm font-medium">{c.name}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               Receives:{" "}
-              {result.dose === null ? "no dose (calculation not completed)" : `${result.dose} IU/day`}
+              {result.dose === null
+                ? "no dose (calculation not completed)"
+                : `${result.dose} IU/day`}
             </p>
           </li>
         ))}
@@ -515,7 +516,6 @@ export function ConsortSection({ result }: { result: ConsortResult }) {
       />
       <ConsortDoseCard result={result} />
       <ConsortFrameworkStatusCard />
-
 
       <ConsortVariablesCard result={result} />
       <ConsortValidationCard result={result} />

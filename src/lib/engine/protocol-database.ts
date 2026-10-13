@@ -20,7 +20,8 @@ export type ProtocolId =
   | "mild-stimulation"
   | "duostim";
 
-export type ProtocolFamily = "agonist" | "antagonist" | "progestin" | "natural" | "low-dose" | "dual";
+export type ProtocolFamily =
+  "agonist" | "antagonist" | "progestin" | "natural" | "low-dose" | "dual";
 
 export interface ProtocolEntry {
   id: ProtocolId;

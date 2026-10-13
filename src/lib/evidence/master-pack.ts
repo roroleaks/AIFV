@@ -295,7 +295,8 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     intervention: "AMH/body-weight individualized follitropin-delta dosing.",
     mainOutcome: NOT_VERIFIED,
     relevantVariables: ["AMH", "Body weight"],
-    relevance: "Real-world evidence for the AMH/body-weight individualized follitropin-delta algorithm.",
+    relevance:
+      "Real-world evidence for the AMH/body-weight individualized follitropin-delta algorithm.",
     validationStatus: "Supporting real-world evidence.",
     implementationRelevance: "Supports the follitropin-delta system only.",
     limitations: "Observational design; product-specific.",
@@ -318,7 +319,8 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     intervention: "AMH/body-weight individualized follitropin-delta dosing.",
     mainOutcome: NOT_VERIFIED,
     relevantVariables: ["AMH", "Body weight"],
-    relevance: "AMH/body-weight individualized follitropin-delta dosing in a long agonist protocol.",
+    relevance:
+      "AMH/body-weight individualized follitropin-delta dosing in a long agonist protocol.",
     validationStatus: NOT_VERIFIED,
     implementationRelevance: "Protocol-extension evidence for follitropin-delta only.",
     limitations: "Metadata not supplied in the pack.",
@@ -338,10 +340,12 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     artefactKind: "Numerical algorithm",
     studyType: "Randomized controlled trial",
     population: NOT_VERIFIED,
-    intervention: "Individualized follitropin-delta dosing in GnRH agonist versus antagonist protocols.",
+    intervention:
+      "Individualized follitropin-delta dosing in GnRH agonist versus antagonist protocols.",
     mainOutcome: NOT_VERIFIED,
     relevantVariables: ["AMH", "Body weight"],
-    relevance: "Individualized follitropin-delta dosing in GnRH agonist versus antagonist protocols.",
+    relevance:
+      "Individualized follitropin-delta dosing in GnRH agonist versus antagonist protocols.",
     validationStatus: NOT_VERIFIED,
     implementationRelevance: "Protocol-comparison evidence for follitropin-delta only.",
     limitations: "Metadata not supplied in the pack.",
@@ -382,10 +386,7 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     year: 2025,
     doi: "10.1093/humrep/deag018",
     pubmedId: "41732035",
-    urls: [
-      "https://pubmed.ncbi.nlm.nih.gov/41732035/",
-      "https://doi.org/10.1093/humrep/deag018",
-    ],
+    urls: ["https://pubmed.ncbi.nlm.nih.gov/41732035/", "https://doi.org/10.1093/humrep/deag018"],
     domains: ["E. ESHRE ovarian stimulation guidance"],
     artefactKind: "Clinical practice guideline",
     studyType: "Guideline",
@@ -493,7 +494,8 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     intervention: "Classification only — no dosing.",
     mainOutcome: NOT_VERIFIED,
     relevantVariables: ["Age", "AMH", "AFC", "Previous ovarian response"],
-    relevance: "POSEIDON classification/low-prognosis framework. This is classification, not CONSORT dosing.",
+    relevance:
+      "POSEIDON classification/low-prognosis framework. This is classification, not CONSORT dosing.",
     validationStatus: "Already implemented as a classification engine in this application.",
     implementationRelevance:
       "Supports the existing POSEIDON classification module only. No treatment output.",
@@ -550,8 +552,7 @@ export const masterEvidenceRecords: MasterEvidenceRecord[] = [
     validationStatus: "Out of scope for IVF stimulation dosing.",
     implementationRelevance:
       "EXCLUDED as a source for IVF protocol or dose logic — different clinical purpose.",
-    limitations:
-      "Explicit pack warning: do NOT use as an IVF protocol/dose algorithm.",
+    limitations: "Explicit pack warning: do NOT use as an IVF protocol/dose algorithm.",
     provenance: `${MASTER_PACK_FILE} § 19`,
   },
   {
@@ -723,7 +724,8 @@ export const doiFindings: DoiFinding[] = [
 /* Algorithm ↔ source mapping                                          */
 /* ------------------------------------------------------------------ */
 
-export type SourceRole = "PRIMARY SOURCE" | "VALIDATION SOURCE" | "GUIDELINE SOURCE" | "SUPPORTING SOURCE";
+export type SourceRole =
+  "PRIMARY SOURCE" | "VALIDATION SOURCE" | "GUIDELINE SOURCE" | "SUPPORTING SOURCE";
 
 export interface AlgorithmSourceMapping {
   algorithm: string;
@@ -841,26 +843,78 @@ export interface ConsortAuditItem {
 }
 
 export const consortAudit: ConsortAuditItem[] = [
-  { item: "Validated population", verdict: "VERIFIED", evidence: "Normo-ovulatory women (pack § 01, CONSORT implementation note)." },
-  { item: "Age range", verdict: "VERIFIED", evidence: "18–34 years inclusive (pack § 01, implementation note)." },
-  { item: "BMI requirements / range", verdict: "PARTIALLY VERIFIED", evidence: "BMI named as an input; no range or band supplied." },
-  { item: "Basal FSH requirements / range", verdict: "PARTIALLY VERIFIED", evidence: "Basal FSH named as an input; no range or band supplied." },
-  { item: "AFC requirements / range", verdict: "PARTIALLY VERIFIED", evidence: "AFC named as an input; no range or band supplied." },
-  { item: "Stimulation protocol", verdict: "VERIFIED", evidence: "Long GnRH-agonist protocol (pack § 01)." },
-  { item: "GnRH analogue requirements", verdict: "PARTIALLY VERIFIED", evidence: "Long agonist stated; agent, dose and timing not supplied." },
-  { item: "Starting-dose categories", verdict: "NOT PRESENT", evidence: "Dose categories are not listed in the pack." },
+  {
+    item: "Validated population",
+    verdict: "VERIFIED",
+    evidence: "Normo-ovulatory women (pack § 01, CONSORT implementation note).",
+  },
+  {
+    item: "Age range",
+    verdict: "VERIFIED",
+    evidence: "18–34 years inclusive (pack § 01, implementation note).",
+  },
+  {
+    item: "BMI requirements / range",
+    verdict: "PARTIALLY VERIFIED",
+    evidence: "BMI named as an input; no range or band supplied.",
+  },
+  {
+    item: "Basal FSH requirements / range",
+    verdict: "PARTIALLY VERIFIED",
+    evidence: "Basal FSH named as an input; no range or band supplied.",
+  },
+  {
+    item: "AFC requirements / range",
+    verdict: "PARTIALLY VERIFIED",
+    evidence: "AFC named as an input; no range or band supplied.",
+  },
+  {
+    item: "Stimulation protocol",
+    verdict: "VERIFIED",
+    evidence: "Long GnRH-agonist protocol (pack § 01).",
+  },
+  {
+    item: "GnRH analogue requirements",
+    verdict: "PARTIALLY VERIFIED",
+    evidence: "Long agonist stated; agent, dose and timing not supplied.",
+  },
+  {
+    item: "Starting-dose categories",
+    verdict: "NOT PRESENT",
+    evidence: "Dose categories are not listed in the pack.",
+  },
   { item: "Dose increments", verdict: "VERIFIED", evidence: "37.5-IU increments (pack § 01)." },
-  { item: "Numerical scoring / banding system", verdict: "NOT PRESENT", evidence: "No band table supplied." },
+  {
+    item: "Numerical scoring / banding system",
+    verdict: "NOT PRESENT",
+    evidence: "No band table supplied.",
+  },
   { item: "Point assignments", verdict: "NOT PRESENT", evidence: "No points table supplied." },
   { item: "Score-to-dose crosswalk", verdict: "NOT PRESENT", evidence: "No crosswalk supplied." },
   { item: "Minimum dose", verdict: "NOT PRESENT", evidence: "Not stated in the pack." },
   { item: "Maximum dose", verdict: "NOT PRESENT", evidence: "Not stated in the pack." },
   { item: "Exclusion criteria", verdict: "NOT PRESENT", evidence: "Not stated in the pack." },
-  { item: "Validation population", verdict: "NOT VERIFIED", evidence: "RCT (§ 03) and observational study (§ 04) cited, but populations are not described." },
+  {
+    item: "Validation population",
+    verdict: "NOT VERIFIED",
+    evidence: "RCT (§ 03) and observational study (§ 04) cited, but populations are not described.",
+  },
   { item: "Validation outcomes", verdict: "NOT VERIFIED", evidence: "Outcomes not supplied." },
-  { item: "Algorithm limitations", verdict: "PARTIALLY VERIFIED", evidence: "Population restriction stated; other limitations not enumerated." },
-  { item: "Later modifications", verdict: "NOT VERIFIED", evidence: "§ 04 notes a modified calculator; the modification is not described." },
-  { item: "Each numerical component directly verified from source", verdict: "NOT VERIFIED", evidence: "Only the 37.5-IU increment and the 18–34 age bound are numerically stated." },
+  {
+    item: "Algorithm limitations",
+    verdict: "PARTIALLY VERIFIED",
+    evidence: "Population restriction stated; other limitations not enumerated.",
+  },
+  {
+    item: "Later modifications",
+    verdict: "NOT VERIFIED",
+    evidence: "§ 04 notes a modified calculator; the modification is not described.",
+  },
+  {
+    item: "Each numerical component directly verified from source",
+    verdict: "NOT VERIFIED",
+    evidence: "Only the 37.5-IU increment and the 18–34 age bound are numerically stated.",
+  },
 ];
 
 export const CONSORT_POPULATION_RESTRICTION = {
@@ -887,10 +941,12 @@ export const artefactSeparation = {
     "AMH-based individualized FSH dosing",
     "Follitropin-delta AMH + body-weight dosing",
   ],
-  guidelines: ["ESHRE ovarian stimulation guideline (2020, 2025 update)", "ASRM practice documents"],
+  guidelines: [
+    "ESHRE ovarian stimulation guideline (2020, 2025 update)",
+    "ASRM practice documents",
+  ],
   classifications: ["POSEIDON", "Bologna criteria"],
-  rule:
-    "Variables, bands and thresholds belonging to one system must never be combined with another. CONSORT ≠ ESHRE ≠ POSEIDON ≠ Bologna ≠ AMH-based dosing ≠ follitropin-delta.",
+  rule: "Variables, bands and thresholds belonging to one system must never be combined with another. CONSORT ≠ ESHRE ≠ POSEIDON ≠ Bologna ≠ AMH-based dosing ≠ follitropin-delta.",
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -1036,8 +1092,14 @@ export const consortReadiness = {
     ? ("NOT READY — REQUIRED EVIDENCE MISSING" as const)
     : ("READY FOR IMPLEMENTATION" as const),
   checklist: [
-    { item: "Exact input-variable definitions", available: "PARTIAL — variables named, definitions not supplied" },
-    { item: "Exact eligibility population", available: "AVAILABLE — normo-ovulatory, 18–34, long agonist" },
+    {
+      item: "Exact input-variable definitions",
+      available: "PARTIAL — variables named, definitions not supplied",
+    },
+    {
+      item: "Exact eligibility population",
+      available: "AVAILABLE — normo-ovulatory, 18–34, long agonist",
+    },
     { item: "Exact numerical bands", available: "NOT AVAILABLE" },
     { item: "Exact point assignments", available: "NOT AVAILABLE" },
     { item: "Exact dose crosswalk", available: "NOT AVAILABLE" },

@@ -146,11 +146,7 @@ function ModuleCard({
           <p className="truncate">Confidence & results reserved</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          <Switch
-            checked={enabled}
-            onCheckedChange={onToggle}
-            aria-label={`Enable ${def.name}`}
-          />
+          <Switch checked={enabled} onCheckedChange={onToggle} aria-label={`Enable ${def.name}`} />
           <Button size="sm" variant="outline" className="rounded-xl" onClick={onInspect}>
             Inspect
           </Button>
@@ -426,7 +422,9 @@ function EnginePage() {
                       </span>
                       <div className="min-w-0">
                         <p className="truncate font-semibold">{stage.label}</p>
-                        <p className="truncate text-xs text-muted-foreground">{stage.description}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {stage.description}
+                        </p>
                       </div>
                     </div>
                     <div className="ml-4 grid gap-2 border-l border-dashed border-border pl-6">

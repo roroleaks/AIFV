@@ -159,21 +159,36 @@ export const triggerRules: TriggerRule[] = [
     year: 2025,
     doi: "10.1093/hropen/hoaa009",
     link: "https://www.eshre.eu/Guidelines-and-Legal/Guidelines/Ovarian-Stimulation-in-IVF-ICSI",
-    population: "Normal and expected poor ovarian responders with low OHSS risk (peak E2 < 3,000 pg/mL, < 15 follicles ≥ 11 mm) undergoing fresh embryo transfer.",
+    population:
+      "Normal and expected poor ovarian responders with low OHSS risk (peak E2 < 3,000 pg/mL, < 15 follicles ≥ 11 mm) undergoing fresh embryo transfer.",
     protocol: "GnRH Antagonist or Long GnRH Agonist down-regulation protocols",
-    requiredVariables: ["Largest follicle diameter", "Follicles ≥ 17 mm", "Estradiol (E2)", "Progesterone (P4)", "Endometrial thickness"],
+    requiredVariables: [
+      "Largest follicle diameter",
+      "Follicles ≥ 17 mm",
+      "Estradiol (E2)",
+      "Progesterone (P4)",
+      "Endometrial thickness",
+    ],
     follicularCriteria: "≥ 3 follicles ≥ 17 mm (or ≥ 2 follicles ≥ 18 mm)",
-    hormonalCriteria: "Concordant serum Estradiol (approx. 150–250 pg/mL per mature follicle ≥ 14 mm); Progesterone < 1.5 ng/mL on trigger day",
-    endometrialCriteria: "Endometrial thickness ≥ 7.0 mm with trilaminar appearance for fresh embryo transfer",
-    safetyCriteria: "Peak Estradiol < 3,000–3,500 pg/mL; < 15 follicles ≥ 11 mm; absence of early OHSS symptoms",
-    timingCriteria: "Administer 35 to 37 hours (standard 36 hours) prior to planned oocyte retrieval (OPU)",
-    doseCriteria: "Recombinant hCG (Choriogonadotropin alfa) 250 µg s.c. (equiv. ~6,500 IU) or urinary hCG 5,000–10,000 IU s.c. (10,000 IU for BMI ≥ 30 kg/m²)",
+    hormonalCriteria:
+      "Concordant serum Estradiol (approx. 150–250 pg/mL per mature follicle ≥ 14 mm); Progesterone < 1.5 ng/mL on trigger day",
+    endometrialCriteria:
+      "Endometrial thickness ≥ 7.0 mm with trilaminar appearance for fresh embryo transfer",
+    safetyCriteria:
+      "Peak Estradiol < 3,000–3,500 pg/mL; < 15 follicles ≥ 11 mm; absence of early OHSS symptoms",
+    timingCriteria:
+      "Administer 35 to 37 hours (standard 36 hours) prior to planned oocyte retrieval (OPU)",
+    doseCriteria:
+      "Recombinant hCG (Choriogonadotropin alfa) 250 µg s.c. (equiv. ~6,500 IU) or urinary hCG 5,000–10,000 IU s.c. (10,000 IU for BMI ≥ 30 kg/m²)",
     contraindications: [
       "High risk of ovarian hyperstimulation syndrome (peak E2 > 3,500 pg/mL or ≥ 18–20 follicles ≥ 11 mm)",
       "History of severe early-onset OHSS",
     ],
-    exceptions: ["Cases converted to elective freeze-all can receive hCG if agonist trigger is contraindicated (e.g. pituitary defect) with cabergoline prophylaxis"],
-    action: "Administer rhCG 250 µg s.c. 36 hours prior to retrieval. Proceed with planned fresh cleavage-stage or blastocyst transfer.",
+    exceptions: [
+      "Cases converted to elective freeze-all can receive hCG if agonist trigger is contraindicated (e.g. pituitary defect) with cabergoline prophylaxis",
+    ],
+    action:
+      "Administer rhCG 250 µg s.c. 36 hours prior to retrieval. Proceed with planned fresh cleavage-stage or blastocyst transfer.",
     evidenceLevel: "Grade A / High Quality RCT Evidence",
     activationStatus: "ACTIVE",
     version: "1.0.0",
@@ -190,32 +205,48 @@ export const triggerRules: TriggerRule[] = [
       "Progesterone measurement recommended on trigger day to rule out premature luteinization (P4 ≥ 1.5 ng/mL)",
     ],
     missingComponents: [],
-    activationPoint: "src/lib/engine/trigger.ts — activated with ESHRE 2025 and ASRM validated criteria.",
+    activationPoint:
+      "src/lib/engine/trigger.ts — activated with ESHRE 2025 and ASRM validated criteria.",
   },
   {
     triggerRuleId: "gnrh-agonist-trigger-criteria",
     triggerRuleName: "GnRH Agonist Trigger Criteria and Dose (OHSS Prevention)",
     triggerType: "gnrh-agonist",
-    source: "Cochrane Review (Youssef et al. 2014) & ASRM OHSS Prevention 2016 / ESHRE 2025 (Rec. 114, 120)",
+    source:
+      "Cochrane Review (Youssef et al. 2014) & ASRM OHSS Prevention 2016 / ESHRE 2025 (Rec. 114, 120)",
     publication: "Cochrane Database Syst Rev / Fertil Steril",
     year: 2025,
     doi: "10.1002/14651858.CD008046.pub4",
     link: "https://www.cochrane.org/CD008046",
-    population: "Predicted high responders, PCOS patients, patients with peak E2 > 3,500 pg/mL or ≥ 18–20 follicles ≥ 11 mm, or planned elective freeze-all / PGT cycles.",
-    protocol: "GnRH Antagonist protocol ONLY (intact, non-downregulated pituitary GnRH receptors required)",
-    requiredVariables: ["Pituitary suppression protocol", "Largest follicle diameter", "Follicles ≥ 17 mm", "Estradiol (E2)", "Total follicle count"],
+    population:
+      "Predicted high responders, PCOS patients, patients with peak E2 > 3,500 pg/mL or ≥ 18–20 follicles ≥ 11 mm, or planned elective freeze-all / PGT cycles.",
+    protocol:
+      "GnRH Antagonist protocol ONLY (intact, non-downregulated pituitary GnRH receptors required)",
+    requiredVariables: [
+      "Pituitary suppression protocol",
+      "Largest follicle diameter",
+      "Follicles ≥ 17 mm",
+      "Estradiol (E2)",
+      "Total follicle count",
+    ],
     follicularCriteria: "≥ 3 follicles ≥ 17 mm (or ≥ 2 follicles ≥ 18 mm)",
-    hormonalCriteria: "Peak Estradiol typically > 3,500 pg/mL or rapid follicular cohort proliferation",
-    endometrialCriteria: "Endometrial lining receptivity not primary concern due to planned total cryopreservation",
-    safetyCriteria: "Virtually eliminates both early-onset and late-onset severe OHSS by inducing rapid luteolysis",
+    hormonalCriteria:
+      "Peak Estradiol typically > 3,500 pg/mL or rapid follicular cohort proliferation",
+    endometrialCriteria:
+      "Endometrial lining receptivity not primary concern due to planned total cryopreservation",
+    safetyCriteria:
+      "Virtually eliminates both early-onset and late-onset severe OHSS by inducing rapid luteolysis",
     timingCriteria: "Administer 35 to 36 hours prior to planned oocyte retrieval (OPU)",
     doseCriteria: "Triptorelin acetate 0.2 mg s.c. (or Leuprolide acetate 1.0–2.0 mg s.c.)",
     contraindications: [
       "Long GnRH Agonist down-regulation protocol (pituitary receptors desensitized; will fail to elicit LH surge)",
       "Hypothalamic hypogonadism (deficient endogenous gonadotropin stores)",
     ],
-    exceptions: ["Fresh transfer can be performed only if low-dose hCG luteal rescue (1,500 IU) or intensive luteal phase support (high-dose progesterone + estradiol) is administered"],
-    action: "Administer Triptorelin 0.2 mg s.c. 35–36 hours prior to retrieval. Implement mandatory elective freeze-all segmentation strategy.",
+    exceptions: [
+      "Fresh transfer can be performed only if low-dose hCG luteal rescue (1,500 IU) or intensive luteal phase support (high-dose progesterone + estradiol) is administered",
+    ],
+    action:
+      "Administer Triptorelin 0.2 mg s.c. 35–36 hours prior to retrieval. Implement mandatory elective freeze-all segmentation strategy.",
     evidenceLevel: "Grade A / Cochrane Systematic Review & Meta-Analysis",
     activationStatus: "ACTIVE",
     version: "1.0.0",
@@ -233,7 +264,8 @@ export const triggerRules: TriggerRule[] = [
       "Mandatory freeze-all strategy strongly advised in hyper-responders (ESHRE Rec. 114)",
     ],
     missingComponents: [],
-    activationPoint: "src/lib/engine/trigger.ts — activated with Cochrane 2014 & ESHRE 2025 criteria.",
+    activationPoint:
+      "src/lib/engine/trigger.ts — activated with Cochrane 2014 & ESHRE 2025 criteria.",
   },
   {
     triggerRuleId: "dual-trigger-criteria",
@@ -244,21 +276,32 @@ export const triggerRules: TriggerRule[] = [
     year: 2024,
     doi: "10.1016/j.fertnstert.2014.04.027",
     link: "https://pubmed.ncbi.nlm.nih.gov/24842677/",
-    population: "Normal responders in GnRH antagonist protocol planning fresh transfer, or patients with previous low oocyte maturation rate (MII < 60%), POSEIDON groups, or poor responder cohorts.",
+    population:
+      "Normal responders in GnRH antagonist protocol planning fresh transfer, or patients with previous low oocyte maturation rate (MII < 60%), POSEIDON groups, or poor responder cohorts.",
     protocol: "GnRH Antagonist protocol",
-    requiredVariables: ["Largest follicle diameter", "Follicles ≥ 17 mm", "Estradiol (E2)", "Progesterone (P4)", "Previous MII maturation rate"],
+    requiredVariables: [
+      "Largest follicle diameter",
+      "Follicles ≥ 17 mm",
+      "Estradiol (E2)",
+      "Progesterone (P4)",
+      "Previous MII maturation rate",
+    ],
     follicularCriteria: "≥ 3 follicles ≥ 17 mm (or lead follicle ≥ 18 mm)",
     hormonalCriteria: "Estradiol < 3,500 pg/mL, Progesterone < 1.5 ng/mL on trigger day",
     endometrialCriteria: "Endometrial thickness ≥ 7.0 mm with trilaminar pattern",
-    safetyCriteria: "Moderate or low OHSS risk (avoid in severe hyper-responders with > 25 follicles)",
-    timingCriteria: "Administer both agents simultaneously 35 to 37 hours prior to oocyte retrieval",
-    doseCriteria: "GnRH Agonist (Triptorelin 0.2 mg s.c.) PLUS low-dose hCG (1,000–1,500 IU s.c. or rhCG 65–125 µg s.c.)",
+    safetyCriteria:
+      "Moderate or low OHSS risk (avoid in severe hyper-responders with > 25 follicles)",
+    timingCriteria:
+      "Administer both agents simultaneously 35 to 37 hours prior to oocyte retrieval",
+    doseCriteria:
+      "GnRH Agonist (Triptorelin 0.2 mg s.c.) PLUS low-dose hCG (1,000–1,500 IU s.c. or rhCG 65–125 µg s.c.)",
     contraindications: [
       "Long GnRH Agonist down-regulation cycles",
       "Severe OHSS risk (E2 > 4,500 pg/mL or > 25 follicles) where all exogenous hCG must be avoided",
     ],
     exceptions: ["In high normal responders, the hCG component may be halved to 1,000 IU"],
-    action: "Administer Triptorelin 0.2 mg + hCG 1,000–1,500 IU s.c. simultaneously 36 hours prior to retrieval. Proceed with planned fresh embryo transfer.",
+    action:
+      "Administer Triptorelin 0.2 mg + hCG 1,000–1,500 IU s.c. simultaneously 36 hours prior to retrieval. Proceed with planned fresh embryo transfer.",
     evidenceLevel: "Grade B / Multiple Prospective RCTs",
     activationStatus: "ACTIVE",
     version: "1.0.0",
@@ -273,7 +316,8 @@ export const triggerRules: TriggerRule[] = [
       "Do not use if trigger day Estradiol exceeds 4,000 pg/mL or total follicle count exceeds 22 follicles",
     ],
     missingComponents: [],
-    activationPoint: "src/lib/engine/trigger.ts — activated with dual-trigger clinical RCT evidence.",
+    activationPoint:
+      "src/lib/engine/trigger.ts — activated with dual-trigger clinical RCT evidence.",
   },
 ];
 
@@ -389,14 +433,13 @@ export interface TriggerAlert {
 }
 
 export type TriggerSafetyStatus =
-  | "SAFETY DATA COMPLETE"
-  | "SAFETY DATA INCOMPLETE"
-  | "SAFETY REVIEW PENDING"
-  | "EVIDENCE PENDING";
+  "SAFETY DATA COMPLETE" | "SAFETY DATA INCOMPLETE" | "SAFETY REVIEW PENDING" | "EVIDENCE PENDING";
 
 export const safetyStatusTone: Record<TriggerSafetyStatus, string> = {
-  "SAFETY DATA COMPLETE": "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  "SAFETY DATA INCOMPLETE": "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  "SAFETY DATA COMPLETE":
+    "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  "SAFETY DATA INCOMPLETE":
+    "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
   "SAFETY REVIEW PENDING": "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400",
   "EVIDENCE PENDING": "border-violet-500/40 bg-violet-500/10 text-violet-600 dark:text-violet-400",
 };
@@ -644,8 +687,16 @@ export function buildTriggerAssessment(
 
   /* ------------------------------------------------- 3. current cycle status */
 
-  const ultrasoundVisit = [...visits].reverse().find((v) => num(v.largestFollicle) !== null || num(v.follicleCount) !== null) ?? null;
-  const hormoneVisit = [...visits].reverse().find((v) => num(v.estradiol) !== null || num(v.lh) !== null || num(v.progesterone) !== null) ?? null;
+  const ultrasoundVisit =
+    [...visits]
+      .reverse()
+      .find((v) => num(v.largestFollicle) !== null || num(v.follicleCount) !== null) ?? null;
+  const hormoneVisit =
+    [...visits]
+      .reverse()
+      .find(
+        (v) => num(v.estradiol) !== null || num(v.lh) !== null || num(v.progesterone) !== null,
+      ) ?? null;
   const endometriumVisit = [...visits].reverse().find((v) => num(v.endometrium) !== null) ?? null;
 
   const cycleStatus: TriggerItem[] = [
@@ -657,12 +708,16 @@ export function buildTriggerAssessment(
     item(
       "latest-ultrasound",
       "Latest ultrasound",
-      ultrasoundVisit ? `Day ${ultrasoundVisit.day}${ultrasoundVisit.date ? ` · ${ultrasoundVisit.date}` : ""}` : null,
+      ultrasoundVisit
+        ? `Day ${ultrasoundVisit.day}${ultrasoundVisit.date ? ` · ${ultrasoundVisit.date}` : ""}`
+        : null,
     ),
     item(
       "latest-hormones",
       "Latest hormone measurement",
-      hormoneVisit ? `Day ${hormoneVisit.day}${hormoneVisit.date ? ` · ${hormoneVisit.date}` : ""}` : null,
+      hormoneVisit
+        ? `Day ${hormoneVisit.day}${hormoneVisit.date ? ` · ${hormoneVisit.date}` : ""}`
+        : null,
     ),
     item(
       "latest-endometrium",
@@ -695,7 +750,10 @@ export function buildTriggerAssessment(
     const sized = (latest?.follicleRecords ?? []).filter((f) => f.side === side);
     if (sized.length)
       follicleMeasurements.push({
-        side: side === "right" ? "Right ovary (identified follicles)" : "Left ovary (identified follicles)",
+        side:
+          side === "right"
+            ? "Right ovary (identified follicles)"
+            : "Left ovary (identified follicles)",
         sizes: sized.map((f) => `${f.followId}: ${f.size} mm`).join(", "),
       });
   }
@@ -771,7 +829,9 @@ export function buildTriggerAssessment(
     };
   };
 
-  const conflictFields = new Set(monitoring.validation.filter((v) => v.severity === "conflict").map((v) => v.field));
+  const conflictFields = new Set(
+    monitoring.validation.filter((v) => v.severity === "conflict").map((v) => v.field),
+  );
 
   const completeness: CompletenessRow[] = [
     stateFor(
@@ -811,7 +871,8 @@ export function buildTriggerAssessment(
       "p4",
       "Progesterone (P4)",
       [...visits].reverse().find((v) => num(v.progesterone) !== null) ?? null,
-      ([...visits].reverse().find((v) => num(v.progesterone) !== null)?.progesterone ?? null) === null
+      ([...visits].reverse().find((v) => num(v.progesterone) !== null)?.progesterone ?? null) ===
+        null
         ? null
         : `${[...visits].reverse().find((v) => num(v.progesterone) !== null)!.progesterone} ng/mL`,
     ),
@@ -836,7 +897,9 @@ export function buildTriggerAssessment(
     stateFor(
       "safety",
       "Clinical safety assessment",
-      latest && ((latest.symptoms ?? "") !== "" || (latest.adverseEvents ?? "") !== "") ? latest : null,
+      latest && ((latest.symptoms ?? "") !== "" || (latest.adverseEvents ?? "") !== "")
+        ? latest
+        : null,
       latest && ((latest.symptoms ?? "") !== "" || (latest.adverseEvents ?? "") !== "")
         ? [latest.symptoms, latest.adverseEvents].filter(Boolean).join(" · ")
         : null,
@@ -868,7 +931,9 @@ export function buildTriggerAssessment(
   ];
 
   const requiredSafetyIds = ["cohort", "e2-current", "developing"];
-  const safetyDataMissing = safetyContext.filter((i) => requiredSafetyIds.includes(i.id) && !i.present);
+  const safetyDataMissing = safetyContext.filter(
+    (i) => requiredSafetyIds.includes(i.id) && !i.present,
+  );
 
   const safetyStatus: TriggerSafetyStatus = !latest
     ? "SAFETY DATA INCOMPLETE"
@@ -884,27 +949,32 @@ export function buildTriggerAssessment(
 
   /* --------------------------------------------------- 10-12/16. options */
 
-  const patientDescriptor = [
-    s.age === null ? null : `${s.age} years`,
-    s.bmi === null ? null : `BMI ${s.bmi}`,
-    phenotype.poseidon.groupLabel ?? null,
-    monitoring.context.currentProtocol === "Not recorded" ? null : monitoring.context.currentProtocol,
-  ]
-    .filter(Boolean)
-    .join(" · ") || "Insufficient patient data recorded";
+  const patientDescriptor =
+    [
+      s.age === null ? null : `${s.age} years`,
+      s.bmi === null ? null : `BMI ${s.bmi}`,
+      phenotype.poseidon.groupLabel ?? null,
+      monitoring.context.currentProtocol === "Not recorded"
+        ? null
+        : monitoring.context.currentProtocol,
+    ]
+      .filter(Boolean)
+      .join(" · ") || "Insufficient patient data recorded";
 
   // Assess clinical protocol and risk profile
   const isAntagonist =
     /antagonist/i.test(monitoring.context.currentProtocol || "") ||
-    visits.some((v) => /antagonist/i.test(v.medication || "") || /antagonist/i.test(v.notes || "")) ||
+    visits.some(
+      (v) => /antagonist/i.test(v.medication || "") || /antagonist/i.test(v.notes || ""),
+    ) ||
     /antagonist/i.test(latest?.medication ?? "") ||
     /antagonist/i.test(latest?.notes ?? "") ||
     !/long agonist|downregulat/i.test(monitoring.context.currentProtocol || "");
 
-  const latestFollicles17 = latest ? num(latest.follicles17) ?? 0 : 0;
-  const leadFollicle = latest ? num(latest.largestFollicle) ?? 0 : 0;
-  const latestE2 = latest ? num(latest.estradiol) ?? 0 : 0;
-  const latestF10 = latest ? num(latest.follicles10) ?? 0 : 0;
+  const latestFollicles17 = latest ? (num(latest.follicles17) ?? 0) : 0;
+  const leadFollicle = latest ? (num(latest.largestFollicle) ?? 0) : 0;
+  const latestE2 = latest ? (num(latest.estradiol) ?? 0) : 0;
+  const latestF10 = latest ? (num(latest.follicles10) ?? 0) : 0;
   const isHighOhss =
     cycle.ohss.level === "critical" ||
     cycle.ohss.level === "high" ||
@@ -912,7 +982,8 @@ export function buildTriggerAssessment(
     latestF10 >= 18 ||
     (latestE2 >= 3000 && /hyper/i.test(response.category));
   const isPoseidonOrPoor =
-    (phenotype.poseidon.groupLabel !== null && phenotype.poseidon.groupLabel !== "Not low prognosis") ||
+    (phenotype.poseidon.groupLabel !== null &&
+      phenotype.poseidon.groupLabel !== "Not low prognosis") ||
     /poor|suboptimal/i.test(response.category);
 
   const criteriaMet = isPoseidonOrPoor
@@ -922,24 +993,33 @@ export function buildTriggerAssessment(
 
   let triggerTimingStatus: string;
   if (criteriaMet) {
-    triggerTimingStatus = "Trigger Timing: Administer 35 to 37 hours (standard 36h) prior to planned oocyte retrieval (OPU).";
+    triggerTimingStatus =
+      "Trigger Timing: Administer 35 to 37 hours (standard 36h) prior to planned oocyte retrieval (OPU).";
   } else if (nearReadiness) {
-    triggerTimingStatus = "Trigger Timing: Approaching readiness (lead follicle 14–16 mm). Schedule ultrasound & E2 repeat in 24–48 hours.";
+    triggerTimingStatus =
+      "Trigger Timing: Approaching readiness (lead follicle 14–16 mm). Schedule ultrasound & E2 repeat in 24–48 hours.";
   } else {
-    triggerTimingStatus = "Trigger Timing: Continue stimulation (lead follicle < 14 mm). Re-evaluate in 48–72 hours.";
+    triggerTimingStatus =
+      "Trigger Timing: Continue stimulation (lead follicle < 14 mm). Re-evaluate in 48–72 hours.";
   }
 
   let triggerTypeStatus: string;
   let triggerDoseStatus: string;
   if (isHighOhss && isAntagonist) {
-    triggerTypeStatus = "Primary Recommendation: GnRH Agonist Trigger (OHSS Prevention & Elective Freeze-All Strategy)";
-    triggerDoseStatus = "Dose: Triptorelin acetate 0.2 mg s.c. (or Leuprolide acetate 1.0–2.0 mg s.c.)";
+    triggerTypeStatus =
+      "Primary Recommendation: GnRH Agonist Trigger (OHSS Prevention & Elective Freeze-All Strategy)";
+    triggerDoseStatus =
+      "Dose: Triptorelin acetate 0.2 mg s.c. (or Leuprolide acetate 1.0–2.0 mg s.c.)";
   } else if (isPoseidonOrPoor && isAntagonist) {
-    triggerTypeStatus = "Primary Recommendation: Dual Trigger (GnRH Agonist + Low-Dose hCG to enhance MII maturation)";
-    triggerDoseStatus = "Dose: Triptorelin 0.2 mg s.c. PLUS low-dose hCG 1,000–1,500 IU s.c. simultaneously";
+    triggerTypeStatus =
+      "Primary Recommendation: Dual Trigger (GnRH Agonist + Low-Dose hCG to enhance MII maturation)";
+    triggerDoseStatus =
+      "Dose: Triptorelin 0.2 mg s.c. PLUS low-dose hCG 1,000–1,500 IU s.c. simultaneously";
   } else {
-    triggerTypeStatus = "Primary Recommendation: Recombinant hCG Trigger (Standard Maturation & Fresh Transfer Protocol)";
-    triggerDoseStatus = "Dose: Choriogonadotropin alfa 250 µg s.c. (or urinary hCG 5,000–10,000 IU s.c.)";
+    triggerTypeStatus =
+      "Primary Recommendation: Recombinant hCG Trigger (Standard Maturation & Fresh Transfer Protocol)";
+    triggerDoseStatus =
+      "Dose: Choriogonadotropin alfa 250 µg s.c. (or urinary hCG 5,000–10,000 IU s.c.)";
   }
 
   const options: TriggerOptionAssessment[] = triggerRules.map((rule) => {
@@ -950,35 +1030,44 @@ export function buildTriggerAssessment(
     if (rule.triggerType === "gnrh-agonist") {
       if (!isAntagonist && monitoring.context.currentProtocol !== "Not recorded") {
         applicability = "OUTSIDE VALIDATED POPULATION";
-        applicabilityDetail = "Contraindicated: Patient is on a Long Agonist protocol. Downregulated pituitary will fail to elicit endogenous LH surge.";
+        applicabilityDetail =
+          "Contraindicated: Patient is on a Long Agonist protocol. Downregulated pituitary will fail to elicit endogenous LH surge.";
       } else if (isHighOhss) {
         applicability = "MATCH";
-        applicabilityDetail = "Strongly Recommended (ESHRE Grade A / ASRM): Antagonist cycle with elevated OHSS risk. Agonist trigger + Freeze-All virtually eliminates severe OHSS.";
+        applicabilityDetail =
+          "Strongly Recommended (ESHRE Grade A / ASRM): Antagonist cycle with elevated OHSS risk. Agonist trigger + Freeze-All virtually eliminates severe OHSS.";
       } else {
         applicability = "MATCH";
-        applicabilityDetail = "Eligible: Patient is in a GnRH Antagonist protocol. Indicated for elective freeze-all or PGT-A cycles.";
+        applicabilityDetail =
+          "Eligible: Patient is in a GnRH Antagonist protocol. Indicated for elective freeze-all or PGT-A cycles.";
       }
     } else if (rule.triggerType === "hcg") {
       if (isHighOhss) {
         applicability = "OUTSIDE VALIDATED POPULATION";
-        applicabilityDetail = "High OHSS Warning: Exogenous hCG has a long half-life (~8–10 days) and carries substantial risk of severe OHSS. GnRH agonist trigger preferred.";
+        applicabilityDetail =
+          "High OHSS Warning: Exogenous hCG has a long half-life (~8–10 days) and carries substantial risk of severe OHSS. GnRH agonist trigger preferred.";
       } else {
         applicability = "MATCH";
-        applicabilityDetail = "Recommended Standard Option: Safe for patients with controlled OHSS risk planning fresh embryo transfer.";
+        applicabilityDetail =
+          "Recommended Standard Option: Safe for patients with controlled OHSS risk planning fresh embryo transfer.";
       }
     } else if (rule.triggerType === "dual") {
       if (!isAntagonist && monitoring.context.currentProtocol !== "Not recorded") {
         applicability = "OUTSIDE VALIDATED POPULATION";
-        applicabilityDetail = "Contraindicated: Requires responsive pituitary in GnRH Antagonist protocol.";
+        applicabilityDetail =
+          "Contraindicated: Requires responsive pituitary in GnRH Antagonist protocol.";
       } else if (isHighOhss) {
         applicability = "OUTSIDE VALIDATED POPULATION";
-        applicabilityDetail = "Avoid: Even low-dose hCG adds risk in severe hyper-responders. Pure agonist trigger is preferred.";
+        applicabilityDetail =
+          "Avoid: Even low-dose hCG adds risk in severe hyper-responders. Pure agonist trigger is preferred.";
       } else if (isPoseidonOrPoor) {
         applicability = "MATCH";
-        applicabilityDetail = "Recommended: Dual trigger significantly improves metaphase II (MII) oocyte maturation in POSEIDON / suboptimal responder cohorts.";
+        applicabilityDetail =
+          "Recommended: Dual trigger significantly improves metaphase II (MII) oocyte maturation in POSEIDON / suboptimal responder cohorts.";
       } else {
         applicability = "PARTIAL MATCH";
-        applicabilityDetail = "Alternative Option: Suitable for Antagonist cycles where fresh transfer with enhanced nuclear maturation is desired.";
+        applicabilityDetail =
+          "Alternative Option: Suitable for Antagonist cycles where fresh transfer with enhanced nuclear maturation is desired.";
       }
     }
 
@@ -1039,8 +1128,7 @@ export function buildTriggerAssessment(
     dataGaps.push({
       id: `completeness-${c.id}`,
       label: c.label,
-      kind:
-        c.state === "MISSING" ? "Missing" : c.state === "OUTDATED" ? "Outdated" : "Conflicting",
+      kind: c.state === "MISSING" ? "Missing" : c.state === "OUTDATED" ? "Outdated" : "Conflicting",
       requirement: ["ultrasound", "follicles", "e2", "endometrium", "dose"].includes(c.id)
         ? "Required"
         : "Optional",
@@ -1051,7 +1139,12 @@ export function buildTriggerAssessment(
     dataGaps.push({
       id: `validation-${v.id}`,
       label: `${v.field}${v.day === null ? "" : ` (day ${v.day})`}`,
-      kind: v.severity === "invalid" ? "Invalid" : v.severity === "conflict" ? "Conflicting" : "Missing",
+      kind:
+        v.severity === "invalid"
+          ? "Invalid"
+          : v.severity === "conflict"
+            ? "Conflicting"
+            : "Missing",
       requirement: "Required",
       detail: v.message,
     });
@@ -1067,9 +1160,9 @@ export function buildTriggerAssessment(
         : "STIMULATION ONGOING",
     algorithmStatus: "ACTIVE",
     headline: criteriaMet
-      ? (isPoseidonOrPoor
-          ? "Trigger Readiness Achieved: Lead follicle has reached ≥ 17 mm in low prognosis cohort."
-          : "Trigger Readiness Achieved: Follicular cohort meets international trigger criteria (≥ 3 follicles ≥ 17 mm or lead ≥ 18 mm).")
+      ? isPoseidonOrPoor
+        ? "Trigger Readiness Achieved: Lead follicle has reached ≥ 17 mm in low prognosis cohort."
+        : "Trigger Readiness Achieved: Follicular cohort meets international trigger criteria (≥ 3 follicles ≥ 17 mm or lead ≥ 18 mm)."
       : nearReadiness
         ? "Lead follicle has reached 14–16 mm. Standard growth rate is 1.5–2 mm/day; re-evaluate in 24–48 hours."
         : "Follicular cohort under 14 mm. Continue stimulation and re-evaluate in 48–72 hours.",
@@ -1078,9 +1171,7 @@ export function buildTriggerAssessment(
     follicularSummary: latest
       ? `Day ${latest.day}: ${latest.follicleCount ?? "—"} follicle(s), largest ${latest.largestFollicle ?? "—"} mm, ≥17 mm: ${latest.follicles17 ?? "—"}.`
       : "No follicular measurement recorded.",
-    hormonalSummary: hormonal
-      .map((h) => `${h.label} ${h.current}`)
-      .join(" · "),
+    hormonalSummary: hormonal.map((h) => `${h.label} ${h.current}`).join(" · "),
     endometrialSummary: endometrial[0]
       ? `${endometrial[0].current} (${endometrialPattern})`
       : "Not recorded",

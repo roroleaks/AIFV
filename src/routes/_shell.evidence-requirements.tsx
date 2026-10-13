@@ -81,11 +81,15 @@ function EvidenceRequirements() {
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
           Upload the listed pages or tables to the{" "}
-          <Link to="/evidence" className="font-medium text-primary underline-offset-4 hover:underline">
+          <Link
+            to="/evidence"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
             Evidence Library
           </Link>
-          . Each module is wired end-to-end already — transcribing the published values at the stated
-          activation point switches the module on without any change to the application architecture.
+          . Each module is wired end-to-end already — transcribing the published values at the
+          stated activation point switches the module on without any change to the application
+          architecture.
         </p>
       </SectionCard>
 
@@ -114,7 +118,6 @@ function EvidenceRequirements() {
               </p>
             )}
             <ul className="divide-y divide-border/60">
-
               {m.requirements.map((r) => (
                 <li key={r.item} className="grid gap-1.5 px-5 py-4">
                   <div className="flex flex-wrap items-center gap-2">

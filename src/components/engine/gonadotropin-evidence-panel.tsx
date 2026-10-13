@@ -283,13 +283,23 @@ function GonadotropinCard({ option }: { option: GonadotropinOptionAssessment }) 
                       ))}
                     </ul>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      <Button asChild size="sm" variant="outline" className="h-7 gap-1.5 text-[11px]">
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="outline"
+                        className="h-7 gap-1.5 text-[11px]"
+                      >
                         <Link to="/evidence/$id" params={{ id: c.evidenceId }}>
                           <BookOpen className="size-3.5" /> View source
                         </Link>
                       </Button>
                       {c.doi && (
-                        <Button asChild size="sm" variant="ghost" className="h-7 gap-1.5 text-[11px]">
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 gap-1.5 text-[11px]"
+                        >
                           <a
                             href={`https://doi.org/${c.doi}`}
                             target="_blank"
@@ -300,7 +310,12 @@ function GonadotropinCard({ option }: { option: GonadotropinOptionAssessment }) 
                         </Button>
                       )}
                       {c.url && (
-                        <Button asChild size="sm" variant="ghost" className="h-7 gap-1.5 text-[11px]">
+                        <Button
+                          asChild
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 gap-1.5 text-[11px]"
+                        >
                           <a href={c.url} target="_blank" rel="noreferrer noopener">
                             <ExternalLink className="size-3.5" /> Open journal
                           </a>
@@ -481,11 +496,7 @@ export function GonadotropinEvidenceSection({ result }: { result: GonadotropinEv
       </Card>
 
       {/* previous exposure */}
-      <Card
-        icon={History}
-        title="Previous gonadotropin experience"
-        badge={<HistoricalBadge />}
-      >
+      <Card icon={History} title="Previous gonadotropin experience" badge={<HistoricalBadge />}>
         {result.previousExposure.length ? (
           <>
             <div className="overflow-x-auto">
@@ -542,7 +553,9 @@ export function GonadotropinEvidenceSection({ result }: { result: GonadotropinEv
 
       {/* options */}
       <div className="grid gap-4">
-        <h3 className="text-sm font-semibold">Gonadotropin options with an indexed evidence record</h3>
+        <h3 className="text-sm font-semibold">
+          Gonadotropin options with an indexed evidence record
+        </h3>
         {result.options.map((o) => (
           <GonadotropinCard key={o.id} option={o} />
         ))}
@@ -672,9 +685,7 @@ export function GonadotropinEvidenceSection({ result }: { result: GonadotropinEv
                     <li key={it.id} className="flex items-center justify-between gap-2">
                       <span>{it.label}</span>
                       <Button asChild size="sm" variant="ghost" className="h-6 text-[11px]">
-                        <Link to="/assessment">
-                          Open
-                        </Link>
+                        <Link to="/assessment">Open</Link>
                       </Button>
                     </li>
                   ))}
@@ -756,7 +767,9 @@ export function GonadotropinEvidenceSection({ result }: { result: GonadotropinEv
         {decision && !editing && (
           <div className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-3 text-xs">
             <p className="font-semibold">{gonadotropinDecisionLabel[decision.kind]}</p>
-            {decision.gonadotropin && <p className="mt-0.5">Gonadotropin: {decision.gonadotropin}</p>}
+            {decision.gonadotropin && (
+              <p className="mt-0.5">Gonadotropin: {decision.gonadotropin}</p>
+            )}
             {decision.note && <p className="mt-0.5 text-muted-foreground">Note: {decision.note}</p>}
             <p className="mt-1 text-[11px] text-muted-foreground">
               {decision.origin} · recorded {new Date(decision.decidedAt).toLocaleString()} by{" "}

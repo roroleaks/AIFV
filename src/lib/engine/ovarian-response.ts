@@ -36,13 +36,7 @@ export const ovarianResponseEvidenceIds = [
 /* ------------------------------------------------------------ categories */
 
 export type ResponseCategory =
-  | "very-poor"
-  | "poor"
-  | "suboptimal"
-  | "normal"
-  | "high"
-  | "hyper"
-  | "unable";
+  "very-poor" | "poor" | "suboptimal" | "normal" | "high" | "hyper" | "unable";
 
 export const responseSpectrum: Exclude<ResponseCategory, "unable">[] = [
   "very-poor",
@@ -249,8 +243,7 @@ export function extractResponseInputs(
     previousCycles: stim.length,
     cycleSignals,
     poorResponseHistory: yields.some((y) => y < POSEIDON_POOR_OOCYTES),
-    hyperResponseHistory:
-      yields.some((y) => y >= 20) || cycleSignals.some((c) => c.ohss !== null),
+    hyperResponseHistory: yields.some((y) => y >= 20) || cycleSignals.some((c) => c.ohss !== null),
     ohssHistory: cycleSignals.map((c) => c.ohss).find((o): o is string => o !== null) ?? null,
     pcos,
     endometriosis,
@@ -266,12 +259,48 @@ const fmt = (n: number | null, unit = "") =>
 function buildVariables(i: ResponseInputs): ResponseVariable[] {
   return [
     { id: "age", label: "Age", value: fmt(i.age, "y"), present: i.age !== null, stepId: "patient" },
-    { id: "bmi", label: "BMI", value: fmt(i.bmi, "kg/m²"), present: i.bmi !== null, stepId: "patient" },
-    { id: "amh", label: "AMH", value: fmt(i.amh, "ng/mL"), present: i.amh !== null, stepId: "reserve" },
-    { id: "afc", label: "Antral follicle count", value: fmt(i.afc), present: i.afc !== null, stepId: "reserve" },
-    { id: "fsh", label: "Basal FSH", value: fmt(i.fsh, "IU/L"), present: i.fsh !== null, stepId: "reserve" },
-    { id: "lh", label: "Basal LH", value: fmt(i.lh, "IU/L"), present: i.lh !== null, stepId: "reserve" },
-    { id: "estradiol", label: "Estradiol", value: fmt(i.estradiol, "pg/mL"), present: i.estradiol !== null, stepId: "reserve" },
+    {
+      id: "bmi",
+      label: "BMI",
+      value: fmt(i.bmi, "kg/m²"),
+      present: i.bmi !== null,
+      stepId: "patient",
+    },
+    {
+      id: "amh",
+      label: "AMH",
+      value: fmt(i.amh, "ng/mL"),
+      present: i.amh !== null,
+      stepId: "reserve",
+    },
+    {
+      id: "afc",
+      label: "Antral follicle count",
+      value: fmt(i.afc),
+      present: i.afc !== null,
+      stepId: "reserve",
+    },
+    {
+      id: "fsh",
+      label: "Basal FSH",
+      value: fmt(i.fsh, "IU/L"),
+      present: i.fsh !== null,
+      stepId: "reserve",
+    },
+    {
+      id: "lh",
+      label: "Basal LH",
+      value: fmt(i.lh, "IU/L"),
+      present: i.lh !== null,
+      stepId: "reserve",
+    },
+    {
+      id: "estradiol",
+      label: "Estradiol",
+      value: fmt(i.estradiol, "pg/mL"),
+      present: i.estradiol !== null,
+      stepId: "reserve",
+    },
     {
       id: "previousCycles",
       label: "Previous IVF/ICSI cycles",
@@ -282,7 +311,11 @@ function buildVariables(i: ResponseInputs): ResponseVariable[] {
     {
       id: "protocol",
       label: "Previous stimulation protocol",
-      value: i.cycleSignals.map((c) => c.protocol).filter(Boolean).join(", ") || "Not recorded",
+      value:
+        i.cycleSignals
+          .map((c) => c.protocol)
+          .filter(Boolean)
+          .join(", ") || "Not recorded",
       present: i.cycleSignals.some((c) => c.protocol),
       stepId: "cycles",
     },
@@ -362,7 +395,13 @@ function buildVariables(i: ResponseInputs): ResponseVariable[] {
       present: i.previousCycles > 0,
       stepId: "cycles",
     },
-    { id: "pcos", label: "PCOS", value: i.pcos ? "Documented" : "Not documented", present: true, stepId: "cause" },
+    {
+      id: "pcos",
+      label: "PCOS",
+      value: i.pcos ? "Documented" : "Not documented",
+      present: true,
+      stepId: "cause",
+    },
     {
       id: "endometriosis",
       label: "Endometriosis",
@@ -370,7 +409,13 @@ function buildVariables(i: ResponseInputs): ResponseVariable[] {
       present: true,
       stepId: "cause",
     },
-    { id: "smoking", label: "Smoking", value: i.smoking ?? "Not recorded", present: i.smoking !== null, stepId: "patient" },
+    {
+      id: "smoking",
+      label: "Smoking",
+      value: i.smoking ?? "Not recorded",
+      present: i.smoking !== null,
+      stepId: "patient",
+    },
   ];
 }
 
@@ -402,17 +447,24 @@ function validate(i: ResponseInputs, variables: ResponseVariable[]): ResponseVal
     );
 
   const abnormal: string[] = [];
-  if (i.amh !== null && i.amh > 20) abnormal.push(`AMH ${i.amh} ng/mL is outside the usual measurable range.`);
-  if (i.afc !== null && i.afc > 50) abnormal.push(`Antral follicle count ${i.afc} is implausibly high.`);
-  if (i.fsh !== null && i.fsh > 40) abnormal.push(`Basal FSH ${i.fsh} IU/L is in the menopausal range.`);
+  if (i.amh !== null && i.amh > 20)
+    abnormal.push(`AMH ${i.amh} ng/mL is outside the usual measurable range.`);
+  if (i.afc !== null && i.afc > 50)
+    abnormal.push(`Antral follicle count ${i.afc} is implausibly high.`);
+  if (i.fsh !== null && i.fsh > 40)
+    abnormal.push(`Basal FSH ${i.fsh} IU/L is in the menopausal range.`);
   if (i.estradiol !== null && i.estradiol > 80)
     abnormal.push(
       `Baseline estradiol ${i.estradiol} pg/mL is above the usual early-follicular range, which can artificially suppress the FSH value.`,
     );
   if (i.bmi !== null && (i.bmi < 16 || i.bmi > 45))
-    abnormal.push(`BMI ${i.bmi} kg/m² is outside the usual clinical range — confirm height and weight.`);
+    abnormal.push(
+      `BMI ${i.bmi} kg/m² is outside the usual clinical range — confirm height and weight.`,
+    );
   if (i.age !== null && (i.age < 18 || i.age > 55))
-    abnormal.push(`Age ${i.age} years is outside the usual treatment range — confirm the date of birth.`);
+    abnormal.push(
+      `Age ${i.age} years is outside the usual treatment range — confirm the date of birth.`,
+    );
 
   const incompleteHistory: string[] = [];
   if (i.previousCycles > 0) {
@@ -423,7 +475,9 @@ function validate(i: ResponseInputs, variables: ResponseVariable[]): ResponseVal
     if (!i.cycleSignals.some((c) => c.protocol))
       incompleteHistory.push("No stimulation protocol is recorded for the previous cycles.");
     if (!i.cycleSignals.some((c) => c.mature !== null))
-      incompleteHistory.push("Mature (MII) oocyte counts are not recorded for the previous cycles.");
+      incompleteHistory.push(
+        "Mature (MII) oocyte counts are not recorded for the previous cycles.",
+      );
   }
 
   const essentialPresent = i.age !== null && (i.amh !== null || i.afc !== null);
@@ -486,7 +540,11 @@ function predict(
     (lowestYield !== null && lowestYield <= 1 && severeReserve)
   ) {
     category = "very-poor";
-  } else if (severeReserve || bologna.status === "positive" || (lowestYield !== null && lowestYield < POSEIDON_POOR_OOCYTES)) {
+  } else if (
+    severeReserve ||
+    bologna.status === "positive" ||
+    (lowestYield !== null && lowestYield < POSEIDON_POOR_OOCYTES)
+  ) {
     category = "poor";
   } else if (
     lowReserve ||
@@ -531,10 +589,17 @@ function predict(
             : `Antral follicle count ${i.afc} is at or above the POSEIDON threshold of 5 follicles.`,
     );
   if (i.bmi !== null)
-    contributing.push(`BMI ${i.bmi} kg/m² is recorded and shown for context alongside the reserve markers.`);
-  if (i.pcos) contributing.push("PCOS is documented, which is associated with a larger antral follicle cohort.");
+    contributing.push(
+      `BMI ${i.bmi} kg/m² is recorded and shown for context alongside the reserve markers.`,
+    );
+  if (i.pcos)
+    contributing.push(
+      "PCOS is documented, which is associated with a larger antral follicle cohort.",
+    );
   if (i.endometriosis)
-    contributing.push("Endometriosis is documented and is shown for context in the reserve assessment.");
+    contributing.push(
+      "Endometriosis is documented and is shown for context in the reserve assessment.",
+    );
   if (i.smoking && i.smoking.startsWith("Current"))
     contributing.push(`Smoking status recorded as “${i.smoking}”, shown for context.`);
   if (poseidon.group)
@@ -575,7 +640,8 @@ function buildRisks(
       id: "expected-poor",
       label: "Expected Poor Response",
       severity: "high",
-      basis: "Recorded reserve markers and/or the Bologna assessment support a poor expected yield.",
+      basis:
+        "Recorded reserve markers and/or the Bologna assessment support a poor expected yield.",
     });
   if (category === "suboptimal")
     push({
@@ -612,7 +678,8 @@ function buildRisks(
       id: "reduced-reserve",
       label: "Reduced Ovarian Reserve",
       severity: "high",
-      basis: "AMH and/or antral follicle count are below the published adequate-reserve thresholds.",
+      basis:
+        "AMH and/or antral follicle count are below the published adequate-reserve thresholds.",
     });
 
   if (i.age !== null && i.age >= 40)
@@ -676,7 +743,9 @@ export function predictOvarianResponse(
 
   const previousCycleFindings: string[] =
     inputs.previousCycles === 0
-      ? ["No previous stimulation cycle is recorded, so the assessment rests on baseline markers only."]
+      ? [
+          "No previous stimulation cycle is recorded, so the assessment rests on baseline markers only.",
+        ]
       : inputs.cycleSignals.map((c) => {
           const parts = [
             c.protocol ? `${c.protocol} protocol` : null,

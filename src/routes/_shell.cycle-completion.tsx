@@ -146,7 +146,6 @@ function CycleCompletionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source.id, result.safetyStatus, result.progress.visits]);
 
-
   const guidelinePopulations = useMemo(() => {
     const ph = buildPhenotype(source.values, source.cycles);
     const resp = predictOvarianResponse(source.values, source.cycles, ph.poseidon, ph.bologna);
@@ -167,8 +166,6 @@ function CycleCompletionPage() {
         <EvidencePendingGate id="trigger-strategy" />
         <EvidencePendingGate id="freeze-all" />
       </div>
-
-
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">
@@ -199,13 +196,22 @@ function CycleCompletionPage() {
         <Badge variant="outline" className="rounded-full">
           Cycle Completion Engine v{CYCLE_COMPLETION_VERSION}
         </Badge>
-        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <Badge
+          variant="outline"
+          className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+        >
           Trigger algorithm active (ESHRE 2025)
         </Badge>
-        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <Badge
+          variant="outline"
+          className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+        >
           OHSS risk stratification active (ASRM 2016)
         </Badge>
-        <Badge variant="outline" className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <Badge
+          variant="outline"
+          className="rounded-full border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+        >
           Freeze-all algorithm active (ESHRE 2025)
         </Badge>
       </div>
@@ -222,7 +228,7 @@ function CycleCompletionPage() {
 
         <OhssPanelCard result={result} />
 
-      <GuidelineRecommendationsPanel module="ohss-risk" populations={guidelinePopulations} />
+        <GuidelineRecommendationsPanel module="ohss-risk" populations={guidelinePopulations} />
 
         <div className="grid items-start gap-5 xl:grid-cols-2">
           <CycleAlertsCard result={result} />

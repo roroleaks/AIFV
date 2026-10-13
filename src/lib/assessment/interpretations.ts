@@ -27,13 +27,19 @@ const rules: Record<string, Rule> = {
     if (v <= 3.5) return { label: "Normal", tone: "normal" };
     return { label: "High", tone: "high" };
   },
-  fsh: (v) => (v > 10 ? { label: "Elevated", tone: "warn" } : { label: "Within expected range", tone: "normal" }),
+  fsh: (v) =>
+    v > 10
+      ? { label: "Elevated", tone: "warn" }
+      : { label: "Within expected range", tone: "normal" },
   tsh: (v) => {
     if (v < 0.4) return { label: "Below expected laboratory range", tone: "warn" };
     if (v > 4.0) return { label: "Above expected laboratory range", tone: "warn" };
     return { label: "Within expected range", tone: "normal" };
   },
-  prolactin: (v) => (v > 25 ? { label: "Above expected range", tone: "warn" } : { label: "Within expected range", tone: "normal" }),
+  prolactin: (v) =>
+    v > 25
+      ? { label: "Above expected range", tone: "warn" }
+      : { label: "Within expected range", tone: "normal" },
   hba1c: (v) => {
     if (v < 5.7) return { label: "Within expected range", tone: "normal" };
     if (v < 6.5) return { label: "Above expected range", tone: "high" };
@@ -44,18 +50,39 @@ const rules: Record<string, Rule> = {
     if (v < 30) return { label: "Insufficient range", tone: "low" };
     return { label: "Within expected range", tone: "normal" };
   },
-  partnerAge: (v) => (v >= 45 ? { label: "Advanced paternal age", tone: "warn" } : { label: "Within usual range", tone: "normal" }),
-  semenVolume: (v) => (v < 1.4 ? { label: "Below WHO reference", tone: "warn" } : { label: "Within WHO reference", tone: "normal" }),
-  concentration: (v) => (v < 16 ? { label: "Below WHO reference", tone: "warn" } : { label: "Within WHO reference", tone: "normal" }),
-  progressiveMotility: (v) => (v < 30 ? { label: "Below WHO reference", tone: "warn" } : { label: "Within WHO reference", tone: "normal" }),
-  totalMotility: (v) => (v < 42 ? { label: "Below WHO reference", tone: "warn" } : { label: "Within WHO reference", tone: "normal" }),
-  morphology: (v) => (v < 4 ? { label: "Below WHO reference", tone: "warn" } : { label: "Within WHO reference", tone: "normal" }),
+  partnerAge: (v) =>
+    v >= 45
+      ? { label: "Advanced paternal age", tone: "warn" }
+      : { label: "Within usual range", tone: "normal" },
+  semenVolume: (v) =>
+    v < 1.4
+      ? { label: "Below WHO reference", tone: "warn" }
+      : { label: "Within WHO reference", tone: "normal" },
+  concentration: (v) =>
+    v < 16
+      ? { label: "Below WHO reference", tone: "warn" }
+      : { label: "Within WHO reference", tone: "normal" },
+  progressiveMotility: (v) =>
+    v < 30
+      ? { label: "Below WHO reference", tone: "warn" }
+      : { label: "Within WHO reference", tone: "normal" },
+  totalMotility: (v) =>
+    v < 42
+      ? { label: "Below WHO reference", tone: "warn" }
+      : { label: "Within WHO reference", tone: "normal" },
+  morphology: (v) =>
+    v < 4
+      ? { label: "Below WHO reference", tone: "warn" }
+      : { label: "Within WHO reference", tone: "normal" },
   dnaFragmentation: (v) => {
     if (v < 15) return { label: "Low fragmentation", tone: "normal" };
     if (v <= 30) return { label: "Intermediate fragmentation", tone: "low" };
     return { label: "High fragmentation", tone: "warn" };
   },
-  endometrium: (v) => (v < 7 ? { label: "Thin measurement", tone: "low" } : { label: "Within usual range", tone: "normal" }),
+  endometrium: (v) =>
+    v < 7
+      ? { label: "Thin measurement", tone: "low" }
+      : { label: "Within usual range", tone: "normal" },
   cycleLength: (v) => {
     if (v < 21) return { label: "Short cycle", tone: "low" };
     if (v > 35) return { label: "Long cycle", tone: "warn" };

@@ -116,9 +116,11 @@ function MonitoringPage() {
       : simulation === "hyper"
         ? simulatedHyperResponseVisits
         : storedVisits;
-  const { events: doseEvents, record: recordDoseEvent, remove: removeDoseEvent } = useDoseEvents(
-    source.id,
-  );
+  const {
+    events: doseEvents,
+    record: recordDoseEvent,
+    remove: removeDoseEvent,
+  } = useDoseEvents(source.id);
 
   const result = useMemo(() => {
     const phenotype = buildPhenotype(source.values, source.cycles);
@@ -186,7 +188,6 @@ function MonitoringPage() {
     ? (visits.find((v) => (editing.id ? v.id === editing.id : v.day === editing.day)) ?? undefined)
     : undefined;
 
-
   const guidelinePopulations = useMemo(() => {
     const ph = buildPhenotype(source.values, source.cycles);
     const resp = predictOvarianResponse(source.values, source.cycles, ph.poseidon, ph.bologna);
@@ -204,8 +205,6 @@ function MonitoringPage() {
 
       <ClinicalSafetyBanner />
       <EvidencePendingGate id="dose-adjustment" />
-
-
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">
@@ -337,7 +336,10 @@ function MonitoringPage() {
         <DoseTimelineCard result={result} />
         <DoseAdjustmentCard evaluation={doseEvaluation} />
 
-      <GuidelineRecommendationsPanel module="dose-adjustment" populations={guidelinePopulations} />
+        <GuidelineRecommendationsPanel
+          module="dose-adjustment"
+          populations={guidelinePopulations}
+        />
 
         <div className="grid items-start gap-5 xl:grid-cols-2">
           <DoseDecisionCard

@@ -110,7 +110,9 @@ export function useResponsePredictions(patientId?: string) {
 
   return {
     entries: patientId ? entries.filter((e) => e.patientId === patientId) : entries,
-    latest: patientId ? (entries.find((e) => e.patientId === patientId) ?? null) : (entries[0] ?? null),
+    latest: patientId
+      ? (entries.find((e) => e.patientId === patientId) ?? null)
+      : (entries[0] ?? null),
     clear,
   };
 }

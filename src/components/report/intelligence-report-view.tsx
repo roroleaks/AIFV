@@ -171,9 +171,7 @@ export function QualityControlCard({ report }: { report: IntelligenceReport }) {
           variant="outline"
           className={cn(
             "rounded-full",
-            report.qualityIssues.length === 0
-              ? statusTone.complete
-              : statusTone.partial,
+            report.qualityIssues.length === 0 ? statusTone.complete : statusTone.partial,
           )}
         >
           {report.qualityIssues.length === 0
@@ -210,7 +208,11 @@ export function QualityControlCard({ report }: { report: IntelligenceReport }) {
 export function TableOfContents({ report }: { report: IntelligenceReport }) {
   const entries = [
     ...report.sections.map((s) => ({ number: s.number, title: s.title, id: s.id })),
-    { number: report.sections.length + 1, title: "Clinical Explanation", id: "clinical-explanation" },
+    {
+      number: report.sections.length + 1,
+      title: "Clinical Explanation",
+      id: "clinical-explanation",
+    },
     { number: report.sections.length + 2, title: "Application Status", id: "application-status" },
     { number: report.sections.length + 3, title: "Audit Trail", id: "audit-trail" },
   ];
@@ -487,7 +489,10 @@ export function ApplicationStatusPanel({ report }: { report: IntelligenceReport 
       </header>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <StatusList title={`Active modules · ${s.active.length}`} items={s.active.map((m) => m.name)} />
+        <StatusList
+          title={`Active modules · ${s.active.length}`}
+          items={s.active.map((m) => m.name)}
+        />
         <StatusList
           title={`Framework modules · ${s.framework.length}`}
           items={s.framework.map((m) => m.name)}
@@ -524,7 +529,10 @@ export function ApplicationStatusPanel({ report }: { report: IntelligenceReport 
         </p>
         <div className="mt-2 grid gap-3 md:grid-cols-2">
           {s.missingEvidence.map((m) => (
-            <div key={m.module} className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-3">
+            <div
+              key={m.module}
+              className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-3"
+            >
               <p className="text-sm font-medium">{m.module}</p>
               <ul className="mt-1 space-y-1">
                 {m.items.map((i, idx) => (

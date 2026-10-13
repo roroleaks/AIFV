@@ -116,7 +116,10 @@ function Expandable({
         <div className="ml-auto flex items-center gap-2">
           {badge}
           <ChevronDown
-            className={cn("size-4 text-muted-foreground transition-transform", open && "rotate-180")}
+            className={cn(
+              "size-4 text-muted-foreground transition-transform",
+              open && "rotate-180",
+            )}
           />
         </div>
       </button>
@@ -154,13 +157,26 @@ export function CycleContextCard({ result }: { result: CycleCompletionResult }) 
 
 /* ------------------------------------------------------- safety dashboard */
 
-function Metric({ label, value, tone }: { label: string; value: string; tone?: "warn" | undefined }) {
+function Metric({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: "warn" | undefined;
+}) {
   return (
     <div className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-3">
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
         {label}
       </p>
-      <p className={cn("mt-1 text-lg font-semibold", tone === "warn" && "text-amber-600 dark:text-amber-400")}>
+      <p
+        className={cn(
+          "mt-1 text-lg font-semibold",
+          tone === "warn" && "text-amber-600 dark:text-amber-400",
+        )}
+      >
         {value}
       </p>
     </div>
@@ -271,7 +287,9 @@ export function AssessmentPanel({
         Missing variables
       </p>
       <p className="mt-1 text-sm">
-        {data.missing.length ? data.missing.join(", ") : "None — every listed variable is recorded."}
+        {data.missing.length
+          ? data.missing.join(", ")
+          : "None — every listed variable is recorded."}
       </p>
 
       <div className="mt-4 rounded-xl border border-dashed border-border px-3.5 py-3">
@@ -299,9 +317,7 @@ function FactorList({ factors }: { factors: OhssFactor[] }) {
           className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2"
         >
           <span className="text-xs text-muted-foreground">{f.label}</span>
-          <span
-            className={cn("text-sm font-medium", !f.present && "text-muted-foreground")}
-          >
+          <span className={cn("text-sm font-medium", !f.present && "text-muted-foreground")}>
             {f.value}
           </span>
         </li>
@@ -449,7 +465,15 @@ const tooltipStyle = {
   color: "var(--color-popover-foreground)",
 } as const;
 
-function ChartFrame({ title, children, note }: { title: string; children: React.ReactElement; note: string }) {
+function ChartFrame({
+  title,
+  children,
+  note,
+}: {
+  title: string;
+  children: React.ReactElement;
+  note: string;
+}) {
   return (
     <Card icon={LineChartIcon} title={title}>
       <div className="h-56 w-full">
@@ -484,9 +508,36 @@ export function CycleCharts({ result }: { result: CycleCompletionResult }) {
           <XAxis dataKey="label" {...axis} />
           <YAxis {...axis} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Line type="monotone" dataKey="largestFollicle" name="Largest (mm)" stroke={C1} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
-          <Line type="monotone" dataKey="follicles14" name="≥14 mm" stroke={C2} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
-          <Line type="monotone" dataKey="follicles17" name="≥17 mm" stroke={C3} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
+          <Line
+            type="monotone"
+            dataKey="largestFollicle"
+            name="Largest (mm)"
+            stroke={C1}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="follicles14"
+            name="≥14 mm"
+            stroke={C2}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="follicles17"
+            name="≥17 mm"
+            stroke={C3}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
         </LineChart>
       </ChartFrame>
 
@@ -496,9 +547,36 @@ export function CycleCharts({ result }: { result: CycleCompletionResult }) {
           <XAxis dataKey="label" {...axis} />
           <YAxis {...axis} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Line type="monotone" dataKey="estradiol" name="E2 (pg/mL)" stroke={C1} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
-          <Line type="monotone" dataKey="progesterone" name="P4 (ng/mL)" stroke={C2} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
-          <Line type="monotone" dataKey="lh" name="LH (IU/L)" stroke={C3} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
+          <Line
+            type="monotone"
+            dataKey="estradiol"
+            name="E2 (pg/mL)"
+            stroke={C1}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="progesterone"
+            name="P4 (ng/mL)"
+            stroke={C2}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="lh"
+            name="LH (IU/L)"
+            stroke={C3}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
         </LineChart>
       </ChartFrame>
 
@@ -508,18 +586,47 @@ export function CycleCharts({ result }: { result: CycleCompletionResult }) {
           <XAxis dataKey="label" {...axis} />
           <YAxis {...axis} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Area type="monotone" dataKey="follicles10" name="≥10 mm" stroke={C1} fill="var(--color-chart-1, #2563eb)" fillOpacity={0.18} strokeWidth={2} />
+          <Area
+            type="monotone"
+            dataKey="follicles10"
+            name="≥10 mm"
+            stroke={C1}
+            fill="var(--color-chart-1, #2563eb)"
+            fillOpacity={0.18}
+            strokeWidth={2}
+          />
         </AreaChart>
       </ChartFrame>
 
-      <ChartFrame title="Endometrium & dose" note="Endometrial thickness and daily dose as entered.">
+      <ChartFrame
+        title="Endometrium & dose"
+        note="Endometrial thickness and daily dose as entered."
+      >
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 4, left: -18 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
           <XAxis dataKey="label" {...axis} />
           <YAxis {...axis} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Line type="monotone" dataKey="endometrium" name="Endometrium (mm)" stroke={C1} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
-          <Line type="monotone" dataKey="dailyDose" name="Dose (IU)" stroke={C2} strokeWidth={2} dot={{ r: 3 }} connectNulls isAnimationActive={false} />
+          <Line
+            type="monotone"
+            dataKey="endometrium"
+            name="Endometrium (mm)"
+            stroke={C1}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="dailyDose"
+            name="Dose (IU)"
+            stroke={C2}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            connectNulls
+            isAnimationActive={false}
+          />
         </LineChart>
       </ChartFrame>
     </div>
@@ -589,7 +696,10 @@ export function CycleSummaryCard({ result }: { result: CycleCompletionResult }) 
     <Card icon={FlaskConical} title="Cycle completion summary">
       <dl className="grid gap-2">
         {rows.map(([label, value]) => (
-          <div key={label} className="grid gap-0.5 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
+          <div
+            key={label}
+            className="grid gap-0.5 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
+          >
             <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
               {label}
             </dt>
@@ -681,7 +791,10 @@ export function CycleEvidenceCard({ ids }: { ids: string[] }) {
           ["Required to activate OHSS risk", OHSS_REQUIRED_EVIDENCE],
           ["Required to activate freeze-all", FREEZE_ALL_REQUIRED_EVIDENCE],
         ].map(([label, items]) => (
-          <div key={label as string} className="rounded-xl border border-dashed border-border px-3.5 py-3">
+          <div
+            key={label as string}
+            className="rounded-xl border border-dashed border-border px-3.5 py-3"
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
               {label as string}
             </p>
@@ -710,7 +823,9 @@ export function CycleIntegrationCard() {
         {cycleConsumerInterfaces.map((c) => (
           <li key={c.id} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
             <p className="text-sm font-medium">{c.name}</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Receives: {c.receives.join(" · ")}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Receives: {c.receives.join(" · ")}
+            </p>
             <p className="mt-1 text-xs text-muted-foreground">{c.status}</p>
           </li>
         ))}

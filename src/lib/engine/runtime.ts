@@ -19,11 +19,9 @@ import type {
   EngineStatus,
 } from "./types";
 
-const variableLabel = (id: string) =>
-  clinicalVariables.find((v) => v.id === id)?.label ?? id;
+const variableLabel = (id: string) => clinicalVariables.find((v) => v.id === id)?.label ?? id;
 
-const variableFields = (id: string) =>
-  clinicalVariables.find((v) => v.id === id)?.source ?? [];
+const variableFields = (id: string) => clinicalVariables.find((v) => v.id === id)?.source ?? [];
 
 /** Dependency-aware execution order (stable topological sort). */
 export function resolveExecutionOrder(
@@ -105,7 +103,11 @@ export function runEngineQueue(
         });
       });
 
-    if (module.id !== "patient-classification" && context.cycles.length === 0 && optional.some((o) => o.startsWith("previous"))) {
+    if (
+      module.id !== "patient-classification" &&
+      context.cycles.length === 0 &&
+      optional.some((o) => o.startsWith("previous"))
+    ) {
       issues.push({
         kind: "incomplete-history",
         message: "No previous cycle recorded — historical variables are unavailable.",

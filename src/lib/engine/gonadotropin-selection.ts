@@ -352,7 +352,12 @@ export function buildGonadotropinSelection(
       ],
       recommendationStrength: "Strong (ESHRE Rec 14, 25, 33)",
       evidenceQuality: "⊕⊕⊕",
-      firedRules: ["eshre-2025-rec-13", "eshre-2025-rec-25", "eshre-2025-rec-33", "eshre-2025-rec-37"],
+      firedRules: [
+        "eshre-2025-rec-13",
+        "eshre-2025-rec-25",
+        "eshre-2025-rec-33",
+        "eshre-2025-rec-37",
+      ],
       explanation: {
         whySelected:
           "Recombinant FSH (r-hFSH) is recommended as the primary gonadotropin for predicted high responders and women with PCOS. Multi-dose pen injectors allow fine-increment dose titration (12.5–25 IU) to adhere strictly to reduced starting doses (100–150 IU/day per ESHRE Rec 13) and avoid excessive follicular recruitment.",
@@ -383,7 +388,9 @@ export function buildGonadotropinSelection(
         ? "Highly purified hMG (hp-hMG) or r-hFSH with r-hLH recommended for advanced reproductive age (≥35 years) and poor ovarian reserve."
         : "Recombinant FSH (r-hFSH) or hp-hMG recommended for young low responders, capped at 300 IU/day ceiling.",
       recommended: hasAmaOrDOR ? "hp-hmg" : "recombinant-fsh",
-      alternatives: hasAmaOrDOR ? ["recombinant-fsh", "fsh-lh-combination"] : ["hp-hmg", "fsh-lh-combination"],
+      alternatives: hasAmaOrDOR
+        ? ["recombinant-fsh", "fsh-lh-combination"]
+        : ["hp-hmg", "fsh-lh-combination"],
       evidenceSource: gonadotropinEvidenceIds,
       lhStrategy: hasAmaOrDOR
         ? "LH supplementation (via hp-hMG or r-hLH addition) is equally recommended to r-hFSH alone for women of advanced age (≥35 years) and low responders (ESHRE 2025 Rec 29, 30). Compensates for age-related decline in theca-cell LH sensitivity."

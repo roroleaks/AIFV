@@ -13,10 +13,7 @@ import { findEvidence } from "@/lib/evidence/library";
 import { useAssessment } from "@/lib/assessment/use-assessment";
 import { usePatients } from "@/lib/assessment/patients";
 import { PHENOTYPE_ENGINE_VERSION, buildPhenotype } from "@/lib/engine/phenotype";
-import {
-  savePhenotypeAssessment,
-  usePhenotypeHistory,
-} from "@/lib/engine/phenotype-store";
+import { savePhenotypeAssessment, usePhenotypeHistory } from "@/lib/engine/phenotype-store";
 import { logAudit } from "@/lib/engine/audit";
 import {
   OVARIAN_RESPONSE_ENGINE_VERSION,
@@ -207,7 +204,6 @@ function DecisionSupport() {
         description="Each module below is an independent, evidence-linked unit. None of them performs a calculation, produces a dose or recommends a protocol — they define what future logic will consume and which publication it must cite."
       />
 
-
       <div className="grid gap-4 sm:grid-cols-3">
         {[
           { label: "Knowledge modules", value: knowledgeModules.length, icon: Brain },
@@ -261,9 +257,7 @@ function DecisionSupport() {
                 <div className="mt-4 space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Input data captured</span>
-                    <span>
-                      {r ? `${r.available}/${r.required}` : "—"}
-                    </span>
+                    <span>{r ? `${r.available}/${r.required}` : "—"}</span>
                   </div>
                   <Progress value={hydrated ? (r?.percent ?? 0) : 0} className="h-1.5" />
                 </div>
@@ -334,7 +328,9 @@ function DecisionSupport() {
                 <tr key={variable.id} className="border-b border-border/40 last:border-0">
                   <td className="px-5 py-2.5 font-medium">{variable.label}</td>
                   <td className="px-5 py-2.5 text-muted-foreground">{variable.unit ?? "—"}</td>
-                  <td className="px-5 py-2.5 text-muted-foreground">{variable.source.join(", ")}</td>
+                  <td className="px-5 py-2.5 text-muted-foreground">
+                    {variable.source.join(", ")}
+                  </td>
                   <td className="px-5 py-2.5 text-muted-foreground">{variable.origin}</td>
                   <td className="px-5 py-2.5">
                     {hydrated && present ? (

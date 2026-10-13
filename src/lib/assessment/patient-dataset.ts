@@ -59,11 +59,7 @@ export interface CycleDataset {
 }
 
 export type MissingCategory =
-  | "core-assessment"
-  | "classification"
-  | "treatment"
-  | "previous-cycle"
-  | "optional";
+  "core-assessment" | "classification" | "treatment" | "previous-cycle" | "optional";
 
 export const missingCategoryLabel: Record<MissingCategory, string> = {
   "core-assessment": "Required for a complete assessment record",
@@ -124,20 +120,52 @@ function visible(field: FieldDef, values: Record<string, FieldValue>): boolean {
 /* --------------------------------------------------- classification needs */
 
 const CLASSIFICATION_KEYS: { key: string; label: string; detail: string }[] = [
-  { key: "dob", label: "Date of birth", detail: "Maternal age is required by POSEIDON and Bologna." },
-  { key: "amh", label: "AMH", detail: "Ovarian reserve marker used by POSEIDON, Bologna and the response engine." },
-  { key: "afcRight", label: "Right antral follicle count", detail: "Antral follicle count is an alternative reserve marker." },
-  { key: "afcLeft", label: "Left antral follicle count", detail: "Antral follicle count is an alternative reserve marker." },
-  { key: "fsh", label: "FSH", detail: "Supplementary endocrine marker used in the response assessment." },
+  {
+    key: "dob",
+    label: "Date of birth",
+    detail: "Maternal age is required by POSEIDON and Bologna.",
+  },
+  {
+    key: "amh",
+    label: "AMH",
+    detail: "Ovarian reserve marker used by POSEIDON, Bologna and the response engine.",
+  },
+  {
+    key: "afcRight",
+    label: "Right antral follicle count",
+    detail: "Antral follicle count is an alternative reserve marker.",
+  },
+  {
+    key: "afcLeft",
+    label: "Left antral follicle count",
+    detail: "Antral follicle count is an alternative reserve marker.",
+  },
+  {
+    key: "fsh",
+    label: "FSH",
+    detail: "Supplementary endocrine marker used in the response assessment.",
+  },
 ];
 
 const TREATMENT_KEYS: { key: string; label: string; detail: string }[] = [
   { key: "height", label: "Height", detail: "Required to derive BMI for dose-related modules." },
   { key: "weight", label: "Weight", detail: "Required to derive BMI for dose-related modules." },
-  { key: "cycleRegularity", label: "Cycle regularity", detail: "Recorded for protocol-level modules." },
+  {
+    key: "cycleRegularity",
+    label: "Cycle regularity",
+    detail: "Recorded for protocol-level modules.",
+  },
   { key: "causes", label: "Cause of infertility", detail: "Recorded for protocol-level modules." },
-  { key: "drugAllergy", label: "Drug allergy", detail: "Recorded before any medication module is activated." },
-  { key: "currentMedications", label: "Current medications", detail: "Recorded before any medication module is activated." },
+  {
+    key: "drugAllergy",
+    label: "Drug allergy",
+    detail: "Recorded before any medication module is activated.",
+  },
+  {
+    key: "currentMedications",
+    label: "Current medications",
+    detail: "Recorded before any medication module is activated.",
+  },
 ];
 
 const CYCLE_CORE_KEYS = [
@@ -223,13 +251,11 @@ export function buildPatientDataset(
         const value = display(f, cycle);
         return { key: f.key, label: f.label, value, present: value !== "Not recorded" };
       });
-    const counted = fields.filter(
-      (f) => !cycleFields.find((c) => c.key === f.key)?.optional,
-    );
+    const counted = fields.filter((f) => !cycleFields.find((c) => c.key === f.key)?.optional);
     const rec = counted.filter((f) => f.present).length;
-    const missing = CYCLE_CORE_KEYS.filter(
-      (k) => !fields.find((f) => f.key === k)?.present,
-    ).map((k) => cycleFields.find((f) => f.key === k)?.label ?? k);
+    const missing = CYCLE_CORE_KEYS.filter((k) => !fields.find((f) => f.key === k)?.present).map(
+      (k) => cycleFields.find((f) => f.key === k)?.label ?? k,
+    );
     return {
       id: cycle.id,
       index: index + 1,

@@ -73,7 +73,10 @@ export function DoseAdjustmentCard({ evaluation }: { evaluation: DoseAdjustmentE
       icon={ShieldAlert}
       title="Evidence-based dose adjustment"
       badge={
-        <Badge variant="outline" className={cn("rounded-full", algorithmStatusTone[evaluation.status])}>
+        <Badge
+          variant="outline"
+          className={cn("rounded-full", algorithmStatusTone[evaluation.status])}
+        >
           {algorithmStatusLabel[evaluation.status]}
         </Badge>
       }
@@ -226,7 +229,11 @@ export function DoseAdjustmentCard({ evaluation }: { evaluation: DoseAdjustmentE
                       ).map(([label, value]) => (
                         <div key={label} className="flex items-baseline justify-between gap-3">
                           <dt className="text-muted-foreground">{label}</dt>
-                          <dd className="font-medium">{value === null || value === "unspecified" ? "Not loaded" : String(value)}</dd>
+                          <dd className="font-medium">
+                            {value === null || value === "unspecified"
+                              ? "Not loaded"
+                              : String(value)}
+                          </dd>
                         </div>
                       ))}
                     </dl>
@@ -369,11 +376,15 @@ export function DoseDecisionCard({
         <Button className="rounded-xl" onClick={submit}>
           Record dose decision
         </Button>
-        {saved && <span className="text-xs text-emerald-600 dark:text-emerald-400">Recorded in the audit trail.</span>}
+        {saved && (
+          <span className="text-xs text-emerald-600 dark:text-emerald-400">
+            Recorded in the audit trail.
+          </span>
+        )}
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        The application never changes a dose on its own. A dose only changes when you record it
-        here or in a visit, and it is stored as PHYSICIAN-ENTERED.
+        The application never changes a dose on its own. A dose only changes when you record it here
+        or in a visit, and it is stored as PHYSICIAN-ENTERED.
       </p>
     </Card>
   );
@@ -476,11 +487,20 @@ export function DoseAuditCard({
               <dl className="mt-2 grid gap-x-6 gap-y-1 text-xs sm:grid-cols-2 xl:grid-cols-3">
                 {(
                   [
-                    ["Stimulation day", e.stimulationDay === null ? "Not recorded" : `Day ${e.stimulationDay}`],
+                    [
+                      "Stimulation day",
+                      e.stimulationDay === null ? "Not recorded" : `Day ${e.stimulationDay}`,
+                    ],
                     ["Medication", e.medication || "Not recorded"],
-                    ["Previous dose", e.previousDose === null ? "Not recorded" : `${e.previousDose} IU/day`],
+                    [
+                      "Previous dose",
+                      e.previousDose === null ? "Not recorded" : `${e.previousDose} IU/day`,
+                    ],
                     ["New dose", e.newDose === null ? "Not recorded" : `${e.newDose} IU/day`],
-                    ["Evidence-derived dose", e.evidenceDerivedDose === null ? "None" : `${e.evidenceDerivedDose} IU/day`],
+                    [
+                      "Evidence-derived dose",
+                      e.evidenceDerivedDose === null ? "None" : `${e.evidenceDerivedDose} IU/day`,
+                    ],
                     ["Evidence rule", e.evidenceRuleId ?? "None"],
                     ["Evidence version", e.evidenceVersion],
                     ["Engine version", e.engineVersion],

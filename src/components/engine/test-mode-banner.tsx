@@ -61,7 +61,13 @@ export function TestOutputBadge({ className }: { className?: string }) {
 }
 
 /** Provenance card: where an engine's executable logic comes from. */
-export function EngineProvenance({ engineId, className }: { engineId: string; className?: string }) {
+export function EngineProvenance({
+  engineId,
+  className,
+}: {
+  engineId: string;
+  className?: string;
+}) {
   const record = engineActivationById(engineId);
   if (!record) return null;
   return (

@@ -36,8 +36,9 @@ function Help() {
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex gap-3">
               <LifeBuoy className="mt-0.5 size-4 shrink-0 text-primary" />
-              Begin from the landing page with <strong className="text-foreground">Start New Patient</strong>{" "}
-              to open the eight-step assessment wizard.
+              Begin from the landing page with{" "}
+              <strong className="text-foreground">Start New Patient</strong> to open the eight-step
+              assessment wizard.
             </li>
             <li className="flex gap-3">
               <LifeBuoy className="mt-0.5 size-4 shrink-0 text-primary" />
@@ -47,7 +48,10 @@ function Help() {
           </ul>
         </SectionCard>
 
-        <SectionCard title="Keyboard navigation" action={<Keyboard className="size-4 text-primary" />}>
+        <SectionCard
+          title="Keyboard navigation"
+          action={<Keyboard className="size-4 text-primary" />}
+        >
           <dl className="space-y-3 text-sm">
             {shortcuts.map(([key, desc]) => (
               <div key={key} className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3">

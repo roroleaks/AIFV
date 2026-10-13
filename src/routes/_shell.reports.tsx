@@ -12,10 +12,7 @@ import { buildPhenotype } from "@/lib/engine/phenotype";
 import { predictOvarianResponse } from "@/lib/engine/ovarian-response";
 import { buildProtocolRecommendation } from "@/lib/engine/protocol-recommendation";
 import { buildProtocolSelection } from "@/lib/engine/protocol-selection";
-import {
-  getProtocolDecision,
-  protocolDecisionLabel,
-} from "@/lib/engine/protocol-decision-store";
+import { getProtocolDecision, protocolDecisionLabel } from "@/lib/engine/protocol-decision-store";
 import { buildPatientContext } from "@/lib/clinical/data-mapping";
 import { buildGonadotropinSelection } from "@/lib/engine/gonadotropin-selection";
 import { buildGonadotropinEvidenceReview } from "@/lib/engine/gonadotropin-evidence";
@@ -334,49 +331,49 @@ function Reports() {
       {!mounted ? (
         <div className="h-64 animate-pulse rounded-2xl border border-border/70 bg-card" />
       ) : (
-      <article className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5">
-        <header className="min-w-0 rounded-2xl border border-border/70 bg-card p-6 shadow-soft sm:p-8">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-6">
-            <div className="flex min-w-0 items-center gap-4">
-              <span className="grid size-14 shrink-0 place-items-center rounded-xl border border-dashed border-border bg-muted/50 text-muted-foreground">
-                <Building2 className="size-6" />
-              </span>
-              <div className="min-w-0">
-                <p className="truncate text-lg font-semibold">Clinic Name</p>
-                <p className="text-xs text-muted-foreground">Clinic branding placeholder</p>
+        <article className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5">
+          <header className="min-w-0 rounded-2xl border border-border/70 bg-card p-6 shadow-soft sm:p-8">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-6">
+              <div className="flex min-w-0 items-center gap-4">
+                <span className="grid size-14 shrink-0 place-items-center rounded-xl border border-dashed border-border bg-muted/50 text-muted-foreground">
+                  <Building2 className="size-6" />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-lg font-semibold">Clinic Name</p>
+                  <p className="text-xs text-muted-foreground">Clinic branding placeholder</p>
+                </div>
+              </div>
+              <div className="shrink-0 text-right text-xs text-muted-foreground">
+                <p className="font-semibold text-foreground">Consultant</p>
+                <p>{report.audit.user}</p>
+                <p>
+                  {report.audit.date} · {report.audit.time}
+                </p>
               </div>
             </div>
-            <div className="shrink-0 text-right text-xs text-muted-foreground">
-              <p className="font-semibold text-foreground">Consultant</p>
-              <p>{report.audit.user}</p>
-              <p>
-                {report.audit.date} · {report.audit.time}
-              </p>
-            </div>
-          </div>
 
-          <Separator className="my-6" />
+            <Separator className="my-6" />
 
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-primary">
-            IVF Clinical Intelligence Report
-          </p>
-          <h2 className="mt-1 text-xl font-semibold">{report.patientName}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Report v{report.version} · Evidence Library {report.audit.evidenceLibraryVersion} ·
-            Application v{report.audit.applicationVersion}
-          </p>
-        </header>
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-primary">
+              IVF Clinical Intelligence Report
+            </p>
+            <h2 className="mt-1 text-xl font-semibold">{report.patientName}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Report v{report.version} · Evidence Library {report.audit.evidenceLibraryVersion} ·
+              Application v{report.audit.applicationVersion}
+            </p>
+          </header>
 
-        <TableOfContents report={report} />
-        <QualityControlCard report={report} />
-        <ReportSections report={report} />
-        <CycleDetailPanel report={report} />
-        <EvidenceTable report={report} />
-        <ExplainablePanel report={report} />
-        <ApplicationStatusPanel report={report} />
-        <AuditPanel report={report} />
-        <DisclaimerPanel report={report} />
-      </article>
+          <TableOfContents report={report} />
+          <QualityControlCard report={report} />
+          <ReportSections report={report} />
+          <CycleDetailPanel report={report} />
+          <EvidenceTable report={report} />
+          <ExplainablePanel report={report} />
+          <ApplicationStatusPanel report={report} />
+          <AuditPanel report={report} />
+          <DisclaimerPanel report={report} />
+        </article>
       )}
     </>
   );

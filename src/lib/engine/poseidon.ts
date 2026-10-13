@@ -34,10 +34,7 @@ export const poseidonEvidenceIds = ["poseidon-2016-alviggi", "poseidon-2016-huma
 export type PoseidonGroup = "1a" | "1b" | "2a" | "2b" | "3" | "4";
 
 export type PoseidonStatus =
-  | "classified"
-  | "not-low-prognosis"
-  | "insufficient-data"
-  | "inconsistent-data";
+  "classified" | "not-low-prognosis" | "insufficient-data" | "inconsistent-data";
 
 export type PoseidonTone = "green" | "amber" | "red" | "blue";
 
@@ -103,7 +100,6 @@ export interface PoseidonResult {
   evidence: string[];
   computedAt: string;
 }
-
 
 export const poseidonGroupTitles: Record<PoseidonGroup, string> = {
   "1a": "Group 1a — young, adequate reserve, unexpected poor response (<4 oocytes)",
@@ -228,9 +224,13 @@ export function classifyPoseidon(
   // ---- data-quality gate -------------------------------------------------
   const validation: string[] = [];
   if (age !== null && (age < 15 || age > 60))
-    validation.push(`Female age of ${age} years is outside the plausible range for classification.`);
+    validation.push(
+      `Female age of ${age} years is outside the plausible range for classification.`,
+    );
   if (amh !== null && (amh < 0 || amh > 40))
-    validation.push(`AMH of ${amh} ng/mL is outside the plausible assay range — verify units (ng/mL expected).`);
+    validation.push(
+      `AMH of ${amh} ng/mL is outside the plausible assay range — verify units (ng/mL expected).`,
+    );
   if (afc !== null && (afc < 0 || afc > 80))
     validation.push(`Total antral follicle count of ${afc} is outside the plausible range.`);
   cycles.forEach((c, i) => {
@@ -323,12 +323,7 @@ export function classifyPoseidon(
       id: "response",
       label: "Unexpected poor or suboptimal response",
       rule: "Poor response < 4 oocytes retrieved; suboptimal response 4-9 oocytes retrieved.",
-      state:
-        lowest === null
-          ? "unknown"
-          : poorResponse || suboptimalResponse
-            ? "met"
-            : "not-met",
+      state: lowest === null ? "unknown" : poorResponse || suboptimalResponse ? "met" : "not-met",
       detail:
         lowest === null
           ? "No retrieved oocyte count available."
@@ -457,7 +452,6 @@ export function classifyPoseidon(
     dataQuality: validation.length ? "invalid" : missing.length ? "missing" : "complete",
     evidence,
     computedAt,
-
   };
 }
 

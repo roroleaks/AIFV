@@ -126,7 +126,6 @@ export const CONSORT_FOLL_LT11_NOTE =
 export const CONSORT_LOCK_NOTE =
   "The original CONSORT publications describe the model structure and predictor set, but the numerical regression coefficients and complete score-to-dose crosswalk required for independent reproduction are not available in the currently held sources. The dose engine therefore remains intentionally locked rather than reconstructed.";
 
-
 export function isConsortModelLoaded(table: ConsortModelTable = consortModelTable): boolean {
   return (
     table.loaded &&

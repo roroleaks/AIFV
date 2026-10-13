@@ -16,17 +16,7 @@ import { evidenceLibrary } from "./library";
 /* ------------------------------------------------------- lifecycle model */
 
 export type LifecycleStage =
-  | "E0"
-  | "E1"
-  | "E2"
-  | "E3"
-  | "E4"
-  | "E5"
-  | "E6"
-  | "E7"
-  | "E8"
-  | "E9"
-  | "E10";
+  "E0" | "E1" | "E2" | "E3" | "E4" | "E5" | "E6" | "E7" | "E8" | "E9" | "E10";
 
 export interface LifecycleStep {
   id: LifecycleStage;
@@ -37,17 +27,72 @@ export interface LifecycleStep {
 }
 
 export const evidenceLifecycle: LifecycleStep[] = [
-  { id: "E0", label: "Captured", description: "Document uploaded, fetched or entered manually.", automatic: true },
-  { id: "E1", label: "Fingerprinted", description: "SHA-256 content hash computed; duplicates detected.", automatic: true },
-  { id: "E2", label: "Metadata extracted", description: "Title, society, year, type and source recorded.", automatic: true },
-  { id: "E3", label: "Source verified", description: "Physician confirms publisher, authenticity and version.", automatic: false },
-  { id: "E4", label: "Priority assigned", description: "Placed in the 7-level source hierarchy.", automatic: false },
-  { id: "E5", label: "Clinically reviewed", description: "Physician reads the full text and records scope.", automatic: false },
-  { id: "E6", label: "Rules transcribed", description: "Tables and statements transcribed verbatim into code.", automatic: false },
-  { id: "E7", label: "Impact analysed", description: "Affected engines and superseded versions identified.", automatic: false },
-  { id: "E8", label: "Validated", description: "Transcription checked against the source, line by line.", automatic: false },
-  { id: "E9", label: "Approved", description: "Named physician approves activation.", automatic: false },
-  { id: "E10", label: "Activated", description: "Algorithm version published and logged.", automatic: false },
+  {
+    id: "E0",
+    label: "Captured",
+    description: "Document uploaded, fetched or entered manually.",
+    automatic: true,
+  },
+  {
+    id: "E1",
+    label: "Fingerprinted",
+    description: "SHA-256 content hash computed; duplicates detected.",
+    automatic: true,
+  },
+  {
+    id: "E2",
+    label: "Metadata extracted",
+    description: "Title, society, year, type and source recorded.",
+    automatic: true,
+  },
+  {
+    id: "E3",
+    label: "Source verified",
+    description: "Physician confirms publisher, authenticity and version.",
+    automatic: false,
+  },
+  {
+    id: "E4",
+    label: "Priority assigned",
+    description: "Placed in the 7-level source hierarchy.",
+    automatic: false,
+  },
+  {
+    id: "E5",
+    label: "Clinically reviewed",
+    description: "Physician reads the full text and records scope.",
+    automatic: false,
+  },
+  {
+    id: "E6",
+    label: "Rules transcribed",
+    description: "Tables and statements transcribed verbatim into code.",
+    automatic: false,
+  },
+  {
+    id: "E7",
+    label: "Impact analysed",
+    description: "Affected engines and superseded versions identified.",
+    automatic: false,
+  },
+  {
+    id: "E8",
+    label: "Validated",
+    description: "Transcription checked against the source, line by line.",
+    automatic: false,
+  },
+  {
+    id: "E9",
+    label: "Approved",
+    description: "Named physician approves activation.",
+    automatic: false,
+  },
+  {
+    id: "E10",
+    label: "Activated",
+    description: "Algorithm version published and logged.",
+    automatic: false,
+  },
 ];
 
 export const lifecycleIndex = (stage: LifecycleStage) =>
@@ -215,7 +260,10 @@ export function analyseImpact(
   const haystack = `${record.title} ${record.society ?? ""} ${record.notes}`.toLowerCase();
 
   const keywordMap: { key: string; engineIds: string[] }[] = [
-    { key: "stimulation", engineIds: ["protocol-selection", "starting-dose", "monitoring", "dose-adjustment"] },
+    {
+      key: "stimulation",
+      engineIds: ["protocol-selection", "starting-dose", "monitoring", "dose-adjustment"],
+    },
     { key: "protocol", engineIds: ["protocol-selection"] },
     { key: "antagonist", engineIds: ["protocol-selection"] },
     { key: "agonist", engineIds: ["protocol-selection", "trigger"] },

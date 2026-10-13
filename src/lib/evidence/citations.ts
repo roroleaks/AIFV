@@ -140,7 +140,11 @@ export function evidenceToCsv(entries: EvidenceEntry[]): string {
 }
 
 export const evidenceToJson = (entries: EvidenceEntry[]) =>
-  JSON.stringify({ generatedAt: new Date().toISOString(), count: entries.length, entries }, null, 2);
+  JSON.stringify(
+    { generatedAt: new Date().toISOString(), count: entries.length, entries },
+    null,
+    2,
+  );
 
 export const evidenceToBibtex = (entries: EvidenceEntry[]) =>
   entries.map(formatBibtex).join("\n\n");
@@ -216,11 +220,7 @@ const routeById: Record<string, AppRoute> = {
 export const moduleRoute = (id: string): AppRoute => routeById[id] ?? "/engine";
 
 export type AlgorithmStatus =
-  | "Validated"
-  | "Active"
-  | "Framework"
-  | "Waiting for Evidence"
-  | "Blocked";
+  "Validated" | "Active" | "Framework" | "Waiting for Evidence" | "Blocked";
 
 export interface ModuleRef {
   id: string;
@@ -243,7 +243,8 @@ const statusFor = (impl: string): { status: AlgorithmStatus; detail: string } =>
     case "awaiting-evidence":
       return {
         status: "Waiting for Evidence",
-        detail: "Interface and data flow complete; the published table or rule set is not yet imported.",
+        detail:
+          "Interface and data flow complete; the published table or rule set is not yet imported.",
       };
     case "not-implemented":
       return { status: "Framework", detail: "Data contract registered; no algorithm activated." };
@@ -258,12 +259,7 @@ const statusFor = (impl: string): { status: AlgorithmStatus; detail: string } =>
 export function modulesUsingEvidence(entryId: string, entryModules: string[]): ModuleRef[] {
   const refs = new Map<string, ModuleRef>();
 
-  const add = (
-    id: string,
-    name: string,
-    kind: ModuleRef["kind"],
-    impl: string,
-  ) => {
+  const add = (id: string, name: string, kind: ModuleRef["kind"], impl: string) => {
     if (refs.has(`${kind}:${id}`)) return;
     const { status, detail } = statusFor(impl);
     const blocked = blockedModules.find((b) => b.engineId === id);

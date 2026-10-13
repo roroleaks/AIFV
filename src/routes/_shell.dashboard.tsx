@@ -68,7 +68,9 @@ function Dashboard() {
           >
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
               <p className="min-w-0 text-sm font-medium text-muted-foreground">{kpi.label}</p>
-              <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${toneClass[kpi.tone]}`}>
+              <span
+                className={`grid size-9 shrink-0 place-items-center rounded-xl ${toneClass[kpi.tone]}`}
+              >
                 <kpi.icon className="size-4.5" />
               </span>
             </div>
@@ -101,21 +103,30 @@ function Dashboard() {
         </SectionCard>
 
         <div className="space-y-5">
-          <SectionCard
-            title="Favorite Protocols"
-            action={<Star className="size-4 text-warning" />}
-          >
+          <SectionCard title="Favorite Protocols" action={<Star className="size-4 text-warning" />}>
             <EmptyPlaceholder label="No saved protocols" hint="Bookmark protocols to pin them." />
           </SectionCard>
 
-          <SectionCard title="Latest Evidence" action={<BookOpen className="size-4 text-primary" />}>
+          <SectionCard
+            title="Latest Evidence"
+            action={<BookOpen className="size-4 text-primary" />}
+          >
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="rounded-lg">Guideline</Badge>
-                <Badge variant="secondary" className="rounded-lg">RCT</Badge>
-                <Badge variant="secondary" className="rounded-lg">Meta-analysis</Badge>
+                <Badge variant="secondary" className="rounded-lg">
+                  Guideline
+                </Badge>
+                <Badge variant="secondary" className="rounded-lg">
+                  RCT
+                </Badge>
+                <Badge variant="secondary" className="rounded-lg">
+                  Meta-analysis
+                </Badge>
               </div>
-              <EmptyPlaceholder label="Library is empty" hint="Add references in the Evidence Library." />
+              <EmptyPlaceholder
+                label="Library is empty"
+                hint="Add references in the Evidence Library."
+              />
             </div>
           </SectionCard>
         </div>

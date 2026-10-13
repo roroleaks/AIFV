@@ -87,13 +87,19 @@ function AlgorithmCard({ a }: { a: AlgorithmAssessment }) {
         <h3 className="text-sm font-semibold">{a.name}</h3>
         <Badge
           variant="outline"
-          className={cn("rounded-full text-[10px] uppercase tracking-wide", algorithmStatusTone[a.status])}
+          className={cn(
+            "rounded-full text-[10px] uppercase tracking-wide",
+            algorithmStatusTone[a.status],
+          )}
         >
           {a.statusLabel}
         </Badge>
         <Badge
           variant="outline"
-          className={cn("rounded-full text-[10px] uppercase tracking-wide", matchStatusTone[a.matchStatus])}
+          className={cn(
+            "rounded-full text-[10px] uppercase tracking-wide",
+            matchStatusTone[a.matchStatus],
+          )}
         >
           {matchStatusLabel[a.matchStatus]}
         </Badge>
@@ -145,14 +151,22 @@ function AlgorithmCard({ a }: { a: AlgorithmAssessment }) {
               <li key={v.id} className="rounded-lg border border-border/60 bg-card p-2">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{v.label}</span>
-                  <span className={cn(v.valid ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground")}>
+                  <span
+                    className={cn(
+                      v.valid ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground",
+                    )}
+                  >
                     {v.present ? `${v.originalValue} ${v.normalizedUnit}` : "Not recorded"}
                   </span>
                 </div>
                 <p className="mt-1 text-[11px] text-muted-foreground">{v.sourceDefinition}</p>
-                {v.issue && <p className="mt-1 text-[11px] text-amber-600 dark:text-amber-400">{v.issue}</p>}
+                {v.issue && (
+                  <p className="mt-1 text-[11px] text-amber-600 dark:text-amber-400">{v.issue}</p>
+                )}
                 {v.substitutionNote && (
-                  <p className="mt-1 text-[11px] text-violet-600 dark:text-violet-400">{v.substitutionNote}</p>
+                  <p className="mt-1 text-[11px] text-violet-600 dark:text-violet-400">
+                    {v.substitutionNote}
+                  </p>
                 )}
               </li>
             ))}
@@ -252,9 +266,10 @@ function DecisionForm({ result }: { result: StartingDoseResult }) {
   return (
     <div className="space-y-4">
       <p className="rounded-lg border border-border/60 bg-muted/40 p-3 text-xs text-muted-foreground">
-        Any dose entered here is recorded as <span className="font-semibold text-foreground">PHYSICIAN-SELECTED</span>{" "}
-        and is never presented as an application recommendation. The engine does not pre-fill, suggest or validate a
-        clinical dose value.
+        Any dose entered here is recorded as{" "}
+        <span className="font-semibold text-foreground">PHYSICIAN-SELECTED</span> and is never
+        presented as an application recommendation. The engine does not pre-fill, suggest or
+        validate a clinical dose value.
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -409,7 +424,10 @@ export function StartingDoseSection({ result }: { result: StartingDoseResult }) 
         badge={
           <Badge
             variant="outline"
-            className={cn("rounded-full text-[10px] uppercase tracking-wide", doseStateTone[result.state])}
+            className={cn(
+              "rounded-full text-[10px] uppercase tracking-wide",
+              doseStateTone[result.state],
+            )}
           >
             {result.stateLabel}
           </Badge>
@@ -468,7 +486,12 @@ export function StartingDoseSection({ result }: { result: StartingDoseResult }) 
                 {g.items.map((it) => (
                   <div key={it.id} className="flex items-start justify-between gap-3 text-xs">
                     <span className="text-muted-foreground">{it.label}</span>
-                    <span className={cn("text-right font-medium", !it.present && "text-muted-foreground")}>
+                    <span
+                      className={cn(
+                        "text-right font-medium",
+                        !it.present && "text-muted-foreground",
+                      )}
+                    >
                       {it.value}
                     </span>
                   </div>
@@ -497,7 +520,10 @@ export function StartingDoseSection({ result }: { result: StartingDoseResult }) 
         ) : (
           <div className="space-y-3">
             {result.evidenceReportedDoses.map((d) => (
-              <article key={d.id} className="rounded-xl border border-border/70 bg-background/60 p-4 text-sm">
+              <article
+                key={d.id}
+                className="rounded-xl border border-border/70 bg-background/60 p-4 text-sm"
+              >
                 <h3 className="font-semibold">{d.source}</h3>
                 <Row label="Population" value={d.population} />
                 <Row label="Gonadotropin" value={d.gonadotropin} />
@@ -516,11 +542,7 @@ export function StartingDoseSection({ result }: { result: StartingDoseResult }) 
       </Card>
 
       {/* 6 — Historical doses */}
-      <Card
-        icon={History}
-        title="Previous stimulation doses"
-        badge={<HistoricalBadge />}
-      >
+      <Card icon={History} title="Previous stimulation doses" badge={<HistoricalBadge />}>
         <HistoricalValueNote />
         {result.historicalDoses.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">{result.historicalNote}</p>
@@ -574,20 +596,29 @@ export function StartingDoseSection({ result }: { result: StartingDoseResult }) 
         badge={
           <Badge
             variant="outline"
-            className={cn("rounded-full text-[10px] uppercase", algorithmStatusTone[result.consortFirewall.status])}
+            className={cn(
+              "rounded-full text-[10px] uppercase",
+              algorithmStatusTone[result.consortFirewall.status],
+            )}
           >
             {result.consortFirewall.statusLabel}
           </Badge>
         }
       >
         <div className="grid gap-1">
-          <Row label="CONSORT framework identified" value={result.consortFirewall.frameworkIdentified ? "Yes" : "No"} />
+          <Row
+            label="CONSORT framework identified"
+            value={result.consortFirewall.frameworkIdentified ? "Yes" : "No"}
+          />
           <Row
             label="CONSORT dose calculation active"
             value={result.consortFirewall.doseCalculationActive ? "Yes" : "No"}
           />
           <Row label="CONSORT dose" value={result.consortFirewall.doseDisplay} />
-          <Row label="Dose produced by this engine" value={result.dose === null ? NOT_CALCULATED : String(result.dose)} />
+          <Row
+            label="Dose produced by this engine"
+            value={result.dose === null ? NOT_CALCULATED : String(result.dose)}
+          />
         </div>
         <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
           {result.consortFirewall.statements.map((st, idx) => (

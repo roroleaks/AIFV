@@ -32,7 +32,9 @@ export function CyclesStep({
           <div>
             <p className="text-sm font-semibold">Number of Previous Cycles</p>
             <p className="text-xs text-muted-foreground">
-              {cycles.length === 0 ? "No cycles recorded yet" : `${cycles.length} cycle${cycles.length > 1 ? "s" : ""} recorded`}
+              {cycles.length === 0
+                ? "No cycles recorded yet"
+                : `${cycles.length} cycle${cycles.length > 1 ? "s" : ""} recorded`}
             </p>
           </div>
         </div>

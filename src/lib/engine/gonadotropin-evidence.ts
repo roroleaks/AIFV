@@ -76,10 +76,7 @@ export const applicabilityTone: Record<Applicability, string> = {
 /* ---------------------------------------------------------------- options */
 
 export type GonadotropinOptionId =
-  | "recombinant-fsh"
-  | "urinary-fsh"
-  | "hp-urinary-fsh"
-  | "hmg-menotropins";
+  "recombinant-fsh" | "urinary-fsh" | "hp-urinary-fsh" | "hmg-menotropins";
 
 export interface GonadotropinOutcomeRow {
   id: string;
@@ -546,13 +543,23 @@ export function buildGonadotropinEvidenceReview(
     ]),
     group("etiology", "Infertility etiology", [
       item("causes", "Recorded causes", causes.length ? causes.join(", ") : null, "Assessment"),
-      item("male-factor", "Male factor", s(values["maleFactorSeverity"]) ?? s(values["semenResult"]), "Assessment"),
+      item(
+        "male-factor",
+        "Male factor",
+        s(values["maleFactorSeverity"]) ?? s(values["semenResult"]),
+        "Assessment",
+      ),
       item("pcos", "PCOS", i.pcos ? "Yes" : null, "Assessment"),
       item("endometriosis", "Endometriosis", i.endometriosis ? "Yes" : null, "Assessment"),
     ]),
     group("medical", "Medical factors", [
       item("ohss-history", "Previous OHSS", i.ohssHistory, "Assessment"),
-      item("ovarian-surgery", "Previous ovarian surgery", s(values["ovarianSurgery"]), "Assessment"),
+      item(
+        "ovarian-surgery",
+        "Previous ovarian surgery",
+        s(values["ovarianSurgery"]),
+        "Assessment",
+      ),
       item("comorbidities", "Relevant comorbidities", s(values["medicalConditions"]), "Assessment"),
       item("smoking", "Smoking", i.smoking, "Assessment"),
     ]),
@@ -748,22 +755,49 @@ export function buildGonadotropinEvidenceReview(
   ): GonadotropinMissingGroup => ({
     id,
     title,
-    items: entries.filter((e) => !e.present).map(({ id: eid, label, stepId }) => ({ id: eid, label, stepId })),
+    items: entries
+      .filter((e) => !e.present)
+      .map(({ id: eid, label, stepId }) => ({ id: eid, label, stepId })),
   });
 
   const missingInformation: GonadotropinMissingGroup[] = [
     missing("applicability", "Required for evidence applicability", [
-      { id: "m-age", label: "Age / date of birth", stepId: "patient", present: phenotype.patientSummary.age !== null },
-      { id: "m-bmi", label: "Height and weight (BMI)", stepId: "patient", present: phenotype.patientSummary.bmi !== null },
+      {
+        id: "m-age",
+        label: "Age / date of birth",
+        stepId: "patient",
+        present: phenotype.patientSummary.age !== null,
+      },
+      {
+        id: "m-bmi",
+        label: "Height and weight (BMI)",
+        stepId: "patient",
+        present: phenotype.patientSummary.bmi !== null,
+      },
     ]),
     missing("context", "Required for patient context", [
       { id: "m-amh", label: "AMH", stepId: "reserve", present: i.amh !== null },
-      { id: "m-afc", label: "Antral follicle count", stepId: "ultrasound", present: i.afc !== null },
+      {
+        id: "m-afc",
+        label: "Antral follicle count",
+        stepId: "ultrasound",
+        present: i.afc !== null,
+      },
       { id: "m-fsh", label: "Basal FSH", stepId: "reserve", present: i.fsh !== null },
-      { id: "m-causes", label: "Cause of infertility", stepId: "cause", present: causes.length > 0 },
+      {
+        id: "m-causes",
+        label: "Cause of infertility",
+        stepId: "cause",
+        present: causes.length > 0,
+      },
     ]),
     missing("previous-cycles", "Previous-cycle information", [
-      { id: "m-cycles", label: "Previous cycle records", stepId: "cycles", present: cycles.length > 0 },
+      {
+        id: "m-cycles",
+        label: "Previous cycle records",
+        stepId: "cycles",
+        present: cycles.length > 0,
+      },
       {
         id: "m-gonadotropin-type",
         label: "Gonadotropin type used in previous cycles",
@@ -778,12 +812,18 @@ export function buildGonadotropinEvidenceReview(
       },
     ]),
     missing("safety", "Safety information", [
-      { id: "m-ohss-history", label: "Previous OHSS status", stepId: "medical", present: i.ohssHistory !== null },
+      {
+        id: "m-ohss-history",
+        label: "Previous OHSS status",
+        stepId: "medical",
+        present: i.ohssHistory !== null,
+      },
       {
         id: "m-complications",
         label: "Complications recorded for previous cycles",
         stepId: "cycles",
-        present: cycles.length === 0 || previousExposure.some((p) => p.complications !== NOT_RECORDED),
+        present:
+          cycles.length === 0 || previousExposure.some((p) => p.complications !== NOT_RECORDED),
       },
     ]),
     missing("optional", "Optional information", [
@@ -838,7 +878,8 @@ export function buildGonadotropinEvidenceReview(
     protocolSelected: Boolean(options?.protocolName),
     protocolName: options?.protocolName ?? "Protocol not yet selected.",
     protocolEvidenceStatus: options?.protocolEvidenceStatus ?? "Evidence Pending",
-    protocolDecisionStatus: options?.protocolDecisionStatus ?? "No physician protocol decision recorded",
+    protocolDecisionStatus:
+      options?.protocolDecisionStatus ?? "No physician protocol decision recorded",
     note: "Gonadotropin review never changes the protocol. The protocol is set only in the Protocol Selection Engine.",
   };
 
@@ -846,7 +887,10 @@ export function buildGonadotropinEvidenceReview(
 
   const observedResponse = previousExposure
     .filter((p) => p.retrieved !== NOT_RECORDED)
-    .map((p) => `${p.label}: ${p.retrieved} oocyte(s) retrieved, MII ${p.mii}, blastocysts ${p.blastocysts} — ${p.outcome}`);
+    .map(
+      (p) =>
+        `${p.label}: ${p.retrieved} oocyte(s) retrieved, MII ${p.mii}, blastocysts ${p.blastocysts} — ${p.outcome}`,
+    );
 
   const evidenceSources = Array.from(
     new Set(optionList.flatMap((o) => o.citations.map((c) => c.evidenceId))),
@@ -878,7 +922,8 @@ export function buildGonadotropinEvidenceReview(
     {
       item: "ESHRE ovarian stimulation guideline — gonadotrophin preparation recommendation table",
       source: "ESHRE guideline 2020 / update 2025 (full text)",
-      blocks: "No preparation may be recommended for any population until the table is transcribed.",
+      blocks:
+        "No preparation may be recommended for any population until the table is transcribed.",
     },
     {
       item: "Head-to-head comparative outcome data (rFSH vs hMG vs uFSH / HP-uFSH)",
@@ -957,7 +1002,10 @@ export function gonadotropinEvidenceReportText(
     "",
     "Missing information",
     ...(r.missingInformation.length
-      ? r.missingInformation.flatMap((g) => [`- ${g.title}:`, ...g.items.map((it) => `  · ${it.label}`)])
+      ? r.missingInformation.flatMap((g) => [
+          `- ${g.title}:`,
+          ...g.items.map((it) => `  · ${it.label}`),
+        ])
       : ["- None."]),
     "",
     `Dose firewall: ${r.doseFirewall.statements.join(" ")}`,

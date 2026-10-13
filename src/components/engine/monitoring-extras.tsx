@@ -73,7 +73,10 @@ export function VisitCompletenessCard({ result }: { result: MonitoringResult }) 
       ) : (
         <ul className="grid gap-2">
           {result.visitCompleteness.map((v) => (
-            <li key={v.visitId} className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
+            <li
+              key={v.visitId}
+              className="rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
+            >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-semibold">Day {v.day}</span>
                 <Badge variant="outline" className={cn("rounded-full", levelTone[v.level])}>
@@ -165,7 +168,10 @@ export function ExpectedVsObservedCard({ result }: { result: MonitoringResult })
     <Card icon={Scale} title="Expected vs observed response">
       <dl className="grid gap-2">
         {rows.map(([label, value]) => (
-          <div key={label} className="grid gap-0.5 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5">
+          <div
+            key={label}
+            className="grid gap-0.5 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5"
+          >
             <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-muted-foreground">
               {label}
             </dt>
@@ -347,13 +353,14 @@ export function CycleComparisonCard({ result }: { result: MonitoringResult }) {
                 </Badge>
               </td>
               <td className="py-2 pr-3">{result.context.currentProtocol}</td>
-              <td className="py-2 pr-3">{latest?.medication || result.context.currentGonadotropin}</td>
               <td className="py-2 pr-3">
-                {result.doseTimeline[0]?.dose ?? "Not recorded"}
+                {latest?.medication || result.context.currentGonadotropin}
               </td>
+              <td className="py-2 pr-3">{result.doseTimeline[0]?.dose ?? "Not recorded"}</td>
               <td className="py-2 pr-3">
                 {result.visits.reduce<number | null>(
-                  (m, v) => (v.dailyDose === null ? m : m === null ? v.dailyDose : Math.max(m, v.dailyDose)),
+                  (m, v) =>
+                    v.dailyDose === null ? m : m === null ? v.dailyDose : Math.max(m, v.dailyDose),
                   null,
                 ) ?? "Not recorded"}
               </td>

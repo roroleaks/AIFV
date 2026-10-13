@@ -94,11 +94,29 @@ export const goldenPatients: GoldenPatient[] = [
     },
     cycles: [
       cycle(
-        { cycleNumber: 1, cycleYear: 2023, type: "IVF", protocol: "Antagonist", startingDose: 300, retrieved: 3, mii: 2, fertilized: 1 },
+        {
+          cycleNumber: 1,
+          cycleYear: 2023,
+          type: "IVF",
+          protocol: "Antagonist",
+          startingDose: 300,
+          retrieved: 3,
+          mii: 2,
+          fertilized: 1,
+        },
         "c1",
       ),
       cycle(
-        { cycleNumber: 2, cycleYear: 2024, type: "ICSI", protocol: "Antagonist", startingDose: 375, retrieved: 2, mii: 2, fertilized: 1 },
+        {
+          cycleNumber: 2,
+          cycleYear: 2024,
+          type: "ICSI",
+          protocol: "Antagonist",
+          startingDose: 375,
+          retrieved: 2,
+          mii: 2,
+          fertilized: 1,
+        },
         "c2",
       ),
     ],
@@ -124,7 +142,17 @@ export const goldenPatients: GoldenPatient[] = [
     },
     cycles: [
       cycle(
-        { cycleNumber: 1, cycleYear: 2024, type: "ICSI", protocol: "Antagonist", startingDose: 150, retrieved: 24, mii: 19, fertilized: 14, ohss: "Moderate" },
+        {
+          cycleNumber: 1,
+          cycleYear: 2024,
+          type: "ICSI",
+          protocol: "Antagonist",
+          startingDose: 150,
+          retrieved: 24,
+          mii: 19,
+          fertilized: 14,
+          ohss: "Moderate",
+        },
         "d1",
       ),
     ],
@@ -147,7 +175,16 @@ export const goldenPatients: GoldenPatient[] = [
     },
     cycles: [
       cycle(
-        { cycleNumber: 1, cycleYear: 2025, type: "ICSI", protocol: "Antagonist", startingDose: 225, retrieved: 3, mii: 2, fertilized: 2 },
+        {
+          cycleNumber: 1,
+          cycleYear: 2025,
+          type: "ICSI",
+          protocol: "Antagonist",
+          startingDose: 225,
+          retrieved: 3,
+          mii: 2,
+          fertilized: 2,
+        },
         "e1",
       ),
     ],
@@ -272,7 +309,12 @@ function runPatient(patient: GoldenPatient): PatientTestResult {
   );
 
   if (!response.ok) {
-    return { patientId: patient.id, patientName: patient.name, scenario: patient.scenario, engines };
+    return {
+      patientId: patient.id,
+      patientName: patient.name,
+      scenario: patient.scenario,
+      engines,
+    };
   }
 
   const protocol = safe(() =>

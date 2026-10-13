@@ -192,7 +192,8 @@ export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
     id: "eshre-2025-stratified",
     name: "ESHRE 2025 Individualized Stratified Starting-Dose Nomogram",
     version: "ESHRE 2025 Guideline Update (Rec 13, 16, 20, 121)",
-    source: "ESHRE Guideline Group on Ovarian Stimulation (2025 Update) / Nyboe Andersen et al. / Arce et al.",
+    source:
+      "ESHRE Guideline Group on Ovarian Stimulation (2025 Update) / Nyboe Andersen et al. / Arce et al.",
     evidenceId: "eshre-2025-ovarian-stimulation-update",
     gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
     validatedPopulation:
@@ -265,12 +266,14 @@ export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
         id: "eshre-low-ceiling",
         label: "Low responder dose band and ceiling (<= 300 IU/day per Rec 20)",
         loaded: true,
-        detail: "Verbatim transcription of ESHRE 2025 Rec 20 capping low responder starting dose at 300 IU/day.",
+        detail:
+          "Verbatim transcription of ESHRE 2025 Rec 20 capping low responder starting dose at 300 IU/day.",
       },
     ],
     doseUnit: "IU/day",
     frequency: "Once daily, subcutaneous",
-    roundingRule: "Standard clinical injection pen setting (100, 125, 150, 175, 200, 225, 250, 300 IU/day)",
+    roundingRule:
+      "Standard clinical injection pen setting (100, 125, 150, 175, 200, 225, 250, 300 IU/day)",
     doseLimits: "Floor: 100 IU/day · Ceiling: 300 IU/day (hard ceiling per Rec 20)",
     activated: () => guidelineRulesLoaded("starting-dose"),
     notes: [
@@ -378,9 +381,12 @@ export const evidenceReportedDoses: EvidenceReportedDose[] = [
     population: "Predicted high responders (AMH >= 3.5 ng/mL or AFC >= 18 or PCOS)",
     gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
     range: "100–150 IU/day",
-    studyDesign: "Guideline recommendation (Conditional, Grade B) based on systematic review of RCTs",
-    populationCharacteristics: "Women with elevated ovarian reserve at risk of ovarian hyperstimulation syndrome",
-    outcome: "Significantly lower incidence of moderate-to-severe OHSS with comparable cumulative live-birth rates",
+    studyDesign:
+      "Guideline recommendation (Conditional, Grade B) based on systematic review of RCTs",
+    populationCharacteristics:
+      "Women with elevated ovarian reserve at risk of ovarian hyperstimulation syndrome",
+    outcome:
+      "Significantly lower incidence of moderate-to-severe OHSS with comparable cumulative live-birth rates",
     limitations: ["Individual dose within 100–150 IU must account for patient BMI and age"],
   },
   {
@@ -390,8 +396,10 @@ export const evidenceReportedDoses: EvidenceReportedDose[] = [
     population: "Predicted normal responders (AMH 1.2–3.49 ng/mL, AFC 8–17)",
     gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
     range: "150–225 IU/day",
-    studyDesign: "Guideline recommendation (Conditional, Grade B) based on pooled RCTs (MERIT, MEGASET)",
-    populationCharacteristics: "Normo-ovulatory women aged 18–40 undergoing conventional stimulation",
+    studyDesign:
+      "Guideline recommendation (Conditional, Grade B) based on pooled RCTs (MERIT, MEGASET)",
+    populationCharacteristics:
+      "Normo-ovulatory women aged 18–40 undergoing conventional stimulation",
     outcome: "Optimal oocyte yield (8–14 oocytes) maximizing live birth without increasing OHSS",
     limitations: ["Higher doses (>225 IU) do not improve live birth in normal responders"],
   },
@@ -402,10 +410,15 @@ export const evidenceReportedDoses: EvidenceReportedDose[] = [
     population: "Predicted low responders / POSEIDON groups / Bologna criteria",
     gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
     range: "225–300 IU/day (hard ceiling 300 IU/day)",
-    studyDesign: "Guideline recommendation (Strong, Grade A) based on Cochrane Review (Lensen et al., 2018)",
-    populationCharacteristics: "Women with diminished ovarian reserve (AMH < 1.2 ng/mL, AFC < 5, or prior poor response)",
-    outcome: "Doses higher than 300 IU/day do NOT increase oocyte yield, mature oocytes, or live birth rates",
-    limitations: ["Ceiling rule: doses above 300 IU/day represent unproven medication burden and cost"],
+    studyDesign:
+      "Guideline recommendation (Strong, Grade A) based on Cochrane Review (Lensen et al., 2018)",
+    populationCharacteristics:
+      "Women with diminished ovarian reserve (AMH < 1.2 ng/mL, AFC < 5, or prior poor response)",
+    outcome:
+      "Doses higher than 300 IU/day do NOT increase oocyte yield, mature oocytes, or live birth rates",
+    limitations: [
+      "Ceiling rule: doses above 300 IU/day represent unproven medication burden and cost",
+    ],
   },
 ];
 
@@ -451,12 +464,18 @@ export function calculateGuidelineStartingDose(
       `High responder phenotype (AMH: ${amh !== null ? `${amh} ng/mL` : "N/A"}, AFC: ${afc ?? "N/A"}, PCOS: ${pcos ? "Yes" : "No"})`,
     );
     let dose = 125;
-    if ((amh !== null && amh >= 5.0) || (afc !== null && afc >= 25) || (pcos && (amh ?? 0) >= 4.0)) {
+    if (
+      (amh !== null && amh >= 5.0) ||
+      (afc !== null && afc >= 25) ||
+      (pcos && (amh ?? 0) >= 4.0)
+    ) {
       dose = 125;
       stratFactors.push("Marked high reserve / severe PCOS: Base 125 IU/day");
       if (bmi !== null && bmi < 20) {
         dose = 100;
-        stratFactors.push("Low BMI (< 20 kg/m²): Reduced to 100 IU/day to prevent ovarian hyperstimulation");
+        stratFactors.push(
+          "Low BMI (< 20 kg/m²): Reduced to 100 IU/day to prevent ovarian hyperstimulation",
+        );
       } else if (bmi !== null && bmi >= 28) {
         dose = 150;
         stratFactors.push("Elevated BMI (>= 28 kg/m²): Adjusted to 150 IU/day");
@@ -828,7 +847,12 @@ export function buildStartingDoseAssessment(
       ),
     ]),
     group("etiology", "Infertility characteristics", [
-      item("causes", "Cause of infertility", causes.length ? causes.join(", ") : null, "Assessment"),
+      item(
+        "causes",
+        "Cause of infertility",
+        causes.length ? causes.join(", ") : null,
+        "Assessment",
+      ),
       item("pcos", "PCOS", i.pcos ? "Yes" : null, "Assessment"),
       item("endometriosis", "Endometriosis", i.endometriosis ? "Yes" : null, "Assessment"),
       item(
@@ -842,7 +866,12 @@ export function buildStartingDoseAssessment(
     ]),
     group("safety", "Medical / safety factors", [
       item("ohss-history", "Previous OHSS", i.ohssHistory, "Assessment"),
-      item("ovarian-surgery", "Previous ovarian surgery", s(values["ovarianSurgery"]), "Assessment"),
+      item(
+        "ovarian-surgery",
+        "Previous ovarian surgery",
+        s(values["ovarianSurgery"]),
+        "Assessment",
+      ),
       item("comorbidities", "Relevant comorbidities", s(values["medicalConditions"]), "Assessment"),
       item("smoking", "Smoking", i.smoking, "Assessment"),
     ]),
@@ -961,10 +990,12 @@ export function buildStartingDoseAssessment(
       matchExplanation = `The patient (age ${age}) falls outside the validated population (${bounds.note}).`;
     } else if (missingVariables.length || invalidVariables.length) {
       matchStatus = "INSUFFICIENT_DATA";
-      matchExplanation = "The patient matches the validated population, but required inputs are missing or invalid.";
+      matchExplanation =
+        "The patient matches the validated population, but required inputs are missing or invalid.";
     } else {
       matchStatus = "MATCH";
-      matchExplanation = "The patient falls inside the validated population and every required input is valid.";
+      matchExplanation =
+        "The patient falls inside the validated population and every required input is valid.";
     }
 
     // Descriptive comparison is always shown, even while the algorithm is pending.
@@ -993,7 +1024,10 @@ export function buildStartingDoseAssessment(
     // activated, the patient is inside the validated population and every
     // required variable is valid. Nothing is derived from any other source.
     const canCalculate =
-      activated && matchStatus === "MATCH" && missingVariables.length === 0 && invalidVariables.length === 0;
+      activated &&
+      matchStatus === "MATCH" &&
+      missingVariables.length === 0 &&
+      invalidVariables.length === 0;
 
     let guidelineCalc: GuidelineStartingDoseCalc | null = null;
     let calculationDetails: string[] = [];
@@ -1024,9 +1058,10 @@ export function buildStartingDoseAssessment(
       ];
     }
 
-    const calculatedDose: number | null = canCalculate && guidelineCalc
-      ? gatedTreatmentValue("starting-dose", guidelineCalc.dose)
-      : null;
+    const calculatedDose: number | null =
+      canCalculate && guidelineCalc
+        ? gatedTreatmentValue("starting-dose", guidelineCalc.dose)
+        : null;
 
     const evidence = def.evidenceId ? findEvidence(def.evidenceId) : null;
 
@@ -1043,7 +1078,11 @@ export function buildStartingDoseAssessment(
       validatedPopulation: def.validatedPopulation,
       status,
       statusLabel:
-        status === "ACTIVE" ? "Active" : status === "DATA_INCOMPLETE" ? "Data incomplete" : "Evidence pending",
+        status === "ACTIVE"
+          ? "Active"
+          : status === "DATA_INCOMPLETE"
+            ? "Data incomplete"
+            : "Evidence pending",
       activated,
       matchStatus,
       matchExplanation,
@@ -1124,7 +1163,7 @@ export function buildStartingDoseAssessment(
     stateExplanation = STARTING_DOSE_REPORT_LANGUAGE;
   }
 
-  const dose = state === "CALCULATED" ? activeAlgorithm?.calculatedDose ?? null : null;
+  const dose = state === "CALCULATED" ? (activeAlgorithm?.calculatedDose ?? null) : null;
 
   /* -------------------------------------------------------- CONSORT firewall */
 
@@ -1174,7 +1213,12 @@ export function buildStartingDoseAssessment(
       { id: "sd-age", label: "Age / date of birth", stepId: "patient", present: age !== null },
       { id: "sd-bmi", label: "Height and weight (BMI)", stepId: "patient", present: bmi !== null },
       { id: "sd-fsh", label: "Basal FSH", stepId: "reserve", present: i.fsh !== null },
-      { id: "sd-afc", label: "Antral follicle count", stepId: "ultrasound", present: i.afc !== null },
+      {
+        id: "sd-afc",
+        label: "Antral follicle count",
+        stepId: "ultrasound",
+        present: i.afc !== null,
+      },
       { id: "sd-amh", label: "AMH", stepId: "reserve", present: i.amh !== null },
     ]),
     missing("treatment", "Required for starting-dose assessment", [
@@ -1192,12 +1236,18 @@ export function buildStartingDoseAssessment(
       },
     ]),
     missing("history", "Previous-cycle information", [
-      { id: "sd-cycles", label: "Previous cycle records", stepId: "cycles", present: cycles.length > 0 },
+      {
+        id: "sd-cycles",
+        label: "Previous cycle records",
+        stepId: "cycles",
+        present: cycles.length > 0,
+      },
       {
         id: "sd-previous-dose",
         label: "Starting dose used in previous cycles",
         stepId: "cycles",
-        present: cycles.length === 0 || historicalDoses.some((h) => h.startingDose !== NOT_RECORDED),
+        present:
+          cycles.length === 0 || historicalDoses.some((h) => h.startingDose !== NOT_RECORDED),
       },
       {
         id: "sd-previous-yield",
@@ -1207,7 +1257,12 @@ export function buildStartingDoseAssessment(
       },
     ]),
     missing("safety", "Safety information", [
-      { id: "sd-ohss", label: "Previous OHSS status", stepId: "medical", present: i.ohssHistory !== null },
+      {
+        id: "sd-ohss",
+        label: "Previous OHSS status",
+        stepId: "medical",
+        present: i.ohssHistory !== null,
+      },
       {
         id: "sd-surgery",
         label: "Previous ovarian surgery",
@@ -1263,9 +1318,10 @@ export function buildStartingDoseAssessment(
     stateExplanation,
     dose,
     doseDisplay: dose === null ? NOT_CALCULATED : `${dose} IU/day`,
-    doseUnit: dose === null ? null : activeAlgorithm?.doseUnit ?? "IU/day",
-    doseFrequency: dose === null ? null : activeAlgorithm?.frequency ?? "Once daily, subcutaneous",
-    producedByAlgorithmId: dose === null ? null : activeAlgorithm?.id ?? null,
+    doseUnit: dose === null ? null : (activeAlgorithm?.doseUnit ?? "IU/day"),
+    doseFrequency:
+      dose === null ? null : (activeAlgorithm?.frequency ?? "Once daily, subcutaneous"),
+    producedByAlgorithmId: dose === null ? null : (activeAlgorithm?.id ?? null),
     consortFirewall,
     safetyGuardrails,
     missingInformation,
@@ -1302,7 +1358,8 @@ export function startingDoseReportText(r: StartingDoseResult): string {
     "HISTORICAL DOSES",
     ...(r.historicalDoses.length
       ? r.historicalDoses.map(
-          (h) => `  ${h.label}: ${h.gonadotropin} ${h.startingDose} (max ${h.maxDose}) — HISTORICAL DOSE, NOT A CURRENT RECOMMENDATION`,
+          (h) =>
+            `  ${h.label}: ${h.gonadotropin} ${h.startingDose} (max ${h.maxDose}) — HISTORICAL DOSE, NOT A CURRENT RECOMMENDATION`,
         )
       : ["  No previous cycle recorded."]),
     "",

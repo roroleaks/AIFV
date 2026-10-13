@@ -26,10 +26,7 @@ import {
   buildGonadotropinEvidenceReview,
 } from "@/lib/engine/gonadotropin-evidence";
 import { GonadotropinEvidenceSection } from "@/components/engine/gonadotropin-evidence-panel";
-import {
-  getProtocolDecision,
-  protocolDecisionLabel,
-} from "@/lib/engine/protocol-decision-store";
+import { getProtocolDecision, protocolDecisionLabel } from "@/lib/engine/protocol-decision-store";
 import { getConsortDose } from "@/lib/engine/consort-store";
 
 const title = "Gonadotropin Selection Engine — IVF Ai Calc";
@@ -130,7 +127,6 @@ function GonadotropinsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source.id, result.legacy.cycleReview.length]);
 
-
   const guidelinePopulations = useMemo(() => {
     const ph = buildPhenotype(source.values, source.cycles);
     const resp = predictOvarianResponse(source.values, source.cycles, ph.poseidon, ph.bologna);
@@ -185,7 +181,10 @@ function GonadotropinsPage() {
 
       <GonadotropinEvidenceSection result={result.evidence} />
 
-      <GuidelineRecommendationsPanel module="gonadotropin-selection" populations={guidelinePopulations} />
+      <GuidelineRecommendationsPanel
+        module="gonadotropin-selection"
+        populations={guidelinePopulations}
+      />
 
       <GonadotropinSelectionSection result={result.legacy} />
     </>

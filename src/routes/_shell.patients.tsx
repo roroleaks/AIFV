@@ -150,7 +150,11 @@ function Patients() {
                       {r.name}
                     </Link>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                      {[r.fileNumber && `File ${r.fileNumber}`, r.age && `Age ${r.age}`, r.infertilityType]
+                      {[
+                        r.fileNumber && `File ${r.fileNumber}`,
+                        r.age && `Age ${r.age}`,
+                        r.infertilityType,
+                      ]
                         .filter(Boolean)
                         .join(" · ") || "No demographics recorded"}
                     </p>
@@ -195,7 +199,9 @@ function Patients() {
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>{r.completion}% complete</span>
                     <span className="flex items-center gap-3">
-                      <span>{r.cycles} cycle{r.cycles === 1 ? "" : "s"}</span>
+                      <span>
+                        {r.cycles} cycle{r.cycles === 1 ? "" : "s"}
+                      </span>
                       <span className="flex items-center gap-1 text-warning">
                         <CircleAlert className="size-3" /> {r.alerts}
                       </span>
