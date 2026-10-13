@@ -186,12 +186,14 @@ export function extractResponseInputs(
 ): ResponseInputs {
   const afcL = toNum(values["afcLeft"]);
   const afcR = toNum(values["afcRight"]);
-  const afc = afcL === null && afcR === null ? null : (afcL ?? 0) + (afcR ?? 0);
+  const afcTot = toNum(values["afcTotal"]) ?? toNum(values["afc"]);
+  const afc = afcL !== null || afcR !== null ? (afcL ?? 0) + (afcR ?? 0) : afcTot;
 
   const heightCm = toNum(values["height"]);
   const weightKg = toNum(values["weight"]);
+  const directBmi = toNum(values["bmi"]);
   const bmi =
-    heightCm && weightKg ? Math.round((weightKg / (heightCm / 100) ** 2) * 10) / 10 : null;
+    heightCm && weightKg ? Math.round((weightKg / (heightCm / 100) ** 2) * 10) / 10 : directBmi;
 
   const stim = cycles.filter(isStimulationCycle);
   const cycleSignals: PreviousCycleSignal[] = stim.map((c, i) => {

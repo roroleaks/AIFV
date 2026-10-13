@@ -798,8 +798,8 @@ export function buildStartingDoseAssessment(
     total: items.length,
   });
 
-  const age = phenotype.patientSummary.age;
-  const bmi = phenotype.patientSummary.bmi;
+  const age = phenotype.patientSummary.age ?? toNum(values["age"]) ?? i.age;
+  const bmi = phenotype.patientSummary.bmi ?? toNum(values["bmi"]) ?? i.bmi;
 
   const contextGroups: StartingDoseContextGroup[] = [
     group("demographics", "Demographics", [

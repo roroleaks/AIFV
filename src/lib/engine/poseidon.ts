@@ -152,7 +152,8 @@ export function extractPoseidonInputs(
   const latest = stim.length ? stim[stim.length - 1] : undefined;
   const afcL = toNum(values["afcLeft"]);
   const afcR = toNum(values["afcRight"]);
-  const afc = afcL === null && afcR === null ? null : (afcL ?? 0) + (afcR ?? 0);
+  const afcTot = toNum(values["afcTotal"]) ?? toNum(values["afc"]);
+  const afc = afcL !== null || afcR !== null ? (afcL ?? 0) + (afcR ?? 0) : afcTot;
   const outcomeParts = latest
     ? [
         latest["liveBirth"] === "Yes"
@@ -167,7 +168,7 @@ export function extractPoseidonInputs(
     : [];
 
   return {
-    age: ageFromDob(values["dob"]),
+    age: toNum(values["age"]) ?? ageFromDob(values["dob"]),
     amh: toNum(values["amh"]),
     afc,
     previousCycles: stim.length,
@@ -186,7 +187,8 @@ export function extractPoseidonContext(
   const stim = cycles.filter(isStimulationCycle);
   const h = toNum(values["height"]);
   const w = toNum(values["weight"]);
-  const bmi = h && w && h > 0 ? Number((w / (h / 100) ** 2).toFixed(1)) : null;
+  const directBmi = toNum(values["bmi"]);
+  const bmi = h && w && h > 0 ? Number((w / (h / 100) ** 2).toFixed(1)) : directBmi;
   const ohssHistory =
     typeof values["ohssHistory"] === "string" && values["ohssHistory"]
       ? String(values["ohssHistory"])
