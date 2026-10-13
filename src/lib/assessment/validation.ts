@@ -27,8 +27,11 @@ export const severityLabels: Record<IssueSeverity, string> = {
   missing: "Mandatory data missing",
 };
 
-const filled = (v: FieldValue) =>
-  Array.isArray(v) ? v.length > 0 : v !== undefined && v !== null && String(v).trim() !== "";
+const filled = (v: FieldValue): boolean => {
+  if (v === undefined || v === null) return false;
+  if (Array.isArray(v)) return v.length > 0;
+  return String(v).trim() !== "";
+};
 
 /** Fields required before any future clinical module can run. */
 const mandatory: { key: string; label: string; stepId: string }[] = [
@@ -58,6 +61,24 @@ const plausible: {
   { key: "amh", label: "AMH", min: 0, max: 30, unit: "ng/mL", stepId: "reserve" },
   { key: "fsh", label: "Basal FSH", min: 0, max: 100, unit: "IU/L", stepId: "reserve" },
   { key: "lh", label: "Basal LH", min: 0, max: 100, unit: "IU/L", stepId: "reserve" },
+  {
+    key: "estradiol",
+    label: "Basal Estradiol",
+    min: 0,
+    max: 10000,
+    unit: "pg/mL",
+    stepId: "reserve",
+  },
+  {
+    key: "progesterone",
+    label: "Basal Progesterone",
+    min: 0,
+    max: 100,
+    unit: "ng/mL",
+    stepId: "reserve",
+  },
+  { key: "tsh", label: "TSH", min: 0.01, max: 50, unit: "mIU/L", stepId: "reserve" },
+  { key: "prolactin", label: "Prolactin", min: 0, max: 300, unit: "ng/mL", stepId: "reserve" },
   { key: "afcLeft", label: "AFC (left)", min: 0, max: 60, unit: "follicles", stepId: "reserve" },
   { key: "afcRight", label: "AFC (right)", min: 0, max: 60, unit: "follicles", stepId: "reserve" },
   {
@@ -126,8 +147,26 @@ export function validateAssessment(
   });
 
   plausible.forEach((p) => {
-    const v = toNum(values[p.key]);
-    if (v === null) return;
+    const rawVal = values[p.key];
+    if (
+      rawVal === undefined ||
+      rawVal === null ||
+      (typeof rawVal === "string" && rawVal.trim() === "")
+    ) {
+      return;
+    }
+    const v = toNum(rawVal);
+    if (v === null || !Number.isFinite(v)) {
+      push({
+        id: `invalid-${p.key}`,
+        severity: "error",
+        title: `${p.label} is not a valid number`,
+        detail: `Entered "${String(rawVal)}". Expected a numeric value between ${p.min} and ${p.max} ${p.unit}.`,
+        stepId: p.stepId,
+        fields: [p.key],
+      });
+      return;
+    }
     if (v < p.min || v > p.max) {
       push({
         id: `range-${p.key}`,
@@ -142,7 +181,7 @@ export function validateAssessment(
 
   // date of birth in the future / implausible
   const dob = values["dob"];
-  if (typeof dob === "string" && dob) {
+  if (typeof dob === "string" && dob.trim() !== "") {
     const d = new Date(dob);
     if (!Number.isNaN(d.getTime())) {
       const years = (Date.now() - d.getTime()) / (365.25 * 24 * 3600 * 1000);
@@ -165,6 +204,15 @@ export function validateAssessment(
           fields: ["dob"],
         });
       }
+    } else {
+      push({
+        id: "dob-invalid",
+        severity: "error",
+        title: "Date of birth is invalid",
+        detail: "Please enter a valid date in YYYY-MM-DD format.",
+        stepId: "patient",
+        fields: ["dob"],
+      });
     }
   }
 
