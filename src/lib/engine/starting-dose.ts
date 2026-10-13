@@ -470,36 +470,43 @@ export function calculateGuidelineStartingDose(
       (pcos && (amh ?? 0) >= 4.0)
     ) {
       dose = 125;
-      stratFactors.push("Marked high reserve / severe PCOS: Base 125 IU/day");
+      stratFactors.push(
+        "Marked high reserve / severe PCOS: Base 125 IU/day (ESHRE 2025 Rec 13 default 100–125 IU tier)",
+      );
       if (bmi !== null && bmi < 20) {
         dose = 100;
         stratFactors.push(
           "Low BMI (< 20 kg/m²): Reduced to 100 IU/day to prevent ovarian hyperstimulation",
         );
       } else if (bmi !== null && bmi >= 28) {
-        dose = 150;
-        stratFactors.push("Elevated BMI (>= 28 kg/m²): Adjusted to 150 IU/day");
+        dose = 125;
+        stratFactors.push("Elevated BMI (>= 28 kg/m²): Maintained at 125 IU/day");
       }
     } else {
-      dose = 150;
-      stratFactors.push("Moderate high reserve: Base 150 IU/day");
+      dose = 125;
+      stratFactors.push(
+        "High reserve / moderate PCOS: Base 125 IU/day per ESHRE 2025 Rec 13 (100–125 IU default tier)",
+      );
       if (bmi !== null && bmi < 20) {
-        dose = 125;
-        stratFactors.push("Low BMI (< 20 kg/m²): Adjusted to 125 IU/day");
-      } else if (bmi !== null && bmi >= 30) {
-        dose = 175;
-        stratFactors.push("BMI >= 30 kg/m²: Adjusted to 175 IU/day");
+        dose = 100;
+        stratFactors.push(
+          "Low BMI (< 20 kg/m²): Reduced to 100 IU/day to prevent ovarian hyperstimulation",
+        );
+      } else if (bmi !== null && bmi >= 32) {
+        dose = 150;
+        stratFactors.push("Markedly elevated BMI (>= 32 kg/m²): Adjusted to 150 IU/day");
       }
     }
 
     return {
       dose,
       responderCategory: "high",
-      doseBand: "100–150 IU/day (Reduced dose)",
+      doseBand: "100–125 IU/day default (100 to <150 IU/day reduced range)",
       stratificationFactors: stratFactors,
       clinicalRationale:
-        "Reduced gonadotropin starting dose (100–150 IU/day) per ESHRE 2025 Rec 13 to mitigate OHSS risk while optimizing mature oocyte yield.",
-      evidenceRule: "ESHRE 2025 Rec 13 (Conditional, Moderate Quality) & ASRM 2016 OHSS Guideline",
+        "Reduced gonadotropin starting dose defaulting to 100–125 IU/day per ESHRE 2025 Rec 13 (Hum Reprod. 2026;41(4):498-514; doi: 10.1093/humrep/deag018) to decrease the risk of OHSS in predicted high responders while achieving optimal oocyte yield.",
+      evidenceRule:
+        "ESHRE 2025 Rec 13 (Conditional, ⊕; Hum Reprod. 2026;41(4):498-514; PMID: 39982461) & ASRM 2016 OHSS Guideline",
     };
   }
 
@@ -512,14 +519,14 @@ export function calculateGuidelineStartingDose(
       (afc !== null && afc < 5) ||
       age >= 38 ||
       phenotype.bologna.status === "positive" ||
-      phenotype.poseidon.group === 3 ||
-      phenotype.poseidon.group === 4;
+      phenotype.poseidon.group === "3" ||
+      phenotype.poseidon.group === "4";
 
     let dose = 300;
     if (severePoor) {
       dose = 300;
       stratFactors.push(
-        "Diminished ovarian reserve / AMA / Bologna positive: Capped at maximum evidence dose 300 IU/day",
+        "Diminished ovarian reserve / AMA / Bologna positive: Capped at maximum evidence dose 300 IU/day per ESHRE 2025 Rec 20",
       );
     } else {
       dose = 225;
@@ -535,12 +542,12 @@ export function calculateGuidelineStartingDose(
     return {
       dose,
       responderCategory: "poor",
-      doseBand: "225–300 IU/day (Maximal evidence ceiling)",
+      doseBand: "225–300 IU/day (Maximal evidence ceiling 300 IU)",
       stratificationFactors: stratFactors,
       clinicalRationale:
-        "Maximum evidence-based starting dose (225–300 IU/day) capped at 300 IU/day per ESHRE 2025 Rec 20. Doses exceeding 300 IU/day do not improve follicle recruitment or live birth.",
+        "Maximum evidence-based starting dose (225–300 IU/day) capped at 300 IU/day hard ceiling per ESHRE 2025 Rec 20 (Hum Reprod. 2026;41(4):498-514; doi: 10.1093/humrep/deag018). Doses exceeding 300 IU/day do not improve follicle recruitment, oocyte yield, or live birth.",
       evidenceRule:
-        "ESHRE 2025 Rec 20 (Strong recommendation, High Quality) & Cochrane Review (Lensen et al.)",
+        "ESHRE 2025 Rec 20 (Strong recommendation, High Quality, reaffirmed 2025; Hum Reprod. 2026;41(4):498-514; PMID: 39982461) & Cochrane Review (Lensen et al., 2018)",
     };
   }
 

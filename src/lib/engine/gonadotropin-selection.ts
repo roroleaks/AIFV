@@ -298,16 +298,16 @@ export function buildGonadotropinSelection(
     phenotype.patientSummary.diagnosis.some((d) => d.toLowerCase().includes("pcos"));
 
   const isHighResponder =
-    response.category === "HYPER" ||
+    response.category === "hyper" ||
     (amh !== null && amh >= 3.5) ||
     (afc !== null && afc >= 20) ||
     isPcos;
 
   const isPoorResponder =
-    response.category === "POOR" ||
-    response.category === "VERY-POOR" ||
-    bolognaStatus === "fulfilled" ||
-    (poseidonGroup !== null && [1, 2, 3, 4].includes(poseidonGroup)) ||
+    response.category === "poor" ||
+    response.category === "very-poor" ||
+    bolognaStatus === "positive" ||
+    (poseidonGroup !== null && ["1a", "1b", "2a", "2b", "3", "4"].includes(poseidonGroup)) ||
     (amh !== null && amh < 1.2) ||
     (afc !== null && afc < 7);
 
@@ -380,7 +380,8 @@ export function buildGonadotropinSelection(
     // Poor Responder / Advanced Maternal Age / POSEIDON Low Prognosis
     // ESHRE 2025 Rec 20, 25, 29, 30, 31, 35, 42
     // -----------------------------------------------------------------------
-    const hasAmaOrDOR = isAdvancedAge || poseidonGroup === 2 || poseidonGroup === 4;
+    const hasAmaOrDOR =
+      isAdvancedAge || poseidonGroup === "2a" || poseidonGroup === "2b" || poseidonGroup === "4";
 
     selection = {
       status: "available",
@@ -420,7 +421,7 @@ export function buildGonadotropinSelection(
           amh !== null ? `AMH ${amh} ng/mL` : null,
           afc !== null ? `AFC ${afc}` : null,
           phenotype.poseidon.groupLabel ? `POSEIDON ${phenotype.poseidon.groupLabel}` : null,
-          bolognaStatus === "fulfilled" ? "Bologna criteria fulfilled" : null,
+          bolognaStatus === "positive" ? "Bologna criteria fulfilled" : null,
         ].filter((v): v is string => v !== null),
         supportingGuideline:
           "ESHRE 2025 (Rec 20, 25, 29, 30, 42) & POSEIDON Criteria (Alviggi 2016)",

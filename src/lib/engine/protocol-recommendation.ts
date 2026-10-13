@@ -394,7 +394,7 @@ function determineProtocolRecommendation(
       ],
       explanation: {
         clinicalRationale:
-          "GnRH antagonist protocol is strongly recommended for predicted high responders and PCOS patients (ESHRE 2025 Rec 14 / Grade A). Antagonist protocols yield equivalent live birth rates compared to long agonist protocols while reducing moderate-to-severe OHSS by over 50%, and uniquely allow GnRH agonist triggering. Long agonist protocols are contraindicated due to unmitigated OHSS risk. PPOS is an evidence-supported alternative (ESHRE 2025 Rec 24) when elective freeze-all or PGT-A is planned.",
+          "GnRH antagonist protocol is strongly recommended for predicted high responders and PCOS patients (ESHRE 2025 Rec 14 / Grade A; Hum Reprod. 2026;41(4):498-514). Antagonist protocols yield equivalent live birth rates compared to long agonist protocols while reducing moderate-to-severe OHSS by over 50%, and uniquely allow GnRH agonist triggering. Starting dose explicitly defaults to the 100–125 IU/day tier per ESHRE 2025 Rec 13. Routine delayed-start ovarian stimulation is probably not recommended (ESHRE 2025 Rec 12), and estrogen pre-treatment is not recommended in antagonist protocols (ESHRE 2025 Rec 6). Long agonist protocols are contraindicated due to unmitigated OHSS risk. PPOS is an evidence-supported alternative (ESHRE 2025 Rec 24) when elective freeze-all or PGT-A is planned.",
         supportingVariables: [
           `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
           `AFC: ${afc !== null ? `${afc} follicles` : "Not recorded"}`,
@@ -403,14 +403,15 @@ function determineProtocolRecommendation(
           `Predicted response: ${summary.expectedResponse}`,
         ],
         evidenceUsed: [
-          "ESHRE 2025 Guideline Update (Rec 14, 24)",
+          "ESHRE 2025 Guideline Update (Rec 6, 12, 13, 14, 24; Hum Reprod. 2026;41(4):498-514)",
           "Cochrane Review (Al-Inany et al., 2016)",
           "ASRM OHSS Prevention Guideline (2016)",
         ],
         guideline: "ESHRE 2025 (Rec 14: Strong recommendation) / ASRM 2016",
-        publication: "Human Reproduction / Cochrane Database of Systematic Reviews",
+        publication:
+          "Human Reproduction (doi: 10.1093/humrep/deag018; PMID: 39982461) / Cochrane Reviews",
         notes:
-          "Strict OHSS surveillance indicated. Agonist trigger and freeze-all strategy should be prepared.",
+          "Strict OHSS surveillance indicated. Default starting dose 100–125 IU/day. Agonist trigger and freeze-all strategy should be prepared.",
       },
     };
   }
@@ -430,7 +431,7 @@ function determineProtocolRecommendation(
       ],
       explanation: {
         clinicalRationale:
-          "GnRH antagonist protocol is recommended for predicted poor responders, POSEIDON groups, and Bologna criteria (ESHRE 2025 Rec 18, 22). The antagonist avoids profound pituitary downregulation and heavy suppression of early follicular recruitment, reducing stimulation duration and gonadotropin consumption with equivalent live birth rates. Microflare (short agonist flare) is an alternative to utilize endogenous flare. In very low reserve, modified natural cycle may be considered per ESHRE 2025 Rec 19 (GPP).",
+          "GnRH antagonist protocol is recommended for predicted poor responders, POSEIDON groups, and Bologna criteria (ESHRE 2025 Rec 18, 22; Hum Reprod. 2026;41(4):498-514; doi: 10.1093/humrep/deag018). The antagonist avoids profound pituitary downregulation and heavy suppression of early follicular recruitment, reducing stimulation duration and gonadotropin consumption with equivalent live birth rates. Starting dose is strictly capped at the 300 IU/day hard ceiling per ESHRE 2025 Rec 20 (Strong recommendation, High Quality). Delayed-start ovarian stimulation is probably not recommended (ESHRE 2025 Rec 17), and routine estrogen pre-treatment is not recommended (ESHRE 2025 Rec 6). Microflare (short agonist flare) is an alternative to utilize endogenous flare. In very low reserve, modified natural cycle may be considered per ESHRE 2025 Rec 19 (GPP).",
         supportingVariables: [
           `Age: ${age !== null ? `${age} years` : "Not recorded"}`,
           `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
@@ -439,12 +440,13 @@ function determineProtocolRecommendation(
           `Bologna: ${summary.bolognaStatus}`,
         ],
         evidenceUsed: [
-          "ESHRE 2025 Guideline Update (Rec 18, 19, 22)",
+          "ESHRE 2025 Guideline Update (Rec 6, 17, 18, 19, 20, 22; Hum Reprod. 2026;41(4):498-514)",
           "Cochrane Review (Al-Inany et al., 2016)",
           "POSEIDON Consensus (Alviggi et al., 2016)",
         ],
-        guideline: "ESHRE 2025 (Rec 18, 22) / POSEIDON Criteria",
-        publication: "Human Reproduction / Fertility and Sterility",
+        guideline: "ESHRE 2025 (Rec 18, 20, 22) / POSEIDON Criteria",
+        publication:
+          "Human Reproduction (doi: 10.1093/humrep/deag018; PMID: 39982461) / Fertility and Sterility",
         notes:
           "Starting dose ceiling capped at 300 IU/day per ESHRE 2025 Rec 20. Heavy downregulation with long agonist is not recommended.",
       },
@@ -461,7 +463,7 @@ function determineProtocolRecommendation(
     evidenceSource: ["eshre-2025-ovarian-stimulation-update", "cochrane-2016-antagonist"],
     explanation: {
       clinicalRationale:
-        "GnRH antagonist protocol with fixed start on stimulation Day 5 or 6 (ESHRE 2025 Rec 22, 23 / Grade A) is recommended as first line for predicted normal responders. It achieves equivalent ongoing pregnancy and live birth rates to long agonist regimens while significantly reducing treatment duration, total gonadotropin consumption, and OHSS risk. Long GnRH agonist protocol remains an established alternative when precise cycle scheduling or clinic batching is required (Rec 21).",
+        "GnRH antagonist protocol with fixed start on stimulation Day 5 or 6 (ESHRE 2025 Rec 22, 23 / Grade A; Hum Reprod. 2026;41(4):498-514; doi: 10.1093/humrep/deag018) is recommended as first line for predicted normal responders. It achieves equivalent ongoing pregnancy and live birth rates to long agonist regimens while significantly reducing treatment duration, total gonadotropin consumption, and OHSS risk. Delayed-start stimulation is probably not recommended over conventional dosing (ESHRE 2025 Rec 15), and estrogen pre-treatment is not recommended in antagonist protocols (ESHRE 2025 Rec 6). Long GnRH agonist protocol remains an established alternative when precise cycle scheduling or clinic batching is required (Rec 21).",
       supportingVariables: [
         `Age: ${age !== null ? `${age} years` : "Not recorded"}`,
         `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
@@ -469,11 +471,12 @@ function determineProtocolRecommendation(
         `BMI: ${bmi !== null ? `${bmi} kg/m²` : "Not recorded"}`,
       ],
       evidenceUsed: [
-        "ESHRE 2025 Guideline Update (Rec 21, 22, 23)",
+        "ESHRE 2025 Guideline Update (Rec 6, 15, 21, 22, 23; Hum Reprod. 2026;41(4):498-514)",
         "Cochrane Review (Al-Inany et al., 2016)",
       ],
       guideline: "ESHRE 2025 (Rec 22: Strong recommendation, Rec 23: Conditional)",
-      publication: "Human Reproduction / Cochrane Database of Systematic Reviews",
+      publication:
+        "Human Reproduction (doi: 10.1093/humrep/deag018; PMID: 39982461) / Cochrane Reviews",
       notes:
         "Target follicular cohort: 8–14 oocytes. Conventional gonadotropin dose 150–225 IU/day.",
     },

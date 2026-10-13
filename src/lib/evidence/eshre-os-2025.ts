@@ -85,6 +85,16 @@ const R = (
 ): GuidelineRecommendation => ({ number, section, text, strength, quality, modules, populations });
 
 export const eshreOs2025Recommendations: GuidelineRecommendation[] = [
+  /* ------------------------------------------- Part B: pre-treatments */
+  R(
+    6,
+    "Pre-treatments",
+    "Estrogen pre-treatment is probably not recommended in GnRH antagonist protocols for scheduling or improving cycle outcomes. [2025]",
+    "Conditional",
+    "⊕",
+    ["protocol-recommendation"],
+    ["general", "normal-responder", "low-responder", "high-responder"],
+  ),
   /* ------------------------------------------- Part C: stimulation protocols */
   R(
     12,

@@ -21,10 +21,10 @@ export interface SourceMetadata {
 }
 
 export const fetchSourceMetadata = createServerFn({ method: "POST" })
-  .inputValidator((data: { reference: string }) =>
+  .validator((data: { reference: string }) =>
     z.object({ reference: z.string().min(4).max(500) }).parse(data),
   )
-  .handler(async ({ data }): Promise<SourceMetadata> => {
+  .handler(async ({ data }: { data: { reference: string } }): Promise<SourceMetadata> => {
     const raw = data.reference.trim();
     const doiMatch = raw.match(/10\.\d{4,9}\/[^\s"<>]+/i);
 
@@ -116,10 +116,10 @@ export interface SearchResponse {
  * unverified, never any clinical rule, threshold or dose.
  */
 export const searchEvidenceCandidates = createServerFn({ method: "POST" })
-  .inputValidator((data: { topic: string }) =>
+  .validator((data: { topic: string }) =>
     z.object({ topic: z.string().min(3).max(200) }).parse(data),
   )
-  .handler(async ({ data }): Promise<SearchResponse> => {
+  .handler(async ({ data }: { data: { topic: string } }): Promise<SearchResponse> => {
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) {
       return {
