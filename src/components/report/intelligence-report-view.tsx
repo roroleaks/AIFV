@@ -686,6 +686,22 @@ export function DisclaimerPanel({ report }: { report: IntelligenceReport }) {
           </div>
         ))}
       </div>
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-4 text-xs text-muted-foreground">
+        <div className="flex items-center gap-2.5">
+          <img
+            src="/dr-raouf-roshdy.jpg"
+            alt="Dr Raouf Roshdy"
+            className="size-8.5 rounded-full object-cover ring-1 ring-border shadow-xs"
+          />
+          <div>
+            <p className="font-semibold text-foreground">Created by Dr Raouf Roshdy</p>
+            <p className="text-[11px] text-muted-foreground">All copyrights reserved 2026</p>
+          </div>
+        </div>
+        <p className="text-[11px] text-muted-foreground">
+          IVF Clinical Intelligence Report · ESHRE 2025 Synchronized
+        </p>
+      </div>
     </section>
   );
 }

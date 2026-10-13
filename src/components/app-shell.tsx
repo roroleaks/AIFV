@@ -247,9 +247,11 @@ export function AppShell({ children }: { children?: ReactNode }) {
             >
               {theme === "dark" ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
             </Button>
-            <span className="ml-1 hidden size-9 place-items-center rounded-full bg-primary-soft text-xs font-bold text-primary sm:grid">
-              DR
-            </span>
+            <img
+              src="/dr-raouf-roshdy.jpg"
+              alt="Dr Raouf Roshdy"
+              className="ml-1 hidden size-8 rounded-full object-cover ring-1 ring-border sm:block"
+            />
           </div>
         </div>
       </header>
@@ -296,8 +298,25 @@ export function AppShell({ children }: { children?: ReactNode }) {
             <TestModeBanner />
             {children ?? <Outlet />}
           </div>
-          <footer className="mx-auto mt-10 w-full max-w-7xl border-t border-border/60 pt-4 text-[11px] tracking-wide text-muted-foreground">
-            Created by Dr Raouf Roshdy
+          <footer className="mx-auto mt-12 flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 border-t border-border/60 py-5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <img
+                src="/dr-raouf-roshdy.jpg"
+                alt="Dr Raouf Roshdy"
+                className="size-8.5 rounded-full object-cover ring-2 ring-primary/20 shadow-xs"
+              />
+              <div className="flex flex-col">
+                <span className="font-semibold text-foreground tracking-tight">
+                  Created by Dr Raouf Roshdy
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  All copyrights reserved 2026
+                </span>
+              </div>
+            </div>
+            <div className="text-[11px] text-muted-foreground">
+              IVF Ai Calc · ESHRE 2025 Synchronized
+            </div>
           </footer>
         </main>
       </div>

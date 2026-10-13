@@ -445,6 +445,10 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 ---
 
 <p align="center">
-  <strong>AIFV CDSS — Precision Ovarian Stimulation Guided by Evidence</strong><br />
-  European Society of Human Reproduction and Embryology (ESHRE) 2025 Synchronized
+  <img src="public/dr-raouf-roshdy.jpg" alt="Dr Raouf Roshdy" width="80" height="80" style="border-radius: 50%; object-fit: cover; border: 2px solid #0284C7;" />
+  <br />
+  <strong>Created by Dr Raouf Roshdy</strong><br />
+  <em>All copyrights reserved 2026</em><br /><br />
+  <sub>AIFV CDSS — Precision Ovarian Stimulation Guided by Evidence</sub><br />
+  <sub>European Society of Human Reproduction and Embryology (ESHRE) 2025 Synchronized</sub>
 </p>

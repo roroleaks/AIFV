@@ -180,12 +180,24 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border/60 py-8">
-        <div className="mx-auto max-w-7xl space-y-1 px-5 text-xs text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} IVF Ai Calc · Intended for use by qualified fertility
-            specialists only.
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 text-xs text-muted-foreground sm:flex-row">
+          <div className="flex items-center gap-3">
+            <img
+              src="/dr-raouf-roshdy.jpg"
+              alt="Dr Raouf Roshdy"
+              className="size-10 rounded-full object-cover ring-2 ring-primary/20 shadow-xs"
+            />
+            <div>
+              <p className="font-semibold text-foreground tracking-tight">
+                Created by Dr Raouf Roshdy
+              </p>
+              <p className="text-[11px] text-muted-foreground">All copyrights reserved 2026</p>
+            </div>
+          </div>
+          <p className="text-center text-[11px] text-muted-foreground sm:text-right">
+            © 2026 IVF Precision Decision Support · Intended for qualified fertility specialists
+            only.
           </p>
-          <p className="text-[11px] tracking-wide">Created by Dr Raouf Roshdy</p>
         </div>
       </footer>
     </div>
