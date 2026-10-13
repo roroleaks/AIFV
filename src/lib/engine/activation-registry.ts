@@ -133,14 +133,18 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     route: "/gonadotropins",
     category: "treatment",
     gateId: "gonadotropin-selection",
-    testImplementation: false,
-    logicSource: "No executable preparation-selection rule exists in the app.",
-    evidenceStatus: "EVIDENCE_PENDING",
+    testImplementation: true,
+    logicSource:
+      "ESHRE 2025 (Rec 25–36, 42) and POSEIDON gonadotropin preparation and LH supplementation selection rules.",
+    evidenceStatus: "EVIDENCE_TRANSCRIBED",
     evidenceIds: ["eshre-2025-ovarian-stimulation-update", "poseidon-2016-alviggi"],
-    outputs: ["Recommended gonadotropin", "LH supplementation statement"],
-    missingForProduction: [
-      "Guideline gonadotropin-preparation recommendation statements with explicit patient groups",
+    outputs: [
+      "Recommended gonadotropin",
+      "Alternative preparations",
+      "LH supplementation strategy",
+      "Negative guidance and cautions",
     ],
+    missingForProduction: [],
     version: "1.0.0",
   },
   {

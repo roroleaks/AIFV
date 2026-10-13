@@ -115,12 +115,7 @@ export const treatmentAlgorithmDefinitions: Record<
   "gonadotropin-selection": {
     id: "gonadotropin-selection",
     name: "Gonadotropin Selection Engine",
-    suppressedOutputs: [
-      "Recommended gonadotropin (FSH, hMG, FSH + hMG or any product)",
-      "Preferred product",
-      "LH supplementation instruction",
-      "Any dose or dose range",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
       eshre2025Evidence(
         "ESHRE 2025 ovarian stimulation guideline — gonadotropin preparation recommendation statements",

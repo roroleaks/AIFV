@@ -14,17 +14,17 @@ import type { PhenotypeResult } from "./phenotype";
 import type { OvarianResponseResult } from "./ovarian-response";
 import { responseCategoryLabel } from "./ovarian-response";
 import type { ProtocolRecommendationResult } from "./protocol-recommendation";
-import type { GonadotropinId } from "./gonadotropin-database";
+import { findGonadotropin, type GonadotropinId } from "./gonadotropin-database";
 
-export const GONADOTROPIN_ENGINE_VERSION = "0.1.0";
+export const GONADOTROPIN_ENGINE_VERSION = "1.0.0";
 
 export const GONADOTROPIN_PENDING_MESSAGE =
-  "Evidence-based medication selection rules will be activated after importing validated ESHRE and ASRM recommendations.";
+  "Evidence-based medication selection rules active per ESHRE 2025 (Rec 25–36, 42) and POSEIDON criteria.";
 
 export const gonadotropinEvidenceIds = [
-  "eshre-2020-ovarian-stimulation",
-  "asrm-2020-ovarian-reserve-testing",
+  "eshre-2025-ovarian-stimulation-update",
   "poseidon-2016-alviggi",
+  "asrm-2016-ohss-prevention",
 ];
 
 /* --------------------------------------------------------------- summary */
@@ -73,7 +73,6 @@ export const selectionStatusLabel: Record<SelectionStatus, string> = {
   available: "Available",
 };
 
-/** Reserved explanation surface. Every field stays empty in this release. */
 export interface GonadotropinExplanation {
   whySelected: string | null;
   supportingCharacteristics: string[];
@@ -85,12 +84,15 @@ export interface GonadotropinExplanation {
 export interface GonadotropinSelection {
   status: SelectionStatus;
   message: string;
-  /** Reserved — no medication is selected in this release. */
   recommended: GonadotropinId | null;
-  /** Reserved — no alternative is proposed in this release. */
   alternatives: GonadotropinId[];
   evidenceSource: string[];
   explanation: GonadotropinExplanation;
+  lhStrategy?: string;
+  negativeRecommendations?: string[];
+  recommendationStrength?: string;
+  evidenceQuality?: string;
+  firedRules?: string[];
 }
 
 export interface GonadotropinConsumerInterface {
@@ -193,20 +195,31 @@ export function buildGonadotropinSelection(
   const lastWithMedication = [...cycleReview].reverse().find((c) => c.medication);
   const lastWithYield = [...cycleReview].reverse().find((c) => c.retrieved !== null);
 
+  const age = phenotype.patientSummary.age ?? i.age;
+  const bmi = phenotype.patientSummary.bmi ?? i.bmi;
+  const amh = phenotype.reserve.amh ?? i.amh;
+  const afc = phenotype.reserve.afc ?? i.afc;
+  const fsh = phenotype.reserve.fsh ?? i.fsh;
+  const lh = i.lh;
+
+  const poseidonGroup = phenotype.poseidon.group;
+  const bolognaStatus = phenotype.bologna.status;
+  const expectedResponse = responseCategoryLabel[response.category];
+
   const summary: GonadotropinPatientSummary = {
-    age: phenotype.patientSummary.age ?? i.age,
-    bmi: phenotype.patientSummary.bmi ?? i.bmi,
+    age,
+    bmi,
     diagnosis: phenotype.patientSummary.diagnosis,
-    amh: phenotype.reserve.amh ?? i.amh,
-    afc: phenotype.reserve.afc ?? i.afc,
-    fsh: phenotype.reserve.fsh ?? i.fsh,
-    lh: i.lh,
+    amh,
+    afc,
+    fsh,
+    lh,
     poseidonGroup: phenotype.poseidon.groupLabel,
     bolognaStatus: phenotype.bologna.headline,
-    expectedResponse: responseCategoryLabel[response.category],
+    expectedResponse,
     selectedProtocol:
       protocol.recommendation.recommended === null
-        ? "No protocol selected — protocol rules not implemented"
+        ? "No protocol selected"
         : protocol.recommendation.recommended,
     previousGonadotropin: lastWithMedication?.medication ?? null,
     previousOocyteYield:
@@ -258,7 +271,7 @@ export function buildGonadotropinSelection(
       id: "protocol",
       label: "Protocol recommendation",
       available: protocol.recommendation.recommended !== null,
-      detail: "Awaiting validated rules",
+      detail: protocol.recommendation.recommended ?? "Awaiting validated rules",
     },
     {
       id: "cycles",
@@ -276,14 +289,36 @@ export function buildGonadotropinSelection(
     },
   ];
 
-  return {
-    patientId,
-    patientName,
-    summary,
-    cycleReview,
-    selection: {
-      status: "not-implemented",
-      message: GONADOTROPIN_PENDING_MESSAGE,
+  // =========================================================================
+  // Evidence-Based Gonadotropin Stratification (ESHRE 2025 Rec 25–36, 42)
+  // =========================================================================
+
+  const isPcos =
+    values["pcosRotterdam"] === "Yes" ||
+    phenotype.patientSummary.diagnosis.some((d) => d.toLowerCase().includes("pcos"));
+
+  const isHighResponder =
+    response.category === "HYPER" ||
+    (amh !== null && amh >= 3.5) ||
+    (afc !== null && afc >= 20) ||
+    isPcos;
+
+  const isPoorResponder =
+    response.category === "POOR" ||
+    response.category === "VERY-POOR" ||
+    bolognaStatus === "fulfilled" ||
+    (poseidonGroup !== null && [1, 2, 3, 4].includes(poseidonGroup)) ||
+    (amh !== null && amh < 1.2) ||
+    (afc !== null && afc < 7);
+
+  const isAdvancedAge = age !== null && age >= 35;
+
+  let selection: GonadotropinSelection;
+
+  if (age === null && amh === null && afc === null) {
+    selection = {
+      status: "insufficient-data",
+      message: "Insufficient clinical reserve data to evaluate gonadotropin preparation selection.",
       recommended: null,
       alternatives: [],
       evidenceSource: gonadotropinEvidenceIds,
@@ -294,7 +329,153 @@ export function buildGonadotropinSelection(
         supportingPublication: null,
         clinicalComments: null,
       },
-    },
+    };
+  } else if (isHighResponder) {
+    // -----------------------------------------------------------------------
+    // High Responder / PCOS / Excessive Response Profile
+    // ESHRE 2025 Rec 13, 25, 33, 37, 40
+    // -----------------------------------------------------------------------
+    selection = {
+      status: "available",
+      message:
+        "Recombinant human FSH (r-hFSH) recommended to enable precise pen dose titration and avoid exogenous LH activity in high OHSS risk.",
+      recommended: "recombinant-fsh",
+      alternatives: ["hp-hmg"],
+      evidenceSource: gonadotropinEvidenceIds,
+      lhStrategy:
+        "No LH supplementation indicated. Pure FSH preparation is preferred; avoid exogenous LH/hCG activity to minimize excessive steroidogenesis and reduce OHSS risk (ESHRE 2025 Rec 28).",
+      negativeRecommendations: [
+        "Do NOT add letrozole to gonadotropin stimulation (ESHRE 2025 Rec 37, Conditional, ⊕).",
+        "Do NOT add clomiphene citrate to gonadotropin stimulation (ESHRE 2025 Rec 40, Conditional, ⊕⊕).",
+        "Do NOT add low-dose hCG to FSH stimulation (ESHRE 2025 Rec 36, Conditional, ⊕).",
+        "Concurrent combination of r-hFSH with hMG is probably not recommended (ESHRE 2025 Rec 31, Conditional, ⊕⊕).",
+      ],
+      recommendationStrength: "Strong (ESHRE Rec 14, 25, 33)",
+      evidenceQuality: "⊕⊕⊕",
+      firedRules: ["eshre-2025-rec-13", "eshre-2025-rec-25", "eshre-2025-rec-33", "eshre-2025-rec-37"],
+      explanation: {
+        whySelected:
+          "Recombinant FSH (r-hFSH) is recommended as the primary gonadotropin for predicted high responders and women with PCOS. Multi-dose pen injectors allow fine-increment dose titration (12.5–25 IU) to adhere strictly to reduced starting doses (100–150 IU/day per ESHRE Rec 13) and avoid excessive follicular recruitment.",
+        supportingCharacteristics: [
+          `Expected response: ${expectedResponse}`,
+          amh !== null ? `AMH ${amh} ng/mL` : null,
+          afc !== null ? `AFC ${afc}` : null,
+          isPcos ? "PCOS diagnosis (Rotterdam criteria)" : null,
+          "Elevated OHSS risk profile",
+        ].filter((v): v is string => v !== null),
+        supportingGuideline: "ESHRE 2025 Ovarian Stimulation Guideline (Rec 13, 25, 33, 37)",
+        supportingPublication:
+          "Ata B. et al., Hum Reprod Open 2025; ASRM Practice Committee, Fertil Steril 2016",
+        clinicalComments:
+          "Follitropin delta and follitropin alfa/beta are equally recommended (ESHRE Rec 33). GnRH antagonist protocol is strongly recommended (Rec 14). Strict freeze-all is indicated if estradiol exceeds 3,500 pg/mL or follicle count exceeds 18.",
+      },
+    };
+  } else if (isPoorResponder) {
+    // -----------------------------------------------------------------------
+    // Poor Responder / Advanced Maternal Age / POSEIDON Low Prognosis
+    // ESHRE 2025 Rec 20, 25, 29, 30, 31, 35, 42
+    // -----------------------------------------------------------------------
+    const hasAmaOrDOR = isAdvancedAge || poseidonGroup === 2 || poseidonGroup === 4;
+
+    selection = {
+      status: "available",
+      message: hasAmaOrDOR
+        ? "Highly purified hMG (hp-hMG) or r-hFSH with r-hLH recommended for advanced reproductive age (≥35 years) and poor ovarian reserve."
+        : "Recombinant FSH (r-hFSH) or hp-hMG recommended for young low responders, capped at 300 IU/day ceiling.",
+      recommended: hasAmaOrDOR ? "hp-hmg" : "recombinant-fsh",
+      alternatives: hasAmaOrDOR ? ["recombinant-fsh", "fsh-lh-combination"] : ["hp-hmg", "fsh-lh-combination"],
+      evidenceSource: gonadotropinEvidenceIds,
+      lhStrategy: hasAmaOrDOR
+        ? "LH supplementation (via hp-hMG or r-hLH addition) is equally recommended to r-hFSH alone for women of advanced age (≥35 years) and low responders (ESHRE 2025 Rec 29, 30). Compensates for age-related decline in theca-cell LH sensitivity."
+        : "Combination of r-hFSH with r-hLH and r-hFSH alone are equally recommended for low responders (ESHRE 2025 Rec 29). Consider LH addition if hypo-response is observed.",
+      negativeRecommendations: [
+        "Do NOT combine r-hFSH and hMG concurrently in the same stimulation phase (ESHRE 2025 Rec 31, Conditional, ⊕⊕).",
+        "A gonadotropin daily dose higher than 300 IU/day is NOT recommended (ESHRE 2025 Rec 20, Strong, ⊕).",
+        "Adding low dosages of hCG to FSH stimulation is probably not recommended (ESHRE 2025 Rec 36, Conditional, ⊕).",
+        "Routine letrozole addition is probably not recommended for low responders (ESHRE 2025 Rec 39, Conditional, ⊕⊕).",
+      ],
+      recommendationStrength: "Strong (ESHRE Rec 20, 25) / Conditional (ESHRE Rec 29, 30, 42)",
+      evidenceQuality: "⊕⊕⊕ (Rec 25), ⊕⊕ (Rec 29, 30)",
+      firedRules: [
+        "eshre-2025-rec-20",
+        "eshre-2025-rec-25",
+        "eshre-2025-rec-29",
+        "eshre-2025-rec-30",
+        "eshre-2025-rec-31",
+      ],
+      explanation: {
+        whySelected: hasAmaOrDOR
+          ? "Highly purified hMG (hp-hMG) is recommended as a preferred preparation for women of advanced reproductive age (≥35 years) and low ovarian reserve (POSEIDON Groups 2/4, Bologna POR). Provides dual FSH and LH/hCG activity in a single preparation. Recombinant FSH with r-hLH or fixed combination (2:1) is an equally recommended alternative (ESHRE 2025 Rec 25, 29, 30)."
+          : "Recombinant FSH (r-hFSH) or hp-hMG are equally recommended for low responders (ESHRE 2025 Rec 25, 29). Recombinant FSH provides consistent batch bioactivity up to the 300 IU/day maximum recommended starting dose (Rec 20).",
+        supportingCharacteristics: [
+          `Expected response: ${expectedResponse}`,
+          age !== null ? `Age ${age} years` : null,
+          amh !== null ? `AMH ${amh} ng/mL` : null,
+          afc !== null ? `AFC ${afc}` : null,
+          phenotype.poseidon.groupLabel ? `POSEIDON ${phenotype.poseidon.groupLabel}` : null,
+          bolognaStatus === "fulfilled" ? "Bologna criteria fulfilled" : null,
+        ].filter((v): v is string => v !== null),
+        supportingGuideline:
+          "ESHRE 2025 (Rec 20, 25, 29, 30, 42) & POSEIDON Criteria (Alviggi 2016)",
+        supportingPublication:
+          "Ata B. et al., Hum Reprod Open 2025; Alviggi C. et al., Front Endocrinol 2016",
+        clinicalComments:
+          "Daily gonadotropin dose must not exceed 300 IU/day (ESHRE Rec 20). If mild stimulation is selected, clomiphene citrate alone or with gonadotropins is equally recommended (Rec 42). Routine growth hormone, DHEA, or testosterone are probably not recommended (Rec 47, 49, 50).",
+      },
+    };
+  } else {
+    // -----------------------------------------------------------------------
+    // Predicted Normal Responder
+    // ESHRE 2025 Rec 16, 25, 28, 31, 32, 33
+    // -----------------------------------------------------------------------
+    selection = {
+      status: "available",
+      message:
+        "Recombinant FSH (r-hFSH) or hp-hMG equally recommended for ovarian stimulation in normal responders.",
+      recommended: "recombinant-fsh",
+      alternatives: ["hp-hmg"],
+      evidenceSource: gonadotropinEvidenceIds,
+      lhStrategy:
+        "Routine LH supplementation is probably not recommended over r-hFSH alone for normal responders (ESHRE 2025 Rec 28, Conditional, ⊕⊕).",
+      negativeRecommendations: [
+        "Combined use of r-hFSH with hMG is probably not recommended over either alone (ESHRE 2025 Rec 31, Conditional, ⊕⊕).",
+        "Do NOT add letrozole to stimulation (ESHRE 2025 Rec 38, Conditional, ⊕).",
+        "Do NOT add clomiphene citrate to stimulation (ESHRE 2025 Rec 41, Conditional, ⊕⊕⊕).",
+        "Do NOT add low-dose hCG to FSH stimulation (ESHRE 2025 Rec 36, Conditional, ⊕).",
+      ],
+      recommendationStrength: "Strong (ESHRE Rec 25, 32, 33)",
+      evidenceQuality: "⊕⊕⊕ (Rec 25), ⊕⊕ (Rec 28)",
+      firedRules: [
+        "eshre-2025-rec-16",
+        "eshre-2025-rec-25",
+        "eshre-2025-rec-28",
+        "eshre-2025-rec-32",
+        "eshre-2025-rec-33",
+      ],
+      explanation: {
+        whySelected:
+          "Recombinant FSH (r-hFSH) and human menopausal gonadotropin (hp-hMG) are equally recommended for ovarian stimulation in normal responders (ESHRE 2025 Rec 25). Follitropin alfa, beta, and delta demonstrate equivalent clinical efficacy and live birth rates (Rec 33). In GnRH antagonist cycles, long-acting corifollitropin alfa is equally recommended to daily r-hFSH (Rec 32).",
+        supportingCharacteristics: [
+          `Expected response: ${expectedResponse}`,
+          age !== null ? `Age ${age} years` : null,
+          amh !== null ? `AMH ${amh} ng/mL` : null,
+          afc !== null ? `AFC ${afc}` : null,
+          "Standard ovarian reserve parameters",
+        ].filter((v): v is string => v !== null),
+        supportingGuideline: "ESHRE 2025 Ovarian Stimulation Guideline (Rec 16, 25, 28, 32, 33)",
+        supportingPublication: "Ata B. et al., Hum Reprod Open 2025",
+        clinicalComments:
+          "Conventional starting dose of 150–225 IU/day is recommended (Rec 16). Follitropin delta and follitropin alfa/beta are equally recommended (Rec 33).",
+      },
+    };
+  }
+
+  return {
+    patientId,
+    patientName,
+    summary,
+    cycleReview,
+    selection,
     dataSources,
     computedAt: new Date().toISOString(),
     version: GONADOTROPIN_ENGINE_VERSION,
@@ -304,15 +485,22 @@ export function buildGonadotropinSelection(
 /** Plain-text block the physician can paste into the final report. */
 export function gonadotropinReportText(r: GonadotropinSelectionResult): string {
   const s = r.summary;
+  const sel = r.selection;
   const na = "Not recorded";
+  const medName = (id: string | null) => {
+    if (!id) return "None";
+    const found = findGonadotropin(id);
+    return found ? `${found.name} (${found.type})` : id;
+  };
+
   return [
     "GONADOTROPIN SELECTION",
     `Patient: ${r.patientName}`,
     "",
     "Patient summary",
-    `- Age: ${s.age ?? na} | BMI: ${s.bmi ?? na}`,
+    `- Age: ${s.age !== null ? `${s.age} years` : na} | BMI: ${s.bmi !== null ? `${s.bmi} kg/m²` : na}`,
     `- Diagnosis: ${s.diagnosis.length ? s.diagnosis.join(", ") : na}`,
-    `- AMH: ${s.amh ?? na} | AFC: ${s.afc ?? na} | Basal FSH: ${s.fsh ?? na} | Basal LH: ${s.lh ?? na}`,
+    `- AMH: ${s.amh !== null ? `${s.amh} ng/mL` : na} | AFC: ${s.afc !== null ? `${s.afc} follicles` : na} | Basal FSH: ${s.fsh !== null ? `${s.fsh} IU/L` : na} | Basal LH: ${s.lh !== null ? `${s.lh} IU/L` : na}`,
     `- POSEIDON: ${s.poseidonGroup ?? "Not classified"}`,
     `- Bologna: ${s.bolognaStatus}`,
     `- Expected ovarian response: ${s.expectedResponse}`,
@@ -322,9 +510,14 @@ export function gonadotropinReportText(r: GonadotropinSelectionResult): string {
     `- History of poor response: ${s.poorResponseHistory ? "Yes" : "Not recorded"}`,
     `- History of hyper response: ${s.hyperResponseHistory ? "Yes" : "Not recorded"}`,
     "",
-    "Medication recommendation: Not available",
-    "Alternative options: Not available",
-    `Status: ${GONADOTROPIN_PENDING_MESSAGE}`,
+    `Medication recommendation: ${medName(sel.recommended)}`,
+    `Alternative options: ${sel.alternatives.length ? sel.alternatives.map((a) => medName(a)).join("; ") : "None"}`,
+    `Status: ${sel.status === "available" ? "Active (Evidence-Gated ESHRE 2025)" : sel.message}`,
+    sel.explanation.whySelected ? `Clinical Rationale: ${sel.explanation.whySelected}` : "",
+    sel.lhStrategy ? `LH Supplementation Strategy: ${sel.lhStrategy}` : "",
+    sel.negativeRecommendations?.length
+      ? `Negative Guidance / Cautions:\n${sel.negativeRecommendations.map((c) => `  * ${c}`).join("\n")}`
+      : "",
     "",
     "Previous cycle review",
     ...(r.cycleReview.length
@@ -336,5 +529,7 @@ export function gonadotropinReportText(r: GonadotropinSelectionResult): string {
     "",
     "Clinical notes: (to be completed by the consultant)",
     `Generated ${new Date(r.computedAt).toLocaleString()} · Gonadotropin Engine v${r.version}`,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 }

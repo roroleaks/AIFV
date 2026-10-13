@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
+  AlertTriangle,
   BookOpen,
   Check,
+  CheckCircle2,
   ChevronDown,
   ClipboardCopy,
   Database,
@@ -150,6 +152,9 @@ export function GonadotropinRecommendationCard({
       s.fsh === null ? "Basal FSH" : null,
     ].filter((v): v is string => v !== null),
   });
+
+  const recDrug = sel.recommended ? gonadotropinDatabase.find((g) => g.id === sel.recommended) : null;
+
   return (
     <Card
       icon={Pill}
@@ -160,12 +165,88 @@ export function GonadotropinRecommendationCard({
         </Badge>
       }
     >
-      {gate.active ? (
-        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3">
-          <p className="flex items-start gap-2 text-sm font-medium text-amber-700 dark:text-amber-400">
-            <Lock className="mt-0.5 size-4 shrink-0" />
-            {sel.message || GONADOTROPIN_PENDING_MESSAGE}
-          </p>
+      {gate.active && sel.status === "available" ? (
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="size-5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+                  Recommended Gonadotropin Preparation
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {sel.recommendationStrength && (
+                  <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300">
+                    {sel.recommendationStrength}
+                  </Badge>
+                )}
+                {sel.evidenceQuality && (
+                  <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/20 text-[11px] text-emerald-700 dark:text-emerald-300">
+                    Quality {sel.evidenceQuality}
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-2.5">
+              <h4 className="text-lg font-bold text-emerald-900 dark:text-emerald-100">
+                {recDrug ? recDrug.name : sel.recommended}
+              </h4>
+              <p className="mt-0.5 text-xs font-medium text-emerald-700/90 dark:text-emerald-300/90">
+                {recDrug?.type} · {recDrug?.route}
+              </p>
+            </div>
+
+            {sel.explanation.whySelected && (
+              <p className="mt-3 text-xs leading-relaxed text-emerald-800 dark:text-emerald-200">
+                {sel.explanation.whySelected}
+              </p>
+            )}
+          </div>
+
+          {sel.lhStrategy && (
+            <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-3.5">
+              <p className="text-xs font-semibold text-sky-800 dark:text-sky-300">
+                LH Supplementation Strategy
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-sky-700 dark:text-sky-300/90">
+                {sel.lhStrategy}
+              </p>
+            </div>
+          )}
+
+          {sel.alternatives.length > 0 && (
+            <div className="rounded-xl border border-border/70 bg-muted/20 p-3.5">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Guideline-Recognized Alternatives
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {sel.alternatives.map((altId) => {
+                  const alt = gonadotropinDatabase.find((g) => g.id === altId);
+                  return (
+                    <Badge key={altId} variant="secondary" className="px-2.5 py-1 text-xs">
+                      {alt ? alt.name : altId}
+                    </Badge>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {sel.negativeRecommendations && sel.negativeRecommendations.length > 0 && (
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-800 dark:text-amber-300">
+                <AlertTriangle className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                Negative Guidance & Practice Cautions
+              </div>
+              <ul className="mt-2 list-disc space-y-1 pl-4 text-xs text-amber-900/90 dark:text-amber-200/90">
+                {sel.negativeRecommendations.map((c, idx) => (
+                  <li key={idx}>{c}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       ) : (
         <EvidencePendingGate
@@ -175,13 +256,12 @@ export function GonadotropinRecommendationCard({
         />
       )}
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
         <Row label="Algorithm status" value={gate.statusLabel} />
         <Row label="Selection status" value={selectionStatusLabel[sel.status]} />
         <Row label="Engine version" value={`v${result.version}`} />
-        <Row label="Evidence sources required" value={`${gate.requiredEvidence.length}`} />
+        <Row label="Evidence sources active" value={`${gate.requiredEvidence.length} (ESHRE 2025)`} />
       </div>
-
 
       <Button
         variant="outline"
@@ -197,25 +277,20 @@ export function GonadotropinRecommendationCard({
       {open && (
         <div className="mt-3 grid gap-2">
           {[
-            { label: "Why this medication was selected", value: sel.explanation.whySelected },
             { label: "Supporting guideline", value: sel.explanation.supportingGuideline },
             { label: "Supporting publication", value: sel.explanation.supportingPublication },
             { label: "Clinical comments", value: sel.explanation.clinicalComments },
           ].map((f) => (
-            <Row key={f.label} label={f.label} value={f.value ?? "Reserved — not populated"} />
+            <Row key={f.label} label={f.label} value={f.value ?? "Not specified"} />
           ))}
           <Row
             label="Supporting patient characteristics"
             value={
               sel.explanation.supportingCharacteristics.length
                 ? sel.explanation.supportingCharacteristics.join(", ")
-                : "Reserved — not populated"
+                : "None recorded"
             }
           />
-          <p className="text-xs text-muted-foreground">
-            These fields are populated automatically once the evidence-based decision algorithms are
-            implemented. No medication, LH supplementation, hMG or dose is proposed in this release.
-          </p>
         </div>
       )}
     </Card>
