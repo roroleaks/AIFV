@@ -98,7 +98,10 @@ export function EvidencePendingGate({
           <AlertTriangle className="size-4" />
         </span>
         <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300">
-          {title ?? `${gate.name}: Evidence Pending`}
+          {title ??
+            (gate.status === "DATA_INCOMPLETE"
+              ? `${gate.name}: Data Incomplete`
+              : `${gate.name}: Evidence Pending`)}
         </h3>
         <Badge
           variant="outline"

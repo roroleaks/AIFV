@@ -271,7 +271,9 @@ export function ConsortDoseCard({ result }: { result: ConsortResult }) {
 
         {!gate.active && (
           <p className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/5 px-3.5 py-2.5 text-sm text-amber-700 dark:text-amber-400">
-            CONSORT dose calculation unavailable — validated methodology not activated.
+            {gate.status === "DATA_INCOMPLETE"
+              ? "CONSORT dose calculation pending complete patient variables (Age, BMI, Basal FSH, Antral Follicle Count)."
+              : "CONSORT dose calculation unavailable — validated methodology not activated."}
           </p>
         )}
 
@@ -536,7 +538,6 @@ export function ConsortSection({ result }: { result: ConsortResult }) {
       <ClinicalSafetyBanner />
       <EvidencePendingGate
         id="consort-dose"
-        title="CONSORT dose calculation unavailable — validated methodology not activated"
         options={{
           dataAvailable: result.variables
             .filter((v) => v.status === "available")

@@ -376,7 +376,7 @@ export function calculateConsortDose(
     clinicalNotes:
       dose === null
         ? [
-            "CONSORT dose calculation unavailable — validated methodology not activated. No starting dose, estimate or fallback is produced.",
+            "CONSORT dose calculation pending complete patient variables. No starting dose, estimate or fallback is produced.",
             "Final prescribing decisions remain the responsibility of the treating physician.",
           ]
         : consortClinicalNotes,
@@ -403,7 +403,7 @@ export function consortReportText(r: ConsortResult): string {
     ...r.history.map((h) => `- ${h.label}: ${h.value}`),
     "",
     r.dose === null
-      ? "Starting dose: CONSORT dose calculation unavailable — validated methodology not activated. No estimated or fallback dose is produced."
+      ? "Starting dose: Not calculated — complete patient variables required (Age, BMI, Basal FSH, AFC)."
       : `Calculated starting dose (validated CONSORT methodology): ${r.dose} IU/day`,
     `Medication: ${r.medication}`,
     `Calculation status: ${consortStatusLabel[r.status]}`,
