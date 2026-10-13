@@ -31,6 +31,7 @@ import {
 } from "@/lib/engine/consort-dose";
 import {
   CONSORT_FRAMEWORK_STATUS,
+  CONSORT_ACTIVE_COMPONENTS,
   CONSORT_MISSING_COMPONENTS,
   CONSORT_FOLL_LT11_NOTE,
   CONSORT_LOCK_NOTE,
@@ -402,34 +403,65 @@ export function ConsortFrameworkStatusCard() {
           </p>
           <p className="mt-1 text-xs text-muted-foreground">{f.frameworkDetail}</p>
         </div>
-        <div className="rounded-xl border border-amber-500/40 bg-amber-500/5 px-3.5 py-3">
-          <p className="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-400">
-            <XCircle className="size-4" /> {f.activeLabel} — not achieved
+        <div
+          className={cn(
+            "rounded-xl border px-3.5 py-3",
+            f.doseCalculationActive
+              ? "border-emerald-500/30 bg-emerald-500/5"
+              : "border-amber-500/40 bg-amber-500/5",
+          )}
+        >
+          <p
+            className={cn(
+              "flex items-center gap-2 text-sm font-semibold",
+              f.doseCalculationActive
+                ? "text-emerald-700 dark:text-emerald-400"
+                : "text-amber-700 dark:text-amber-400",
+            )}
+          >
+            {f.doseCalculationActive ? (
+              <Check className="size-4" />
+            ) : (
+              <XCircle className="size-4" />
+            )}
+            {f.activeLabel}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">{f.activeDetail}</p>
         </div>
       </div>
 
       <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-        Evidence required to activate
+        {f.doseCalculationActive
+          ? "Validated nomogram components"
+          : "Evidence required to activate"}
       </p>
       <ul className="mt-2 grid gap-1.5">
-        {CONSORT_MISSING_COMPONENTS.map((c) => (
-          <li
-            key={c.symbol}
-            className="flex flex-wrap items-baseline gap-x-2 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2"
-          >
-            <span className="font-mono text-sm font-semibold">{c.symbol}</span>
-            <span className="text-xs text-muted-foreground">{c.detail}</span>
-            <Badge variant="outline" className="ml-auto rounded-full text-[10px]">
-              Missing
-            </Badge>
-          </li>
-        ))}
+        {(f.doseCalculationActive ? CONSORT_ACTIVE_COMPONENTS : CONSORT_MISSING_COMPONENTS).map(
+          (c) => (
+            <li
+              key={c.symbol}
+              className="flex flex-wrap items-baseline gap-x-2 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2"
+            >
+              <span className="font-mono text-sm font-semibold">{c.symbol}</span>
+              <span className="text-xs text-muted-foreground">{c.detail}</span>
+              <Badge
+                variant="outline"
+                className={cn(
+                  "ml-auto rounded-full text-[10px]",
+                  "loaded" in c && c.loaded
+                    ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400"
+                    : "border-amber-500/40 text-amber-600 dark:text-amber-400",
+                )}
+              >
+                {"loaded" in c && c.loaded ? "Active" : "Missing"}
+              </Badge>
+            </li>
+          ),
+        )}
       </ul>
 
       <p className="mt-3 rounded-xl border border-border/60 bg-muted/30 px-3.5 py-2.5 text-[11px] text-muted-foreground">
-        {CONSORT_FOLL_LT11_NOTE} AMH is never substituted into the CONSORT equation.
+        {CONSORT_FOLL_LT11_NOTE} AMH is recorded for clinical context and safety evaluation.
       </p>
       <p className="mt-2 text-[11px] text-muted-foreground">{CONSORT_LOCK_NOTE}</p>
       <Button asChild size="sm" variant="outline" className="mt-3">

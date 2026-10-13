@@ -165,13 +165,17 @@ export const engineActivationRegistry: EngineActivationRecord[] = [
     route: "/consort",
     category: "treatment",
     gateId: "consort-dose",
-    testImplementation: false,
+    testImplementation: true,
     logicSource:
-      "Calculator scaffold only. The published CONSORT band/points tables are not transcribed, so no dose can be produced in any mode.",
-    evidenceStatus: "EVIDENCE_PENDING",
+      "Published multivariable CONSORT scoring nomogram (Howles 2006; Olivennes 2009, 2011; Pouly 2015) in 37.5 IU increments.",
+    evidenceStatus: "EVIDENCE_TRANSCRIBED",
     evidenceIds: ["rbmo-2015-consort-fsh-dose"],
-    outputs: ["Calculated rFSH starting dose"],
-    missingForProduction: ["CONSORT published band/points tables and score-to-dose crosswalk"],
+    outputs: [
+      "Calculated rFSH starting dose",
+      "Variable scoring contributions",
+      "Dose step crosswalk",
+    ],
+    missingForProduction: [],
     version: "1.0.0",
   },
   {

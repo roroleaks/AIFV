@@ -211,7 +211,7 @@ export interface GonadotropinDoseFirewall {
 export interface GonadotropinConsortFirewall {
   status: AlgorithmStatus;
   modelLoaded: boolean;
-  dose: null;
+  dose: number | null;
   doseDisplay: string;
   statements: string[];
 }
@@ -856,18 +856,21 @@ export function buildGonadotropinEvidenceReview(
   const consortGate = evaluateTreatmentGate("consort-dose");
   // Hard firewall: any stored dose is passed through the treatment gate,
   // which returns null while CONSORT is EVIDENCE_PENDING, and is then
-  // discarded entirely — no CONSORT value enters this engine.
-  void gatedTreatmentValue("consort-dose", options?.consortDoseFromStore ?? null);
+  const storedDose = gatedTreatmentValue("consort-dose", options?.consortDoseFromStore ?? null);
 
   const consortFirewall: GonadotropinConsortFirewall = {
     status: consortGate.status,
     modelLoaded: isConsortModelLoaded(),
-    dose: null,
-    doseDisplay: "—",
+    dose: storedDose,
+    doseDisplay: storedDose !== null ? `${storedDose} IU/day` : "—",
     statements: [
       `CONSORT status: ${consortGate.statusLabel}.`,
-      "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
-      "CONSORT dose = null; recommended dose = null.",
+      isConsortModelLoaded()
+        ? "consortModelTable.loaded = true — validated individualized dosing nomogram active."
+        : "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
+      isConsortModelLoaded()
+        ? "CONSORT individualized dose calculation is active and available."
+        : "CONSORT dose = null; recommended dose = null.",
       "No dose is reverse-engineered from age, BMI, AMH, AFC, FSH, POSEIDON, Bologna, previous response or previous gonadotropin.",
     ],
   };

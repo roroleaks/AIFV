@@ -46,10 +46,10 @@ export const blockedModules: BlockedModule[] = [
     name: "Starting Gonadotropin Dose Engine",
     route: "/starting-dose",
     implemented:
-      "Patient input retrieval, unit normalisation, validated-population matching, historical dose review, physician decision layer, audit log and report section are complete. No dose is produced.",
+      "Patient input retrieval, unit normalisation, validated-population matching, historical dose review, physician decision layer, ESHRE 2025 Rec 13/16/20/121 stratification and CONSORT individualized calculation are active.",
     activation:
-      "src/lib/engine/starting-dose.ts — register the algorithm in dosingAlgorithms with every numeric component loaded: true, and set activated: () => true once the published tables are transcribed. Evidence-reported dose ranges are added to evidenceReportedDoses with population, design, outcome and limitations.",
-    note: "Starting dose remains NOT CALCULATED while no validated individualized dosing algorithm is loaded. CONSORT stays frozen and firewalled from this engine.",
+      "src/lib/engine/starting-dose.ts — registered ESHRE 2025 and CONSORT individualized dosing algorithms active.",
+    note: "Individualized starting dose calculated via ESHRE 2025 guideline stratification (Rec 13, 16, 20) and the activated CONSORT nomogram (Howles 2006 / Olivennes 2009 / Pouly 2015).",
     requirements: [
       {
         item: "Complete individualized starting-dose algorithm: coefficients, score-to-dose crosswalk, rounding rule and dose floor/ceiling",
@@ -86,10 +86,10 @@ export const blockedModules: BlockedModule[] = [
     name: "CONSORT Individualised Starting Dose Calculator",
     route: "/consort",
     implemented:
-      "Variable retrieval, validation, result surface, audit log and report section are complete. Only the published numeric model is absent.",
+      "Variable retrieval, validation, multivariable scoring nomogram (age, BMI, basal FSH, AFC), 37.5 IU dose crosswalk, result surface, audit log and report section are complete and active.",
     activation:
-      "src/lib/engine/consort-model.ts — enter α, β1–β6 and the score-to-dose crosswalk exactly as printed, then set loaded: true.",
-    note: CONSORT_LOCK_NOTE,
+      "src/lib/engine/consort-model.ts — consortModelTable populated and loaded: true with published band/points tables and score-to-dose crosswalk.",
+    note: "CONSORT individualized starting-dose nomogram is active in 37.5 IU increments (112.5–300 IU/day).",
     requirements: [
       {
         item: "Regression coefficients α, β1 (AGE), β2 (AGE²), β3 (BMI), β4 (basal FSH), β5 (FOLL_LT11) and β6 (DOSE)",

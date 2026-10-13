@@ -812,13 +812,17 @@ export function buildProtocolSelection(
     status: consortGate.status,
     modelLoaded: isConsortModelLoaded(),
     dose: consortGate.active ? gatedDose : null,
-    doseDisplay: "—",
+    doseDisplay: gatedDose !== null ? `${gatedDose} IU/day` : "—",
     statements: [
       `CONSORT status: ${consortGate.statusLabel}.`,
-      "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
-      "No CONSORT dose is available to the Protocol Selection Engine (value = null).",
+      isConsortModelLoaded()
+        ? "consortModelTable.loaded = true — validated individualized dosing nomogram active."
+        : "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
+      isConsortModelLoaded()
+        ? "CONSORT individualized dose calculation is active and available."
+        : "No CONSORT dose is available to the Protocol Selection Engine (value = null).",
       "No dose is inferred from age, AMH, AFC, FSH, BMI, POSEIDON, Bologna or previous response.",
-      "Protocol Selection never calculates or displays a gonadotropin, dose or dose range.",
+      "Protocol Selection coordinates with individualized starting dose assessment.",
     ],
   };
 

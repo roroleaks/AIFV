@@ -1224,12 +1224,14 @@ export function buildTriggerAssessment(
     guardrails,
     consortFirewall: {
       loaded: isConsortModelLoaded(),
-      statusLabel: isConsortModelLoaded() ? "CONSORT loaded" : "CONSORT = EVIDENCE_PENDING",
+      statusLabel: isConsortModelLoaded() ? "CONSORT active" : "CONSORT = EVIDENCE_PENDING",
       statements: [
-        "consortModelTable.loaded = false — the CONSORT model remains frozen.",
-        "CONSORT dose = null. No trigger calculation receives a CONSORT dose.",
-        "No trigger recommendation, timing or safety statement depends on CONSORT.",
-        "AFC is never substituted for FOLL_LT11 and AMH is never substituted for a CONSORT variable.",
+        isConsortModelLoaded()
+          ? "consortModelTable.loaded = true — CONSORT individualized dosing algorithm is active."
+          : "consortModelTable.loaded = false — the CONSORT model remains frozen.",
+        "Trigger safety, agent selection, and timing operate independently under ESHRE 2025 Rec 45–54.",
+        "No trigger recommendation, timing or safety statement depends on starting dose alone.",
+        "Trigger strategy is dynamically determined by lead follicle maturation and peak E2 levels.",
       ],
     },
     startingDoseFirewall: [

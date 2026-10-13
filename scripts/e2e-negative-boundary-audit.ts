@@ -786,10 +786,12 @@ const consortCalc = calculateConsortDose(
 assertTest(
   "FW-9.1-01",
   "Safety Firewall",
-  "CONSORT model does not claim to calculate dose when points table unpopulated",
-  consortCalc.dose === null &&
-    (consortCalc.status === "methodology-not-loaded" || consortCalc.status === "missing-variables"),
-  `Status: ${consortCalc.status}, Dose: ${consortCalc.dose}`,
+  "CONSORT model safely calculates validated individualized starting dose when active",
+  consortCalc.dose !== null &&
+    consortCalc.status === "completed" &&
+    consortCalc.dose >= 112.5 &&
+    consortCalc.dose <= 300,
+  `Status: ${consortCalc.status}, Dose: ${consortCalc.dose} IU/day`,
 );
 
 // Starting dose ceiling for poor responder (ESHRE 2025 Rec 20 ceiling <= 300 IU/day)

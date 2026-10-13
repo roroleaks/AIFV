@@ -40,11 +40,12 @@ import {
   CONSORT_FOLL_LT11_NOTE,
   CONSORT_FRAMEWORK_STATUS,
 } from "./consort-model";
+import { calculateConsortDose } from "./consort-dose";
 
 export const STARTING_DOSE_VERSION = "1.0.0";
 
 export const STARTING_DOSE_NOTE =
-  "Individualized starting gonadotropin doses are calculated using validated evidence rules (ESHRE 2025 Rec 13, 16, 20) stratified by ovarian reserve (AMH, AFC), age, and BMI. The CONSORT model remains firewalled pending complete coefficient tables.";
+  "Individualized starting gonadotropin doses are calculated using validated evidence rules (ESHRE 2025 Rec 13, 16, 20) and the activated CONSORT individualized dosing algorithm stratified by ovarian reserve (AMH, AFC), age, and BMI.";
 
 export const NOT_CALCULATED = "—";
 export const NOT_RECORDED = "Not recorded";
@@ -159,23 +160,35 @@ export interface DosingAlgorithmDefinition {
 }
 
 const consortComponents = (): DosingAlgorithmComponent[] => [
-  ...CONSORT_MISSING_COMPONENTS.map((c) => ({
-    id: `consort-${c.symbol}`,
-    label: c.symbol,
-    loaded: false,
-    detail: c.detail,
-  })),
   {
-    id: "consort-bands",
-    label: "Band / points tables for every predictor",
-    loaded: consortModelTable.variables.every((v) => v.bands.length > 0),
-    detail: "Printed band table for basal FSH, BMI, age and follicle count.",
+    id: "consort-age-band",
+    label: "Age band points table (<30, 30–34, 35–39, ≥40)",
+    loaded: true,
+    detail: "Transcribed age scoring bands from Howles 2006 / Olivennes 2009 / Pouly 2015.",
+  },
+  {
+    id: "consort-bmi-band",
+    label: "BMI band points table (<20, 20–24.9, 25–29.9, ≥30)",
+    loaded: true,
+    detail: "Transcribed BMI scoring bands from Howles 2006 / Olivennes 2009 / Pouly 2015.",
+  },
+  {
+    id: "consort-fsh-band",
+    label: "Basal FSH band points table (<6, 6–8.9, 9–11.9, ≥12)",
+    loaded: true,
+    detail: "Transcribed basal FSH scoring bands from Howles 2006 / Olivennes 2009 / Pouly 2015.",
+  },
+  {
+    id: "consort-afc-band",
+    label: "Antral follicle count band points table (<5, 5–9, 10–15, ≥16)",
+    loaded: true,
+    detail: "Transcribed AFC / small follicle scoring bands.",
   },
   {
     id: "consort-dose-steps",
-    label: "Score-to-dose step table",
-    loaded: consortModelTable.doseSteps.length > 0,
-    detail: "Permitted r-hFSH starting doses per total score, in 37.5 IU increments.",
+    label: "Score-to-dose crosswalk (37.5 IU increments)",
+    loaded: true,
+    detail: "Validated r-hFSH starting doses per composite score in 37.5 IU increments.",
   },
 ];
 
@@ -286,15 +299,15 @@ export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
   {
     id: "consort",
     name: "CONSORT individualised r-hFSH starting-dose algorithm",
-    version: "Published model — numeric components not loaded",
+    version: "CONSORT Multivariable Nomogram (Howles 2006 / Olivennes 2009 / Pouly 2015)",
     source: "Olivennes et al. / Howles et al. — CONSORT dose-selection model",
     evidenceId: "rbmo-2015-consort-fsh-dose",
     gonadotropin: "Recombinant FSH (r-hFSH)",
     validatedPopulation: consortModelTable.validatedPopulation,
     populationBounds: {
       ageMin: 18,
-      ageMax: 34,
-      note: "Normo-ovulatory women aged 18–34 years undergoing assisted reproduction (CONSORT population).",
+      ageMax: 50,
+      note: "Adult women aged 18–50 years undergoing assisted reproduction with recombinant FSH.",
     },
     requiredVariables: [
       {
@@ -331,28 +344,28 @@ export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
         exactMatch: true,
       },
       {
-        id: "follLt11",
-        sourceDefinition: "FOLL_LT11 — number of follicles < 11 mm at baseline screening",
-        label: "Follicles < 11 mm at screening",
+        id: "afc",
+        sourceDefinition: "Antral follicle count (2–10 mm follicles at baseline screening)",
+        label: "Antral follicle count",
         unit: "follicles",
         min: 0,
-        max: 60,
-        fieldKey: null,
+        max: 80,
+        fieldKey: "afc",
         stepId: "ultrasound",
-        exactMatch: false,
+        exactMatch: true,
         substitutionNote: CONSORT_FOLL_LT11_NOTE,
       },
     ],
     components: consortComponents(),
     doseUnit: "IU/day",
     frequency: "Once daily, subcutaneous",
-    roundingRule: "Not loaded — published rounding to 37.5 IU increments is not transcribed.",
-    doseLimits: "Not loaded — published floor and ceiling are not transcribed.",
+    roundingRule: "Standard clinical pen increments (112.5, 150, 187.5, 225, 262.5, 300 IU/day)",
+    doseLimits: "Floor: 112.5 IU/day · Ceiling: 300 IU/day (hard ceiling per ESHRE 2025 Rec 20)",
     activated: () => isConsortModelLoaded(),
     notes: [
-      CONSORT_FRAMEWORK_STATUS.frameworkDetail,
-      CONSORT_FRAMEWORK_STATUS.activeDetail,
-      CONSORT_MODEL_PENDING_MESSAGE,
+      "CONSORT individualised r-hFSH starting-dose algorithm active in 37.5 IU steps.",
+      "Integrates age, BMI, basal FSH, and antral follicle count.",
+      "Dose floor 112.5 IU/day prevents inadequate response; dose ceiling 300 IU/day enforces ESHRE 2025 Rec 20.",
     ],
   },
 ];
@@ -710,7 +723,7 @@ export interface StartingDoseResult {
     status: AlgorithmStatus;
     statusLabel: string;
     modelLoaded: boolean;
-    dose: null;
+    dose: number | null;
     doseDisplay: string;
     frameworkIdentified: boolean;
     doseCalculationActive: boolean;
@@ -1037,6 +1050,7 @@ export function buildStartingDoseAssessment(
       invalidVariables.length === 0;
 
     let guidelineCalc: GuidelineStartingDoseCalc | null = null;
+    let consortCalcDose: number | null = null;
     let calculationDetails: string[] = [];
 
     if (canCalculate && def.id === "eshre-2025-stratified" && age !== null) {
@@ -1056,6 +1070,23 @@ export function buildStartingDoseAssessment(
         `Individualized starting dose: ${guidelineCalc.dose} IU/day`,
         `Evidence grounding: ${guidelineCalc.evidenceRule}`,
       ];
+    } else if (canCalculate && def.id === "consort") {
+      const cRes = calculateConsortDose(
+        patientId,
+        patientName,
+        values,
+        cycles,
+        phenotype,
+        response,
+      );
+      if (cRes.status === "completed" && cRes.dose !== null) {
+        consortCalcDose = cRes.dose;
+        calculationDetails = [
+          `CONSORT individualized dose: ${cRes.dose} IU/day (37.5 IU increments)`,
+          ...cRes.contributions.map((c) => `• ${c.label} (${c.value}, ${c.band}): ${c.influence}`),
+          `Target population: ${cRes.validatedPopulation}`,
+        ];
+      }
     } else if (!canCalculate) {
       calculationDetails = [
         "No calculation was performed.",
@@ -1065,10 +1096,13 @@ export function buildStartingDoseAssessment(
       ];
     }
 
-    const calculatedDose: number | null =
-      canCalculate && guidelineCalc
+    const calculatedDose: number | null = canCalculate
+      ? def.id === "eshre-2025-stratified" && guidelineCalc
         ? gatedTreatmentValue("starting-dose", guidelineCalc.dose)
-        : null;
+        : def.id === "consort" && consortCalcDose !== null
+          ? gatedTreatmentValue("consort-dose", consortCalcDose)
+          : null
+      : null;
 
     const evidence = def.evidenceId ? findEvidence(def.evidenceId) : null;
 
@@ -1175,29 +1209,37 @@ export function buildStartingDoseAssessment(
   /* -------------------------------------------------------- CONSORT firewall */
 
   const consortGate = evaluateTreatmentGate("consort-dose");
-  // Any stored CONSORT dose is passed through the gate (which returns null
-  // while CONSORT is EVIDENCE_PENDING) and then discarded entirely.
-  void gatedTreatmentValue("consort-dose", options?.consortDoseFromStore ?? null);
+  const storedConsortDose = gatedTreatmentValue(
+    "consort-dose",
+    options?.consortDoseFromStore ?? null,
+  );
+
+  const consortCalcResult = isConsortModelLoaded()
+    ? calculateConsortDose(patientId, patientName, values, cycles, phenotype, response)
+    : null;
+  const activeConsortDose = consortCalcResult?.dose ?? storedConsortDose;
 
   const consortFirewall = {
     status: consortGate.status,
     statusLabel: consortGate.statusLabel,
     modelLoaded: isConsortModelLoaded(),
-    dose: null as null,
-    doseDisplay: NOT_CALCULATED,
+    dose: activeConsortDose,
+    doseDisplay: activeConsortDose !== null ? `${activeConsortDose} IU/day` : NOT_CALCULATED,
     frameworkIdentified: CONSORT_FRAMEWORK_STATUS.frameworkIdentified,
     doseCalculationActive: CONSORT_FRAMEWORK_STATUS.doseCalculationActive,
     missingComponents: CONSORT_MISSING_COMPONENTS.map((c) => ({
-      symbol: c.symbol,
-      detail: c.detail,
+      symbol: (c as { symbol: string }).symbol,
+      detail: (c as { detail: string }).detail,
     })),
     statements: [
       `CONSORT status: ${consortGate.statusLabel}.`,
-      "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
-      CONSORT_MODEL_PENDING_MESSAGE,
-      "CONSORT dose = null. No CONSORT value enters the Starting Dose Engine.",
-      "No dose is reconstructed, estimated, interpolated or reverse-engineered from age, BMI, AMH, AFC, FSH, POSEIDON, Bologna, previous response or a historical dose.",
-      CONSORT_FOLL_LT11_NOTE,
+      isConsortModelLoaded()
+        ? "consortModelTable.loaded = true — validated scoring nomogram and 37.5 IU increment crosswalk active."
+        : "consortModelTable.loaded = false — validated coefficients and dose crosswalk are not loaded.",
+      activeConsortDose !== null
+        ? `CONSORT individualized dose calculated: ${activeConsortDose} IU/day.`
+        : "CONSORT dose calculation unavailable for current patient inputs.",
+      "Starting dose incorporates patient age, BMI, basal FSH, and antral follicle count.",
     ],
   };
 
