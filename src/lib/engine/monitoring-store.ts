@@ -15,22 +15,27 @@ const EVENT = "ivf-monitoring-changed";
 
 type Store = Record<string, MonitoringVisit[]>;
 
+import { DEFAULT_VIRTUAL_MONITORING } from "../assessment/virtual-patients-data";
+
 function read(): Store {
-  if (typeof window === "undefined") return {};
+  if (typeof window === "undefined") return DEFAULT_VIRTUAL_MONITORING;
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return {};
+    if (!raw) {
+      write(DEFAULT_VIRTUAL_MONITORING);
+      return DEFAULT_VIRTUAL_MONITORING;
+    }
     const parsed = JSON.parse(raw) as Store;
     // Repair records written by earlier builds so a missing field can never
     // crash the monitoring, trigger or report chain.
     return Object.fromEntries(
-      Object.entries(parsed).map(([id, list]) => [
+      Object.entries({ ...DEFAULT_VIRTUAL_MONITORING, ...parsed }).map(([id, list]) => [
         id,
         (Array.isArray(list) ? list : []).map(normalizeVisit),
       ]),
     );
   } catch {
-    return {};
+    return DEFAULT_VIRTUAL_MONITORING;
   }
 }
 

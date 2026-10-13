@@ -24,13 +24,20 @@ export interface PatientRecord {
   cycleRecords: CycleRecord[];
 }
 
+import { DEFAULT_VIRTUAL_PATIENTS } from "./virtual-patients-data";
+
 const read = (): PatientRecord[] => {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return DEFAULT_VIRTUAL_PATIENTS;
   try {
     const raw = window.localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as PatientRecord[]) : [];
+    if (!raw) {
+      write(DEFAULT_VIRTUAL_PATIENTS);
+      return DEFAULT_VIRTUAL_PATIENTS;
+    }
+    const parsed = JSON.parse(raw) as PatientRecord[];
+    return parsed.length > 0 ? parsed : DEFAULT_VIRTUAL_PATIENTS;
   } catch {
-    return [];
+    return DEFAULT_VIRTUAL_PATIENTS;
   }
 };
 
