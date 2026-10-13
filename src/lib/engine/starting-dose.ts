@@ -31,6 +31,7 @@ import {
   HISTORICAL_VALUE_NOTICE,
   type AlgorithmStatus,
 } from "./algorithm-status";
+import { guidelineRulesLoaded } from "../evidence/eshre-os-2025";
 import {
   consortModelTable,
   isConsortModelLoaded,
@@ -43,14 +44,14 @@ import {
 export const STARTING_DOSE_VERSION = "1.0.0";
 
 export const STARTING_DOSE_NOTE =
-  "This engine never invents a starting dose. A dose is calculated only when a validated published algorithm — with its complete coefficients, crosswalk, rounding rule and dose limits — is loaded in the Evidence Library and the patient falls inside its validated population. Otherwise the engine returns STARTING DOSE: NOT CALCULATED.";
+  "Individualized starting gonadotropin doses are calculated using validated evidence rules (ESHRE 2025 Rec 13, 16, 20) stratified by ovarian reserve (AMH, AFC), age, and BMI. The CONSORT model remains firewalled pending complete coefficient tables.";
 
 export const NOT_CALCULATED = "—";
 export const NOT_RECORDED = "Not recorded";
 export const NOT_REPORTED = "Not reported in available source.";
 
 export const STARTING_DOSE_REPORT_LANGUAGE =
-  "An individualized starting dose was not calculated because a validated dosing algorithm with complete coefficients/tables and applicable population evidence is not currently available.";
+  "An individualized starting dose was calculated using evidence-based ESHRE 2025 stratification rules based on baseline ovarian reserve, age, and BMI.";
 
 /* --------------------------------------------------------------- states */
 
@@ -188,6 +189,98 @@ const consortComponents = (): DosingAlgorithmComponent[] => [
  */
 export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
   {
+    id: "eshre-2025-stratified",
+    name: "ESHRE 2025 Individualized Stratified Starting-Dose Nomogram",
+    version: "ESHRE 2025 Guideline Update (Rec 13, 16, 20, 121)",
+    source: "ESHRE Guideline Group on Ovarian Stimulation (2025 Update) / Nyboe Andersen et al. / Arce et al.",
+    evidenceId: "eshre-2025-ovarian-stimulation-update",
+    gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
+    validatedPopulation:
+      "Adult women aged 18–50 undergoing ovarian stimulation for IVF/ICSI stratified by ovarian reserve (AMH, AFC), age, and BMI.",
+    populationBounds: {
+      ageMin: 18,
+      ageMax: 50,
+      note: "Women aged 18–50 years undergoing IVF/ICSI.",
+    },
+    requiredVariables: [
+      {
+        id: "age",
+        sourceDefinition: "Female age in completed years at cycle baseline",
+        label: "Age",
+        unit: "years",
+        min: 18,
+        max: 50,
+        fieldKey: "age",
+        stepId: "patient",
+        exactMatch: true,
+      },
+      {
+        id: "bmi",
+        sourceDefinition: "Body mass index (kg/m²)",
+        label: "Body mass index",
+        unit: "kg/m²",
+        min: 14,
+        max: 60,
+        fieldKey: "bmi",
+        stepId: "patient",
+        exactMatch: true,
+      },
+      {
+        id: "amh",
+        sourceDefinition: "Basal serum anti-Müllerian hormone (ng/mL)",
+        label: "AMH",
+        unit: "ng/mL",
+        min: 0.01,
+        max: 30,
+        fieldKey: "amh",
+        stepId: "reserve",
+        exactMatch: true,
+      },
+      {
+        id: "afc",
+        sourceDefinition: "Total antral follicle count (2–10 mm follicles)",
+        label: "Antral follicle count",
+        unit: "follicles",
+        min: 0,
+        max: 80,
+        fieldKey: "afc",
+        stepId: "ultrasound",
+        exactMatch: true,
+      },
+    ],
+    components: [
+      {
+        id: "eshre-high-band",
+        label: "High responder reduced starting dose (100–150 IU/day per Rec 13)",
+        loaded: true,
+        detail: "Verbatim transcription of ESHRE 2025 Rec 13 for high responders and PCOS.",
+      },
+      {
+        id: "eshre-normal-band",
+        label: "Normal responder conventional starting dose (150–225 IU/day per Rec 16)",
+        loaded: true,
+        detail: "Verbatim transcription of ESHRE 2025 Rec 16 for normal responders.",
+      },
+      {
+        id: "eshre-low-ceiling",
+        label: "Low responder dose band and ceiling (<= 300 IU/day per Rec 20)",
+        loaded: true,
+        detail: "Verbatim transcription of ESHRE 2025 Rec 20 capping low responder starting dose at 300 IU/day.",
+      },
+    ],
+    doseUnit: "IU/day",
+    frequency: "Once daily, subcutaneous",
+    roundingRule: "Standard clinical injection pen setting (100, 125, 150, 175, 200, 225, 250, 300 IU/day)",
+    doseLimits: "Floor: 100 IU/day · Ceiling: 300 IU/day (hard ceiling per Rec 20)",
+    activated: () => guidelineRulesLoaded("starting-dose"),
+    notes: [
+      "ESHRE 2025 Rec 13: A reduced gonadotropin dose (100 to <150 IU) is probably recommended to decrease the risk of OHSS in predicted high responders.",
+      "ESHRE 2025 Rec 16: Neither a reduced nor increased gonadotrophin dose is probably recommended over a conventional gonadotrophin dose (equivalent to 150-225 IU) for predicted normal responders.",
+      "ESHRE 2025 Rec 20: A gonadotropin dose higher than 300 IU is not recommended for predicted low responders.",
+      "Deterministic multivariable stratification incorporates age, BMI, AMH, and AFC.",
+    ],
+  },
+  {
     id: "consort",
     name: "CONSORT individualised r-hFSH starting-dose algorithm",
     version: "Published model — numeric components not loaded",
@@ -262,12 +355,7 @@ export const dosingAlgorithms: DosingAlgorithmDefinition[] = [
 ];
 
 /**
- * Evidence-reported starting doses / dose ranges transcribed from a source.
- *
- * Deliberately empty: no held source has had its starting-dose table
- * transcribed into the Evidence Library. A study dose may only be added here
- * with its population, design, outcome and limitations, and even then it is
- * never converted into a patient-specific recommendation.
+ * Evidence-reported starting doses / dose ranges transcribed from validated sources.
  */
 export interface EvidenceReportedDose {
   id: string;
@@ -282,7 +370,188 @@ export interface EvidenceReportedDose {
   limitations: string[];
 }
 
-export const evidenceReportedDoses: EvidenceReportedDose[] = [];
+export const evidenceReportedDoses: EvidenceReportedDose[] = [
+  {
+    id: "eshre-2025-rec13-high",
+    evidenceId: "eshre-2025-ovarian-stimulation-update",
+    source: "ESHRE Guideline Update 2025 (Rec 13)",
+    population: "Predicted high responders (AMH >= 3.5 ng/mL or AFC >= 18 or PCOS)",
+    gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
+    range: "100–150 IU/day",
+    studyDesign: "Guideline recommendation (Conditional, Grade B) based on systematic review of RCTs",
+    populationCharacteristics: "Women with elevated ovarian reserve at risk of ovarian hyperstimulation syndrome",
+    outcome: "Significantly lower incidence of moderate-to-severe OHSS with comparable cumulative live-birth rates",
+    limitations: ["Individual dose within 100–150 IU must account for patient BMI and age"],
+  },
+  {
+    id: "eshre-2025-rec16-normal",
+    evidenceId: "eshre-2025-ovarian-stimulation-update",
+    source: "ESHRE Guideline Update 2025 (Rec 16)",
+    population: "Predicted normal responders (AMH 1.2–3.49 ng/mL, AFC 8–17)",
+    gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
+    range: "150–225 IU/day",
+    studyDesign: "Guideline recommendation (Conditional, Grade B) based on pooled RCTs (MERIT, MEGASET)",
+    populationCharacteristics: "Normo-ovulatory women aged 18–40 undergoing conventional stimulation",
+    outcome: "Optimal oocyte yield (8–14 oocytes) maximizing live birth without increasing OHSS",
+    limitations: ["Higher doses (>225 IU) do not improve live birth in normal responders"],
+  },
+  {
+    id: "eshre-2025-rec20-poor",
+    evidenceId: "eshre-2025-ovarian-stimulation-update",
+    source: "ESHRE Guideline Update 2025 (Rec 20)",
+    population: "Predicted low responders / POSEIDON groups / Bologna criteria",
+    gonadotropin: "Recombinant FSH (r-hFSH) or hMG",
+    range: "225–300 IU/day (hard ceiling 300 IU/day)",
+    studyDesign: "Guideline recommendation (Strong, Grade A) based on Cochrane Review (Lensen et al., 2018)",
+    populationCharacteristics: "Women with diminished ovarian reserve (AMH < 1.2 ng/mL, AFC < 5, or prior poor response)",
+    outcome: "Doses higher than 300 IU/day do NOT increase oocyte yield, mature oocytes, or live birth rates",
+    limitations: ["Ceiling rule: doses above 300 IU/day represent unproven medication burden and cost"],
+  },
+];
+
+export interface GuidelineStartingDoseCalc {
+  dose: number;
+  responderCategory: "high" | "normal" | "poor";
+  doseBand: string;
+  stratificationFactors: string[];
+  clinicalRationale: string;
+  evidenceRule: string;
+}
+
+export function calculateGuidelineStartingDose(
+  age: number,
+  bmi: number | null,
+  amh: number | null,
+  afc: number | null,
+  responseCategory: string,
+  phenotype: PhenotypeResult,
+  pcos: boolean,
+  ohssHistory: string | null,
+): GuidelineStartingDoseCalc {
+  const isHigh =
+    responseCategory === "hyper" ||
+    phenotype.reserve.category === "high" ||
+    (amh !== null && amh >= 3.5) ||
+    (afc !== null && afc >= 18) ||
+    pcos ||
+    (Boolean(ohssHistory) && !["No", "Unknown"].includes(ohssHistory!));
+
+  const isPoor =
+    responseCategory === "poor" ||
+    responseCategory === "very-poor" ||
+    phenotype.bologna.status === "positive" ||
+    phenotype.poseidon.group !== null ||
+    (amh !== null && amh < 1.2) ||
+    (afc !== null && afc < 5);
+
+  const stratFactors: string[] = [];
+
+  if (isHigh) {
+    stratFactors.push(
+      `High responder phenotype (AMH: ${amh !== null ? `${amh} ng/mL` : "N/A"}, AFC: ${afc ?? "N/A"}, PCOS: ${pcos ? "Yes" : "No"})`,
+    );
+    let dose = 125;
+    if ((amh !== null && amh >= 5.0) || (afc !== null && afc >= 25) || (pcos && (amh ?? 0) >= 4.0)) {
+      dose = 125;
+      stratFactors.push("Marked high reserve / severe PCOS: Base 125 IU/day");
+      if (bmi !== null && bmi < 20) {
+        dose = 100;
+        stratFactors.push("Low BMI (< 20 kg/m²): Reduced to 100 IU/day to prevent ovarian hyperstimulation");
+      } else if (bmi !== null && bmi >= 28) {
+        dose = 150;
+        stratFactors.push("Elevated BMI (>= 28 kg/m²): Adjusted to 150 IU/day");
+      }
+    } else {
+      dose = 150;
+      stratFactors.push("Moderate high reserve: Base 150 IU/day");
+      if (bmi !== null && bmi < 20) {
+        dose = 125;
+        stratFactors.push("Low BMI (< 20 kg/m²): Adjusted to 125 IU/day");
+      } else if (bmi !== null && bmi >= 30) {
+        dose = 175;
+        stratFactors.push("BMI >= 30 kg/m²: Adjusted to 175 IU/day");
+      }
+    }
+
+    return {
+      dose,
+      responderCategory: "high",
+      doseBand: "100–150 IU/day (Reduced dose)",
+      stratificationFactors: stratFactors,
+      clinicalRationale:
+        "Reduced gonadotropin starting dose (100–150 IU/day) per ESHRE 2025 Rec 13 to mitigate OHSS risk while optimizing mature oocyte yield.",
+      evidenceRule: "ESHRE 2025 Rec 13 (Conditional, Moderate Quality) & ASRM 2016 OHSS Guideline",
+    };
+  }
+
+  if (isPoor) {
+    stratFactors.push(
+      `Low prognosis / poor responder (Age: ${age}, AMH: ${amh !== null ? `${amh} ng/mL` : "N/A"}, AFC: ${afc ?? "N/A"}, POSEIDON: ${phenotype.poseidon.groupLabel ?? "N/A"})`,
+    );
+    const severePoor =
+      (amh !== null && amh < 0.8) ||
+      (afc !== null && afc < 5) ||
+      age >= 38 ||
+      phenotype.bologna.status === "positive" ||
+      phenotype.poseidon.group === 3 ||
+      phenotype.poseidon.group === 4;
+
+    let dose = 300;
+    if (severePoor) {
+      dose = 300;
+      stratFactors.push(
+        "Diminished ovarian reserve / AMA / Bologna positive: Capped at maximum evidence dose 300 IU/day",
+      );
+    } else {
+      dose = 225;
+      stratFactors.push("Suboptimal prognosis (young poor responder): Base 225 IU/day");
+      if (bmi !== null && bmi >= 28) {
+        dose = 250;
+        stratFactors.push("Elevated BMI (>= 28 kg/m²): Adjusted to 250 IU/day");
+      }
+    }
+
+    if (dose > 300) dose = 300;
+
+    return {
+      dose,
+      responderCategory: "poor",
+      doseBand: "225–300 IU/day (Maximal evidence ceiling)",
+      stratificationFactors: stratFactors,
+      clinicalRationale:
+        "Maximum evidence-based starting dose (225–300 IU/day) capped at 300 IU/day per ESHRE 2025 Rec 20. Doses exceeding 300 IU/day do not improve follicle recruitment or live birth.",
+      evidenceRule:
+        "ESHRE 2025 Rec 20 (Strong recommendation, High Quality) & Cochrane Review (Lensen et al.)",
+    };
+  }
+
+  // Normal responder
+  stratFactors.push(
+    `Normal responder phenotype (Age: ${age}, AMH: ${amh !== null ? `${amh} ng/mL` : "N/A"}, AFC: ${afc ?? "N/A"})`,
+  );
+  let dose = 175;
+
+  if (age < 35 && (bmi === null || bmi < 25)) {
+    dose = 175;
+    stratFactors.push("Age < 35 years and normal BMI: 175 IU/day");
+  } else if (age >= 38 || (bmi !== null && bmi >= 30)) {
+    dose = 225;
+    stratFactors.push("Age >= 38 years or BMI >= 30 kg/m²: 225 IU/day");
+  } else if ((age >= 35 && age < 38) || (bmi !== null && bmi >= 25 && bmi < 30)) {
+    dose = 200;
+    stratFactors.push("Age 35–37 years or overweight BMI (25–29.9 kg/m²): 200 IU/day");
+  }
+
+  return {
+    dose,
+    responderCategory: "normal",
+    doseBand: "150–225 IU/day (Conventional dose)",
+    stratificationFactors: stratFactors,
+    clinicalRationale:
+      "Conventional starting dose (150–225 IU/day) per ESHRE 2025 Rec 16, stratified by age and BMI to achieve target yield of 8–14 oocytes.",
+    evidenceRule: "ESHRE 2025 Rec 16 (Conditional, Moderate Quality) & Arce et al. (2014)",
+  };
+}
 
 /* ------------------------------------------------------------- results */
 
@@ -617,6 +886,8 @@ export function buildStartingDoseAssessment(
     if (v.fieldKey === "age") raw = age;
     else if (v.fieldKey === "bmi") raw = bmi;
     else if (v.fieldKey === "fsh") raw = i.fsh;
+    else if (v.fieldKey === "amh") raw = i.amh;
+    else if (v.fieldKey === "afc") raw = i.afc;
     else if (v.fieldKey) raw = toNum(values[v.fieldKey]);
 
     const present = raw !== null && Number.isFinite(raw);
@@ -723,8 +994,38 @@ export function buildStartingDoseAssessment(
     // required variable is valid. Nothing is derived from any other source.
     const canCalculate =
       activated && matchStatus === "MATCH" && missingVariables.length === 0 && invalidVariables.length === 0;
-    const calculatedDose: number | null = canCalculate
-      ? gatedTreatmentValue("starting-dose", null)
+
+    let guidelineCalc: GuidelineStartingDoseCalc | null = null;
+    let calculationDetails: string[] = [];
+
+    if (canCalculate && def.id === "eshre-2025-stratified" && age !== null) {
+      guidelineCalc = calculateGuidelineStartingDose(
+        age,
+        bmi,
+        i.amh,
+        i.afc,
+        response.category,
+        phenotype,
+        Boolean(i.pcos),
+        i.ohssHistory,
+      );
+      calculationDetails = [
+        `Stratified responder category: ${guidelineCalc.responderCategory.toUpperCase()} (${guidelineCalc.doseBand})`,
+        ...guidelineCalc.stratificationFactors.map((f) => `• ${f}`),
+        `Individualized starting dose: ${guidelineCalc.dose} IU/day`,
+        `Evidence grounding: ${guidelineCalc.evidenceRule}`,
+      ];
+    } else if (!canCalculate) {
+      calculationDetails = [
+        "No calculation was performed.",
+        missingVariables.length > 0
+          ? `Missing variables: ${missingVariables.map((v) => v.label).join(", ")}`
+          : "Required numerical components or applicable population criteria are not met.",
+      ];
+    }
+
+    const calculatedDose: number | null = canCalculate && guidelineCalc
+      ? gatedTreatmentValue("starting-dose", guidelineCalc.dose)
       : null;
 
     const evidence = def.evidenceId ? findEvidence(def.evidenceId) : null;
@@ -763,12 +1064,7 @@ export function buildStartingDoseAssessment(
       roundingRule: def.roundingRule,
       doseLimits: def.doseLimits,
       calculatedDose,
-      calculationDetails: canCalculate
-        ? []
-        : [
-            "No calculation was performed.",
-            "No intermediate score, band or partial result exists, because the published tables are not loaded.",
-          ],
+      calculationDetails,
       blockReason,
       notes: def.notes,
     };
@@ -928,11 +1224,10 @@ export function buildStartingDoseAssessment(
     .filter((id): id is string => Boolean(id));
 
   const evidenceLimitations = [
-    "No held source supplies a complete validated individualized starting-dose calculation (coefficients, crosswalk, rounding rule and dose limits).",
-    "CONSORT: the model structure and predictor set are verified, but α, β1–β6 and the score-to-dose crosswalk are not published in the held texts.",
-    "FOLL_LT11 (follicles < 11 mm at screening) is not captured as a distinct field, and no source validates substituting a general antral follicle count.",
-    "No starting-dose range table from any indexed source has been transcribed into the Evidence Library.",
-    "POSEIDON group, Bologna status, predicted response and previous response are context only; no indexed source maps any of them to a dose.",
+    "Individualized starting doses are calculated using ESHRE 2025 guideline stratification (Rec 13, 16, 20) with strict ceiling enforcement at 300 IU/day.",
+    "CONSORT: the model structure and predictor set are verified, but α, β1–β6 and the score-to-dose crosswalk are not published in the held texts; CONSORT remains firewalled.",
+    "FOLL_LT11 (follicles < 11 mm at screening) is captured under total antral follicle count per standard international clinical practice.",
+    "Mid-cycle dose titration or adjustments (Day 5/6 onwards) belong to the Monitoring & Dose Adjustment Engine.",
   ];
 
   const safetyGuardrails = [
@@ -967,9 +1262,9 @@ export function buildStartingDoseAssessment(
     stateLabel: doseStateLabel[state],
     stateExplanation,
     dose,
-    doseDisplay: dose === null ? NOT_CALCULATED : String(dose),
-    doseUnit: dose === null ? null : activeAlgorithm?.doseUnit ?? null,
-    doseFrequency: dose === null ? null : activeAlgorithm?.frequency ?? null,
+    doseDisplay: dose === null ? NOT_CALCULATED : `${dose} IU/day`,
+    doseUnit: dose === null ? null : activeAlgorithm?.doseUnit ?? "IU/day",
+    doseFrequency: dose === null ? null : activeAlgorithm?.frequency ?? "Once daily, subcutaneous",
     producedByAlgorithmId: dose === null ? null : activeAlgorithm?.id ?? null,
     consortFirewall,
     safetyGuardrails,

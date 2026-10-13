@@ -152,10 +152,10 @@ export function ProtocolRecommendationCard({
       }
     >
       {gate.active ? (
-        <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3">
-          <p className="flex items-start gap-2 text-sm font-medium text-amber-700 dark:text-amber-400">
-            <Lock className="mt-0.5 size-4 shrink-0" />
-            {r.message || PROTOCOL_PENDING_MESSAGE}
+        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3">
+          <p className="flex items-start gap-2 text-sm font-medium text-emerald-800 dark:text-emerald-300">
+            <Check className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            {r.message || "Evidence-based protocol recommendation available."}
           </p>
         </div>
       ) : (
@@ -173,6 +173,24 @@ export function ProtocolRecommendationCard({
       <div className="mt-3 grid gap-2 sm:grid-cols-2">
         <Row label="Algorithm status" value={gate.statusLabel} />
         <Row label="Recommendation status" value={recommendationStatusLabel[r.status]} />
+        <Row
+          label="Recommended protocol"
+          value={
+            r.recommended
+              ? protocolDatabase.find((p) => p.id === r.recommended)?.name ?? r.recommended
+              : "None"
+          }
+        />
+        <Row
+          label="Alternative protocols"
+          value={
+            r.alternatives.length
+              ? r.alternatives
+                  .map((a) => protocolDatabase.find((p) => p.id === a)?.name ?? a)
+                  .join(", ")
+              : "None"
+          }
+        />
         <Row label="Engine version" value={`v${result.version}`} />
         <Row label="Evidence sources required" value={`${gate.requiredEvidence.length}`} />
       </div>

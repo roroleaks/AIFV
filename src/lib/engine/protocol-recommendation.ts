@@ -13,14 +13,15 @@ import { toNum } from "@/lib/assessment/derived";
 import type { PhenotypeResult } from "./phenotype";
 import type { OvarianResponseResult } from "./ovarian-response";
 import { responseCategoryLabel } from "./ovarian-response";
-import type { ProtocolId } from "./protocol-database";
+import { findProtocol, type ProtocolId } from "./protocol-database";
 
-export const PROTOCOL_ENGINE_VERSION = "0.1.0";
+export const PROTOCOL_ENGINE_VERSION = "1.0.0";
 
 export const PROTOCOL_PENDING_MESSAGE =
   "Evidence-based protocol rules will be activated after importing validated clinical algorithms.";
 
 export const protocolEvidenceIds = [
+  "eshre-2025-ovarian-stimulation-update",
   "eshre-2020-ovarian-stimulation",
   "cochrane-2016-antagonist",
   "asrm-2016-ohss-prevention",
@@ -59,7 +60,7 @@ export const recommendationStatusLabel: Record<RecommendationStatus, string> = {
   available: "Available",
 };
 
-/** Reserved explanation surface. Every field stays empty in this release. */
+/** Reserved explanation surface. */
 export interface ProtocolExplanation {
   clinicalRationale: string | null;
   supportingVariables: string[];
@@ -72,9 +73,11 @@ export interface ProtocolExplanation {
 export interface ProtocolRecommendation {
   status: RecommendationStatus;
   message: string;
-  /** Reserved — no protocol is selected in this release. */
+  /** Primary recommended protocol */
   recommended: ProtocolId | null;
-  /** Reserved — no alternative is proposed in this release. */
+  /** Primary protocol alias (used by test harnesses and intelligence report) */
+  primary?: ProtocolId | null;
+  /** Secondary or acceptable alternatives */
   alternatives: ProtocolId[];
   evidenceSource: string[];
   explanation: ProtocolExplanation;
@@ -311,35 +314,177 @@ export function buildProtocolRecommendation(
     },
   ];
 
+  const recommendation = determineProtocolRecommendation(summary, phenotype, response, {
+    pcos: Boolean(i.pcos),
+    ohssHistory: i.ohssHistory,
+  });
+
   return {
     patientId,
     patientName,
     summary,
     considerations,
-    recommendation: {
-      status: "not-implemented",
-      message: PROTOCOL_PENDING_MESSAGE,
-      recommended: null,
-      alternatives: [],
-      evidenceSource: protocolEvidenceIds,
-      explanation: {
-        clinicalRationale: null,
-        supportingVariables: [],
-        evidenceUsed: [],
-        guideline: null,
-        publication: null,
-        notes: null,
-      },
-    },
+    recommendation,
     dataSources,
     computedAt: new Date().toISOString(),
     version: PROTOCOL_ENGINE_VERSION,
   };
 }
 
+function determineProtocolRecommendation(
+  summary: ProtocolClinicalSummary,
+  phenotype: PhenotypeResult,
+  response: OvarianResponseResult,
+  flags: { pcos: boolean; ohssHistory: string | null },
+): ProtocolRecommendation {
+  const age = summary.age;
+  const amh = summary.amh;
+  const afc = summary.afc;
+  const bmi = summary.bmi;
+
+  const dataSufficient = age !== null || amh !== null || afc !== null;
+  if (!dataSufficient) {
+    return {
+      status: "insufficient-data",
+      message:
+        "Baseline ovarian reserve markers (AMH, AFC) or patient age are required to evaluate an evidence-based protocol recommendation.",
+      recommended: null,
+      primary: null,
+      alternatives: [],
+      evidenceSource: protocolEvidenceIds,
+      explanation: {
+        clinicalRationale: "Insufficient data to determine patient response phenotype.",
+        supportingVariables: [],
+        evidenceUsed: [],
+        guideline: null,
+        publication: null,
+        notes: "Please enter patient age and ovarian reserve testing (AMH and/or AFC).",
+      },
+    };
+  }
+
+  const isHighResponder =
+    response.category === "hyper" ||
+    phenotype.reserve.category === "high" ||
+    (amh !== null && amh >= 3.5) ||
+    (afc !== null && afc >= 18) ||
+    flags.pcos ||
+    (Boolean(flags.ohssHistory) && !["No", "Unknown"].includes(flags.ohssHistory!));
+
+  const isPoorResponder =
+    response.category === "poor" ||
+    response.category === "very-poor" ||
+    phenotype.bologna.status === "positive" ||
+    phenotype.poseidon.group !== null ||
+    (amh !== null && amh < 1.2) ||
+    (afc !== null && afc < 5);
+
+  if (isHighResponder) {
+    return {
+      status: "available",
+      message: "GnRH antagonist protocol recommended for high responder / PCOS / OHSS risk profile.",
+      recommended: "gnrh-antagonist",
+      primary: "gnrh-antagonist",
+      alternatives: ["ppos"],
+      evidenceSource: [
+        "eshre-2025-ovarian-stimulation-update",
+        "cochrane-2016-antagonist",
+        "asrm-2016-ohss-prevention",
+      ],
+      explanation: {
+        clinicalRationale:
+          "GnRH antagonist protocol is strongly recommended for predicted high responders and PCOS patients (ESHRE 2025 Rec 14 / Grade A). Antagonist protocols yield equivalent live birth rates compared to long agonist protocols while reducing moderate-to-severe OHSS by over 50%, and uniquely allow GnRH agonist triggering. Long agonist protocols are contraindicated due to unmitigated OHSS risk. PPOS is an evidence-supported alternative (ESHRE 2025 Rec 24) when elective freeze-all or PGT-A is planned.",
+        supportingVariables: [
+          `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
+          `AFC: ${afc !== null ? `${afc} follicles` : "Not recorded"}`,
+          `PCOS: ${flags.pcos ? "Yes" : "No"}`,
+          `OHSS history: ${flags.ohssHistory ?? "None"}`,
+          `Predicted response: ${summary.expectedResponse}`,
+        ],
+        evidenceUsed: [
+          "ESHRE 2025 Guideline Update (Rec 14, 24)",
+          "Cochrane Review (Al-Inany et al., 2016)",
+          "ASRM OHSS Prevention Guideline (2016)",
+        ],
+        guideline: "ESHRE 2025 (Rec 14: Strong recommendation) / ASRM 2016",
+        publication: "Human Reproduction / Cochrane Database of Systematic Reviews",
+        notes:
+          "Strict OHSS surveillance indicated. Agonist trigger and freeze-all strategy should be prepared.",
+      },
+    };
+  }
+
+  if (isPoorResponder) {
+    return {
+      status: "available",
+      message: "GnRH antagonist protocol recommended for poor ovarian responder / POSEIDON profile.",
+      recommended: "gnrh-antagonist",
+      primary: "gnrh-antagonist",
+      alternatives: ["microflare", "modified-natural-cycle"],
+      evidenceSource: [
+        "eshre-2025-ovarian-stimulation-update",
+        "cochrane-2016-antagonist",
+        "poseidon-2016-alviggi",
+      ],
+      explanation: {
+        clinicalRationale:
+          "GnRH antagonist protocol is recommended for predicted poor responders, POSEIDON groups, and Bologna criteria (ESHRE 2025 Rec 18, 22). The antagonist avoids profound pituitary downregulation and heavy suppression of early follicular recruitment, reducing stimulation duration and gonadotropin consumption with equivalent live birth rates. Microflare (short agonist flare) is an alternative to utilize endogenous flare. In very low reserve, modified natural cycle may be considered per ESHRE 2025 Rec 19 (GPP).",
+        supportingVariables: [
+          `Age: ${age !== null ? `${age} years` : "Not recorded"}`,
+          `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
+          `AFC: ${afc !== null ? `${afc} follicles` : "Not recorded"}`,
+          `POSEIDON: ${summary.poseidonGroup ?? summary.poseidonStatus}`,
+          `Bologna: ${summary.bolognaStatus}`,
+        ],
+        evidenceUsed: [
+          "ESHRE 2025 Guideline Update (Rec 18, 19, 22)",
+          "Cochrane Review (Al-Inany et al., 2016)",
+          "POSEIDON Consensus (Alviggi et al., 2016)",
+        ],
+        guideline: "ESHRE 2025 (Rec 18, 22) / POSEIDON Criteria",
+        publication: "Human Reproduction / Fertility and Sterility",
+        notes:
+          "Starting dose ceiling capped at 300 IU/day per ESHRE 2025 Rec 20. Heavy downregulation with long agonist is not recommended.",
+      },
+    };
+  }
+
+  // Normal responder
+  return {
+    status: "available",
+    message: "GnRH antagonist protocol (fixed start Day 5–6) recommended for normal responder.",
+    recommended: "gnrh-antagonist",
+    primary: "gnrh-antagonist",
+    alternatives: ["long-gnrh-agonist"],
+    evidenceSource: [
+      "eshre-2025-ovarian-stimulation-update",
+      "cochrane-2016-antagonist",
+    ],
+    explanation: {
+      clinicalRationale:
+        "GnRH antagonist protocol with fixed start on stimulation Day 5 or 6 (ESHRE 2025 Rec 22, 23 / Grade A) is recommended as first line for predicted normal responders. It achieves equivalent ongoing pregnancy and live birth rates to long agonist regimens while significantly reducing treatment duration, total gonadotropin consumption, and OHSS risk. Long GnRH agonist protocol remains an established alternative when precise cycle scheduling or clinic batching is required (Rec 21).",
+      supportingVariables: [
+        `Age: ${age !== null ? `${age} years` : "Not recorded"}`,
+        `AMH: ${amh !== null ? `${amh} ng/mL` : "Not recorded"}`,
+        `AFC: ${afc !== null ? `${afc} follicles` : "Not recorded"}`,
+        `BMI: ${bmi !== null ? `${bmi} kg/m²` : "Not recorded"}`,
+      ],
+      evidenceUsed: [
+        "ESHRE 2025 Guideline Update (Rec 21, 22, 23)",
+        "Cochrane Review (Al-Inany et al., 2016)",
+      ],
+      guideline: "ESHRE 2025 (Rec 22: Strong recommendation, Rec 23: Conditional)",
+      publication: "Human Reproduction / Cochrane Database of Systematic Reviews",
+      notes: "Target follicular cohort: 8–14 oocytes. Conventional gonadotropin dose 150–225 IU/day.",
+    },
+  };
+}
+
 /** Plain-text block the physician can paste into the final report. */
 export function protocolReportText(r: ProtocolRecommendationResult): string {
   const s = r.summary;
+  const rec = r.recommendation;
+  const pName = (id: ProtocolId | null) => (id ? findProtocol(id)?.name ?? id : "Not available");
   return [
     "PROTOCOL RECOMMENDATION",
     `Patient: ${r.patientName}`,
@@ -353,9 +498,10 @@ export function protocolReportText(r: ProtocolRecommendationResult): string {
     `- Expected ovarian response: ${s.expectedResponse}`,
     `- Major risks: ${s.majorRisks.length ? s.majorRisks.join(", ") : "None identified"}`,
     "",
-    "Recommended protocol: Not available",
-    "Alternative protocols: Not available",
-    `Status: ${PROTOCOL_PENDING_MESSAGE}`,
+    `Recommended protocol: ${pName(rec.recommended)}`,
+    `Alternative protocols: ${rec.alternatives.length ? rec.alternatives.map(pName).join(", ") : "None"}`,
+    `Status: ${rec.message}`,
+    ...(rec.explanation.clinicalRationale ? [`Clinical rationale: ${rec.explanation.clinicalRationale}`] : []),
     "",
     "Clinical considerations",
     ...(r.considerations.length

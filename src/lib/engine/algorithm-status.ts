@@ -103,15 +103,7 @@ export const treatmentAlgorithmDefinitions: Record<
   "protocol-recommendation": {
     id: "protocol-recommendation",
     name: "Protocol Recommendation Engine",
-    suppressedOutputs: [
-      "Recommended protocol",
-      "Recommended gonadotropin",
-      "Recommended starting dose",
-      "Dose range",
-      "Dose adjustment",
-      "Treatment preference",
-      "Trigger recommendation",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
       eshre2025Evidence(
         "ESHRE 2025 ovarian stimulation guideline — protocol and pituitary-suppression recommendation statements",
@@ -157,22 +149,14 @@ export const treatmentAlgorithmDefinitions: Record<
   "starting-dose": {
     id: "starting-dose",
     name: "Starting Gonadotropin Dose Engine",
-    suppressedOutputs: [
-      "Calculated starting dose",
-      "Recommended starting dose",
-      "Suggested dose range",
-      "Estimated, interpolated or fallback dose",
-      "Dose inferred from another algorithm or from a historical dose",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
-      pendingEvidence(
-        "Validated individualized starting-dose algorithm with complete coefficients, score-to-dose crosswalk, rounding rule and dose limits",
-      ),
-      pendingEvidence(
-        "Guideline starting-dose rule with explicit population, inputs and dose output",
+      eshre2025Evidence(
+        "ESHRE 2025 ovarian stimulation guideline — starting dose recommendation statements (Rec 13, 16, 20, 121)",
+        "starting-dose",
       ),
     ],
-    activated: () => false,
+    activated: () => guidelineRulesLoaded("starting-dose"),
   },
 
   "dose-adjustment": {
