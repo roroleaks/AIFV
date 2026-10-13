@@ -80,25 +80,25 @@ flowchart TD
 
 ## 🧬 Core Clinical Engines
 
-Located in [`ai-ivf-cdss/src/lib/engine/`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine):
+Located in [`ai-ivf-cdss/src/lib/engine/`](src/lib/engine):
 
 | Engine Module | File Source | Core Methodologies & Clinical Purpose |
 | :--- | :--- | :--- |
-| **Patient Validation** | [`types.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/types.ts) | Validates input completeness, flags physiological anomalies, normalizes units. |
-| **POSEIDON Classifier** | [`poseidon.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/poseidon.ts) | Classifies patients into **POSEIDON Groups 1–4** (and subgroups 1a/1b/2a/2b) based on age, AFC, AMH, and prior oocyte yield. |
-| **Bologna POR Criteria** | [`bologna.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/bologna.ts) | Evaluates ESHRE Bologna criteria for Poor Ovarian Response (Age $\ge 40$, prior POR $\le 3$ oocytes, AFC $< 5-7$, AMH $< 0.5-1.1$ ng/mL). |
-| **Response Phenotype** | [`phenotype.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/phenotype.ts) | Determines reserve phenotype (Normal, Expected Poor, Expected High, Hypo-responder, Hyper-responder). |
-| **Response Predictor** | [`ovarian-response.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/ovarian-response.ts) | Predicts oocyte yield ranges (Low $\le 3$, Sub-optimal $4-9$, Optimal $10-15$, High $> 15$), OHSS risk, cancellation probability. |
-| **Protocol Selection** | [`protocol-selection.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/protocol-selection.ts) | Recommends optimal stimulation protocol (GnRH Antagonist, Long Agonist, Microdose Flare, DuoStim, Modified Natural). |
-| **Gonadotropin Selection**| [`gonadotropin-selection.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/gonadotropin-selection.ts) | Evaluates rFSH vs. uFSH and scores rLH / hp-hMG addition for LH deficit, POSEIDON hypo-responders, and AMA. |
-| **Gonadotropin Evidence** | [`gonadotropin-evidence.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/gonadotropin-evidence.ts) | Cross-references RCTs and ESHRE guidelines to justify drug selection and LH supplementation. |
-| **CONSORT Nomogram** | [`consort-model.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/consort-model.ts) | Nomogram calculation estimating baseline rFSH starting dose based on basal FSH, BMI, age, and AFC. |
-| **Starting Dose Engine** | [`starting-dose.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/starting-dose.ts) | Integrates AMH, AFC, BMI, and prior response to calculate daily starting gonadotropin dose ($150 - 450\text{ IU/day}$). |
-| **Mid-Cycle Adjustment** | [`dose-adjustment.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/dose-adjustment.ts) | Analyzes day 5–8 follicular cohort dynamics and Estradiol trajectories to adjust daily dosage. |
-| **Stimulation Monitor** | [`monitoring.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/monitoring.ts) | Tracks folliculometry ($<10\text{mm}$, $10-13\text{mm}$, $14-16\text{mm}$, $\ge 17\text{mm}$), endometrial thickness, and $E_2$/$P_4$ curves. |
-| **Trigger Decision** | [`trigger.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/trigger.ts) | Calculates trigger timing, agent (Dual Trigger, GnRH Agonist alone, hCG), and freeze-all segmentation strategy for OHSS prevention. |
-| **Cycle Completion** | [`cycle-completion.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/cycle-completion.ts) | Retrospective quality & safety audit comparing predicted vs. actual oocyte yields to refine future algorithms. |
-| **Algorithm Governance** | [`algorithm-governance.ts`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/engine/algorithm-governance.ts) | Manages clinical rule versions, rule activation states, evidence tiers (Gold, Silver, Bronze), and physician override logs. |
+| **Patient Validation** | [`types.ts`](src/lib/engine/types.ts) | Validates input completeness, flags physiological anomalies, normalizes units. |
+| **POSEIDON Classifier** | [`poseidon.ts`](src/lib/engine/poseidon.ts) | Classifies patients into **POSEIDON Groups 1–4** (and subgroups 1a/1b/2a/2b) based on age, AFC, AMH, and prior oocyte yield. |
+| **Bologna POR Criteria** | [`bologna.ts`](src/lib/engine/bologna.ts) | Evaluates ESHRE Bologna criteria for Poor Ovarian Response (Age $\ge 40$, prior POR $\le 3$ oocytes, AFC $< 5-7$, AMH $< 0.5-1.1$ ng/mL). |
+| **Response Phenotype** | [`phenotype.ts`](src/lib/engine/phenotype.ts) | Determines reserve phenotype (Normal, Expected Poor, Expected High, Hypo-responder, Hyper-responder). |
+| **Response Predictor** | [`ovarian-response.ts`](src/lib/engine/ovarian-response.ts) | Predicts oocyte yield ranges (Low $\le 3$, Sub-optimal $4-9$, Optimal $10-15$, High $> 15$), OHSS risk, cancellation probability. |
+| **Protocol Selection** | [`protocol-selection.ts`](src/lib/engine/protocol-selection.ts) | Recommends optimal stimulation protocol (GnRH Antagonist, Long Agonist, Microdose Flare, DuoStim, Modified Natural). |
+| **Gonadotropin Selection**| [`gonadotropin-selection.ts`](src/lib/engine/gonadotropin-selection.ts) | Evaluates rFSH vs. uFSH and scores rLH / hp-hMG addition for LH deficit, POSEIDON hypo-responders, and AMA. |
+| **Gonadotropin Evidence** | [`gonadotropin-evidence.ts`](src/lib/engine/gonadotropin-evidence.ts) | Cross-references RCTs and ESHRE guidelines to justify drug selection and LH supplementation. |
+| **CONSORT Nomogram** | [`consort-model.ts`](src/lib/engine/consort-model.ts) | Nomogram calculation estimating baseline rFSH starting dose based on basal FSH, BMI, age, and AFC. |
+| **Starting Dose Engine** | [`starting-dose.ts`](src/lib/engine/starting-dose.ts) | Integrates AMH, AFC, BMI, and prior response to calculate daily starting gonadotropin dose ($150 - 450\text{ IU/day}$). |
+| **Mid-Cycle Adjustment** | [`dose-adjustment.ts`](src/lib/engine/dose-adjustment.ts) | Analyzes day 5–8 follicular cohort dynamics and Estradiol trajectories to adjust daily dosage. |
+| **Stimulation Monitor** | [`monitoring.ts`](src/lib/engine/monitoring.ts) | Tracks folliculometry ($<10\text{mm}$, $10-13\text{mm}$, $14-16\text{mm}$, $\ge 17\text{mm}$), endometrial thickness, and $E_2$/$P_4$ curves. |
+| **Trigger Decision** | [`trigger.ts`](src/lib/engine/trigger.ts) | Calculates trigger timing, agent (Dual Trigger, GnRH Agonist alone, hCG), and freeze-all segmentation strategy for OHSS prevention. |
+| **Cycle Completion** | [`cycle-completion.ts`](src/lib/engine/cycle-completion.ts) | Retrospective quality & safety audit comparing predicted vs. actual oocyte yields to refine future algorithms. |
+| **Algorithm Governance** | [`algorithm-governance.ts`](src/lib/engine/algorithm-governance.ts) | Manages clinical rule versions, rule activation states, evidence tiers (Gold, Silver, Bronze), and physician override logs. |
 
 ---
 
@@ -220,7 +220,7 @@ Executed inside `ai-ivf-cdss/`:
 The repository includes a comprehensive 14-engine verification script that validates clinical calculations across all patient profiles:
 
 ```bash
-npx tsx --tsconfig ai-ivf-cdss/tsconfig.json ai-ivf-cdss/test_all_engines.ts
+npx tsx scripts/engine-audit.ts
 ```
 
 The test runner evaluates:
@@ -236,7 +236,7 @@ The test runner evaluates:
 
 Developers and administrators can configure workspace options on the **Settings page** (`/_shell/settings`):
 
-- **Clinic Logo Upload**: Upload custom clinic logos (PNG, JPG, SVG, WebP up to 5MB). Images are stored as Data URLs and dynamically updated in the application header via [`useClinicSettings()`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/hooks/use-clinic-settings.ts).
+- **Clinic Logo Upload**: Upload custom clinic logos (PNG, JPG, SVG, WebP up to 5MB). Images are stored as Data URLs and dynamically updated in the application header via [`useClinicSettings()`](src/hooks/use-clinic-settings.ts).
 - **Clinic Name & Country**: Customizes patient report headers and app branding.
 - **Unit Preferences**: Toggle between SI units and Conventional laboratory units.
 - **Dark Theme Toggle**: Switches workspace theme globally.
@@ -245,7 +245,7 @@ Developers and administrators can configure workspace options on the **Settings 
 
 ## 📊 Intelligence Reports & Exports
 
-The Intelligence Report Engine ([`src/components/report/intelligence-report-view.tsx`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/components/report/intelligence-report-view.tsx)) provides multi-format data export options:
+The Intelligence Report Engine ([`src/components/report/intelligence-report-view.tsx`](src/components/report/intelligence-report-view.tsx)) provides multi-format data export options:
 
 - 📄 **Export PDF**: Opens print preview with dedicated print stylesheet.
 - 📝 **Download Markdown (`.md`)**: Structured clinical text output for EHR embedding.
@@ -257,7 +257,7 @@ The Intelligence Report Engine ([`src/components/report/intelligence-report-view
 
 ## 📚 Evidence Library & Master Registry
 
-Every clinical decision rule is linked to evidence cards indexed in [`src/lib/evidence/`](file:///c:/Users/raouf.RAOUFDESKTOP/Downloads/ivf/ai-ivf-cdss/src/lib/evidence):
+Every clinical decision rule is linked to evidence cards indexed in [`src/lib/evidence/`](src/lib/evidence):
 - **Grade A**: Randomized Controlled Trials (RCTs) & Cochrane Meta-analyses.
 - **Grade B**: Prospective cohort studies & ESHRE/ASRM guidelines.
 - **Grade C**: Retrospective series & international consensus.
@@ -282,4 +282,3 @@ Every clinical decision rule is linked to evidence cards indexed in [`src/lib/ev
 ---
 
 © 2026 AIFV Clinical Decision Support Systems. All rights reserved.
-l picture prior to making therapeutic decisions._
