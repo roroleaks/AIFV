@@ -1763,12 +1763,14 @@ function buildApplicationStatus(input: IntelligenceReportInput): ApplicationStat
     .filter((m) => m.implementation === "planned" || m.implementation === "not-implemented")
     .map((m) => ({ id: m.id, name: m.name }));
 
-  const missingEvidence = blockedModules.map((b) => ({
-    module: b.name,
-    items: b.requirements.map(
-      (r) => `${r.item} — ${r.source}${r.locator ? ` (${r.locator})` : ""}`,
-    ),
-  }));
+  const missingEvidence = blockedModules
+    .filter((b) => b.status !== "ACTIVE")
+    .map((b) => ({
+      module: b.name,
+      items: b.requirements
+        .filter((r) => r.status !== "satisfied")
+        .map((r) => `${r.item} — ${r.source}${r.locator ? ` (${r.locator})` : ""}`),
+    }));
 
   const { phenotype, response, protocol, gonadotropin, consort, monitoring, cycle } = input;
   const totalFields = 12;

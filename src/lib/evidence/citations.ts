@@ -271,12 +271,14 @@ export function modulesUsingEvidence(entryId: string, entryModules: string[]): M
       status,
       statusDetail: blocked ? `${detail} ${blocked.implemented}` : detail,
       missing:
-        blocked?.requirements.map((r) => ({
-          item: r.item,
-          kind: r.kind,
-          source: r.source,
-          locator: r.locator,
-        })) ?? [],
+        blocked?.requirements
+          .filter((r) => r.status !== "satisfied")
+          .map((r) => ({
+            item: r.item,
+            kind: r.kind,
+            source: r.source,
+            locator: r.locator,
+          })) ?? [],
     });
   };
 
