@@ -17,6 +17,7 @@ import {
 } from "@/lib/engine/consort-dose";
 import { saveConsortDose } from "@/lib/engine/consort-store";
 import { ConsortActions, ConsortSection } from "@/components/engine/consort-panel";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 
 const title = "CONSORT Starting Dose Calculator — IVF Ai Calc";
 const description =
@@ -93,10 +94,12 @@ function ConsortPage() {
   return (
     <>
       <PageHeader
-        eyebrow="CONSORT Calculator"
-        title="Individualized Starting Dose Calculator"
-        description="Calculates the individualized recombinant FSH starting dose using only the variables required by the validated CONSORT model — age, body mass index, basal FSH and antral follicle count. No dose is produced when a mandatory variable is missing, invalid or conflicting."
+        eyebrow="Specialized Engine · Stage 4 Starting Dose"
+        title="CONSORT Individualized Starting Dose Calculator"
+        description="Calculates the individualized recombinant FSH starting dose using the 4 variables of the validated CONSORT nomogram (Olivennes 2009/2011, Pouly 2015): age, body mass index, basal FSH and antral follicle count in 37.5 IU pen increments."
       />
+
+      <WorkflowStepper currentStage={4} className="my-4" />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

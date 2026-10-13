@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { BookOpen, Brain, CircleDashed, Database, Lock, Users } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import { SectionCard } from "@/components/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -191,10 +192,12 @@ function DecisionSupport() {
   return (
     <>
       <PageHeader
-        eyebrow="Patient Phenotype Engine"
-        title="Decision Support — Patient Phenotype"
-        description="One unified physician view combining the implemented assessment engines: POSEIDON classification, the Bologna poor-response definition and the recorded ovarian reserve biomarkers. Assessment only — no treatment, protocol, medication or dose is recommended."
+        eyebrow="Specialized Engine · Stage 2 Phenotype Synthesis"
+        title="Patient Phenotype & Knowledge Model"
+        description="One unified physician view combining the implemented assessment engines: POSEIDON classification, the Bologna poor-response definition and the recorded ovarian reserve biomarkers."
       />
+
+      <WorkflowStepper currentStage={2} className="my-4" />
 
       <PhenotypeDashboard />
 

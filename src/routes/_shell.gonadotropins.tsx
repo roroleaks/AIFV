@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Users } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import { GuidelineRecommendationsPanel } from "@/components/engine/guideline-panel";
 import { derivePopulationTags } from "@/lib/engine/guideline-context";
 import { Badge } from "@/components/ui/badge";
@@ -136,10 +137,12 @@ function GonadotropinsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Gonadotropin Selection"
-        title="Gonadotropin Selection Engine"
-        description="Evidence review of the gonadotropin preparations that have an indexed evidence record, with patient applicability, previous gonadotropin experience and a physician decision log. No medication is recommended and no dose, dose range or dose adjustment is produced. Organises every gonadotropin preparation and the patient information that future evidence-based selection rules will consume: phenotype, POSEIDON, Bologna, ovarian reserve, ovarian response, protocol framework and previous stimulation outcomes. No medication, LH supplementation or dose is recommended in this release."
+        eyebrow="Specialized Engine · Stage 4 Drug Regimen"
+        title="Gonadotropin Selection & Evidence Review"
+        description="Evidence review of recombinant and urinary gonadotropins (rFSH, HP-hMG, rLH) evaluating patient-specific indications per ESHRE 2025 Rec 25–36 for advanced reproductive age and poor responders."
       />
+
+      <WorkflowStepper currentStage={4} className="my-4" />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

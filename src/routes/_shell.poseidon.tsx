@@ -13,6 +13,7 @@ import { usePatients } from "@/lib/assessment/patients";
 import { classifyPoseidon } from "@/lib/engine/poseidon";
 import { POSEIDON_ENGINE_VERSION, savePoseidonAssessment } from "@/lib/engine/poseidon-store";
 import { logAudit } from "@/lib/engine/audit";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 
 const title = "POSEIDON Clinical Assessment — IVF Ai Calc";
 const description =
@@ -93,10 +94,12 @@ function PoseidonPage() {
   return (
     <div className="grid gap-6">
       <PageHeader
-        eyebrow="Clinical Intelligence Engine"
-        title="POSEIDON Clinical Assessment"
-        description="Evaluates the patient against the published POSEIDON criteria (Alviggi et al., 2016) and explains every step. Classification only — no treatment, protocol or medication is recommended."
+        eyebrow="Workflow Stage 2 of 8 · POSEIDON & Reserve Phenotyping"
+        title="2. POSEIDON Clinical Assessment"
+        description="Stage 2 of the clinical workflow: Evaluates the patient against published POSEIDON criteria (Alviggi et al., 2016) and ovarian reserve biomarker thresholds to stratify low prognosis risk."
       />
+
+      <WorkflowStepper currentStage={2} />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

@@ -27,6 +27,7 @@ import {
   buildProtocolSelection,
 } from "@/lib/engine/protocol-selection";
 import { ProtocolSelectionSection } from "@/components/engine/protocol-selection-panel";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 
 const title = "Protocol Selection Engine — IVF Ai Calc";
 const description =
@@ -121,10 +122,12 @@ function ProtocolsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Protocol Selection"
-        title="Protocol Selection Engine"
-        description="Evidence review of the ovarian stimulation protocol options documented in the Evidence Library, matched descriptively against this patient's phenotype, POSEIDON and Bologna status and previous cycle response. No protocol, gonadotropin, dose or trigger is recommended, and no CONSORT dose enters this engine."
+        eyebrow="Workflow Stage 3 of 8 · Protocol Selection"
+        title="3. Protocol Recommendation & Selection"
+        description="Stage 3 of the clinical workflow: Evaluates evidence-based ovarian stimulation protocol options (GnRH Antagonist vs Agonist) matched against patient phenotype and prior cycle response per ESHRE 2025 guidelines."
       />
+
+      <WorkflowStepper currentStage={3} className="my-4" />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

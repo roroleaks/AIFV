@@ -38,63 +38,143 @@ import { cn } from "@/lib/utils";
 
 const topNav = [
   { label: "Dashboard", to: "/dashboard" },
-  { label: "New Assessment", to: "/assessment" },
-  { label: "Patients", to: "/patients" },
-  { label: "Engine", to: "/engine" },
-  { label: "POSEIDON", to: "/poseidon" },
-  { label: "Reports", to: "/reports" },
-  { label: "Evidence Library", to: "/evidence" },
-  { label: "Settings", to: "/settings" },
-  { label: "Help", to: "/help" },
+  { label: "1. Assessment", to: "/assessment" },
+  { label: "2. POSEIDON", to: "/poseidon" },
+  { label: "3. Protocols", to: "/protocols" },
+  { label: "4. Starting Dose", to: "/starting-dose" },
+  { label: "5. Monitoring", to: "/monitoring" },
+  { label: "6. Trigger", to: "/trigger" },
+  { label: "7. Completion", to: "/cycle-completion" },
+  { label: "8. Reports", to: "/reports" },
+  { label: "Evidence", to: "/evidence" },
 ] as const;
 
-const sideNav = [
-  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-  { label: "Patient Assessment", to: "/assessment", icon: ClipboardPlus },
-  { label: "Clinical Calculator", to: "/calculator", icon: Calculator },
-  { label: "Intelligence Engine", to: "/engine", icon: Cpu },
-  { label: "POSEIDON Clinical Assessment", to: "/poseidon", icon: Compass },
-  { label: "Patient Phenotype Engine", to: "/decision-support", icon: Brain },
-  { label: "Protocol Recommendation", to: "/protocols", icon: Stethoscope },
-  { label: "Gonadotropin Selection", to: "/gonadotropins", icon: Pill },
-  { label: "Starting Dose Engine", to: "/starting-dose", icon: Syringe },
-  { label: "CONSORT Starting Dose", to: "/consort", icon: Syringe },
-  { label: "Monitoring & Dose Adjustment", to: "/monitoring", icon: Activity },
-  { label: "Trigger Decision & Safety", to: "/trigger", icon: Syringe },
-  { label: "Cycle Completion & Safety", to: "/cycle-completion", icon: ShieldCheck },
+export interface NavItem {
+  label: string;
+  to: string;
+  icon: typeof LayoutDashboard;
+  stageNumber?: number;
+}
 
-  { label: "Reports", to: "/reports", icon: FileText },
-  { label: "Evidence Library", to: "/evidence", icon: BookOpen },
-  { label: "Evidence Master Index", to: "/evidence-master", icon: Library },
-  { label: "Evidence Updates", to: "/evidence-updates", icon: Library },
-  { label: "Evidence Requirements", to: "/evidence-requirements", icon: FileWarning },
-  { label: "Update Evidence Center", to: "/evidence-governance", icon: Library },
-  { label: "Full Engine Test", to: "/system-test", icon: FileWarning },
+export interface NavSection {
+  title: string;
+  items: NavItem[];
+}
 
-  { label: "Favorites", to: "/favorites", icon: Star },
-  { label: "Settings", to: "/settings", icon: Settings },
-] as const;
+const navSections: NavSection[] = [
+  {
+    title: "Workspace",
+    items: [
+      { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+      { label: "Patients", to: "/patients", icon: ClipboardPlus },
+      { label: "Intelligence Engine", to: "/engine", icon: Cpu },
+      { label: "Clinical Calculator", to: "/calculator", icon: Calculator },
+    ],
+  },
+  {
+    title: "Clinical Workflow (Stages 1 – 8)",
+    items: [
+      { label: "1. Patient Assessment", to: "/assessment", icon: ClipboardPlus, stageNumber: 1 },
+      { label: "2. POSEIDON Assessment", to: "/poseidon", icon: Compass, stageNumber: 2 },
+      { label: "3. Protocol Recommendation", to: "/protocols", icon: Stethoscope, stageNumber: 3 },
+      { label: "4. Starting Dose Engine", to: "/starting-dose", icon: Syringe, stageNumber: 4 },
+      {
+        label: "5. Monitoring & Dose Adjustment",
+        to: "/monitoring",
+        icon: Activity,
+        stageNumber: 5,
+      },
+      { label: "6. Trigger Decision & Safety", to: "/trigger", icon: Syringe, stageNumber: 6 },
+      {
+        label: "7. Cycle Completion & Safety",
+        to: "/cycle-completion",
+        icon: ShieldCheck,
+        stageNumber: 7,
+      },
+      { label: "8. Clinical Reports", to: "/reports", icon: FileText, stageNumber: 8 },
+    ],
+  },
+  {
+    title: "Specialized Engines",
+    items: [
+      { label: "Patient Phenotype Engine", to: "/decision-support", icon: Brain },
+      { label: "Gonadotropin Selection", to: "/gonadotropins", icon: Pill },
+      { label: "CONSORT Starting Dose", to: "/consort", icon: Syringe },
+    ],
+  },
+  {
+    title: "Evidence & Governance",
+    items: [
+      { label: "Evidence Library", to: "/evidence", icon: BookOpen },
+      { label: "Evidence Master Index", to: "/evidence-master", icon: Library },
+      { label: "Evidence Updates", to: "/evidence-updates", icon: Library },
+      { label: "Evidence Requirements", to: "/evidence-requirements", icon: FileWarning },
+      { label: "Update Evidence Center", to: "/evidence-governance", icon: Library },
+      { label: "Full Engine Test", to: "/system-test", icon: FileWarning },
+    ],
+  },
+  {
+    title: "System",
+    items: [
+      { label: "Favorites", to: "/favorites", icon: Star },
+      { label: "Settings", to: "/settings", icon: Settings },
+    ],
+  },
+];
 
 function SideNavList({ collapsed, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   return (
-    <nav aria-label="Primary" className="flex flex-col gap-1 px-3">
-      {sideNav.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          onClick={onNavigate}
-          title={collapsed ? item.label : undefined}
-          activeProps={{
-            className: "bg-sidebar-accent text-sidebar-accent-foreground font-semibold",
-          }}
-          className={cn(
-            "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-sidebar-foreground/80 transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
-            collapsed && "justify-center px-0",
+    <nav
+      aria-label="Primary"
+      className="flex flex-col gap-4 px-3 overflow-y-auto max-h-[calc(100vh-140px)] scrollbar-thin"
+    >
+      {navSections.map((section, sIdx) => (
+        <div key={section.title} className="flex flex-col gap-1">
+          {!collapsed && (
+            <p
+              className={cn(
+                "px-3 pb-1 text-[11px] font-bold uppercase tracking-wider",
+                sIdx === 1 ? "text-primary" : "text-muted-foreground/70",
+              )}
+            >
+              {section.title}
+            </p>
           )}
-        >
-          <item.icon className="size-4.5 shrink-0" strokeWidth={2} />
-          {!collapsed && <span className="truncate">{item.label}</span>}
-        </Link>
+          {section.items.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={onNavigate}
+              title={collapsed ? item.label : undefined}
+              activeProps={{
+                className:
+                  "bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-xs ring-1 ring-border/50",
+              }}
+              className={cn(
+                "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-sidebar-foreground/80 transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                collapsed && "justify-center px-0",
+                item.stageNumber && !collapsed && "hover:pl-3.5",
+              )}
+            >
+              {item.stageNumber ? (
+                <span
+                  className={cn(
+                    "flex size-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition-all",
+                    "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground",
+                  )}
+                >
+                  {item.stageNumber}
+                </span>
+              ) : (
+                <item.icon
+                  className="size-4 shrink-0 text-muted-foreground group-hover:text-foreground"
+                  strokeWidth={2}
+                />
+              )}
+              {!collapsed && <span className="truncate">{item.label}</span>}
+            </Link>
+          ))}
+        </div>
       ))}
     </nav>
   );

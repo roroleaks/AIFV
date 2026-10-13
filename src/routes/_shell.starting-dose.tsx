@@ -19,6 +19,7 @@ import {
   isSelectionKind,
 } from "@/lib/engine/gonadotropin-decision-store";
 import { getConsortDose } from "@/lib/engine/consort-store";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 
 const title = "Starting Gonadotropin Dose Engine — IVF Ai Calc";
 const description =
@@ -114,10 +115,12 @@ function StartingDosePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Starting Dose"
-        title="Starting Gonadotropin Dose Engine"
-        description="Determines whether a validated evidence source permits calculation or selection of an individualized starting gonadotropin dose. Distinguishes historical dose, evidence-reported range, evidence-supported rule, validated calculation, physician-selected dose and evidence-pending dose. No dose is invented, and CONSORT remains completely isolated."
+        eyebrow="Workflow Stage 4 of 8 · Starting Dose"
+        title="4. Starting Dose Engine & CONSORT Nomogram"
+        description="Stage 4 of the clinical workflow: Calculates individualized starting gonadotropin doses via the validated CONSORT nomogram (37.5 IU steps) and enforces ESHRE 2025 starting dose ceilings (300 IU/day max)."
       />
+
+      <WorkflowStepper currentStage={4} className="my-4" />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/page-header";
 import { GuidelineRecommendationsPanel } from "@/components/engine/guideline-panel";
 import { derivePopulationTags } from "@/lib/engine/guideline-context";
 import { ClinicalSafetyBanner } from "@/components/engine/clinical-safety-banner";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import {
   TriggerAlertsCard,
   TriggerCompletenessCard,
@@ -134,10 +135,12 @@ function TriggerPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Trigger Decision & Safety"
-        title="Trigger Readiness, Option Review & Physician Decision"
-        description="Structured review of the observed stimulation data relevant to trigger. The validated trigger algorithm is not activated, so no trigger type, dose or timing is produced."
+        eyebrow="Workflow Stage 6 of 8 · Trigger Strategy"
+        title="6. Trigger Decision & Final Oocyte Maturation"
+        description="Stage 6 of the clinical workflow: Evaluates pre-ovulatory trigger criteria (lead follicle ≥ 17–18 mm), trigger drug selection (rhCG vs GnRH agonist vs dual trigger), and 36-hour retrieval timing."
       />
+
+      <WorkflowStepper currentStage={6} className="my-4" />
 
       <ClinicalSafetyBanner />
 

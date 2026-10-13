@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import { SectionCard, EmptyPlaceholder } from "@/components/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -354,6 +355,8 @@ function EnginePage() {
           </Button>
         }
       />
+
+      <WorkflowStepper className="mb-5" />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[

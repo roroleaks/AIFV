@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Building2, Users } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -282,11 +283,13 @@ function Reports() {
   return (
     <>
       <PageHeader
-        eyebrow="Clinical Intelligence"
-        title="IVF Clinical Intelligence Report"
-        description="The unified explainable output of every implemented engine, suitable for clinical documentation, multidisciplinary discussion, education and research. Modules whose validated guideline tables have not been imported are shown as “Evidence Algorithm Pending” — no recommendation, dose or clinical decision is generated for them."
+        eyebrow="Workflow Stage 8 of 8 · Intelligence Synthesis"
+        title="8. IVF Clinical Intelligence Report"
+        description="Stage 8 of the clinical workflow: The unified, explainable 16-section output integrating patient assessment, POSEIDON, protocol recommendation, CONSORT dosing, monitoring kinetics, and cycle safety."
         actions={<ReportActions report={report} />}
       />
+
+      <WorkflowStepper currentStage={8} className="my-4" />
 
       {records.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 print:hidden">

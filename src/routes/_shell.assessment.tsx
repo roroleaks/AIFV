@@ -27,6 +27,7 @@ import { DocumentsStep } from "@/components/assessment/documents-step";
 import { TimelineStep } from "@/components/assessment/timeline-step";
 import { ClinicalAlertsPanel } from "@/components/assessment/clinical-alerts";
 import { SummaryPanel } from "@/components/assessment/summary-panel";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 
 export const Route = createFileRoute("/_shell/assessment")({
   head: () => ({
@@ -116,9 +117,9 @@ function Assessment() {
   return (
     <>
       <PageHeader
-        eyebrow={`Step ${current + 1} of ${steps.length}`}
-        title="IVF / ICSI Patient Assessment"
-        description="Complete structured intake. Data is stored locally for later clinical decision modules — no calculations are performed."
+        eyebrow={`Stage 1 of 8 · Step ${current + 1} of ${steps.length}`}
+        title="1. Patient Assessment & Clinical Intake"
+        description="Stage 1 of the clinical workflow: Complete structured intake covering demographics, history, ovarian reserve, ultrasound folliculometry and prior ART cycles."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <span className="hidden items-center gap-1.5 text-xs text-muted-foreground sm:inline-flex">
@@ -155,6 +156,8 @@ function Assessment() {
           </div>
         }
       />
+
+      <WorkflowStepper currentStage={1} className="mb-4" />
 
       {/* Sticky progress + step navigation */}
       <div className="sticky top-16 z-30 -mx-1 rounded-2xl border border-border/70 bg-card/85 px-4 py-4 shadow-soft backdrop-blur-xl">

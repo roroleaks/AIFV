@@ -28,6 +28,7 @@ import {
   evaluateDoseAdjustment,
 } from "@/lib/engine/dose-adjustment";
 import { useDoseEvents } from "@/lib/engine/dose-adjustment-store";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import {
   SIMULATED_DATA_LABEL,
   SIMULATED_DATA_NOTICE,
@@ -197,11 +198,13 @@ function MonitoringPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Monitoring Engine"
-        title="Dynamic Monitoring & Dose Adjustment"
-        description="Organises the stimulation cycle from day 1 until trigger: follow-up entry, follicle and hormone trends, dose history and a physician summary after every visit. No dose change, cancellation, trigger timing or freeze-all decision is produced — those activate only once the published ESHRE and ASRM tables are imported into the Evidence Library."
+        eyebrow="Workflow Stage 5 of 8 · Stimulation Monitoring"
+        title="5. Monitoring & Mid-Cycle Dose Adjustment"
+        description="Stage 5 of the clinical workflow: Organises longitudinal follicular tracking and hormone kinetics from Day 1 to pre-trigger, evaluating Day 5/6 titration rules under ESHRE 2025 Rec 43."
         actions={<MonitoringActions result={result} />}
       />
+
+      <WorkflowStepper currentStage={5} className="my-4" />
 
       <ClinicalSafetyBanner />
       <EvidencePendingGate id="dose-adjustment" />

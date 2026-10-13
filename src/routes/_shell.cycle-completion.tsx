@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Snowflake, Timer, Users } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { WorkflowStepper } from "@/components/workflow-stepper";
 import { GuidelineRecommendationsPanel } from "@/components/engine/guideline-panel";
 import { derivePopulationTags } from "@/lib/engine/guideline-context";
 import { Badge } from "@/components/ui/badge";
@@ -155,11 +156,13 @@ function CycleCompletionPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Cycle Completion Engine"
-        title="Cycle Completion & Safety"
-        description="Integrates monitoring, ultrasound, hormones, protocol, response prediction and OHSS markers for the final stage of ovarian stimulation. Evidence-based trigger readiness, ASRM/ESHRE OHSS risk stratification, and elective freeze-all indications are active."
+        eyebrow="Workflow Stage 7 of 8 · Cycle Completion & Safety"
+        title="7. Cycle Completion & OHSS Safety"
+        description="Stage 7 of the clinical workflow: Integrates monitoring, hormone kinetics, ASRM/ESHRE OHSS risk stratification, and embryo transfer disposition (Fresh Transfer vs. Elective Freeze-All)."
         actions={<CycleCompletionActions result={result} />}
       />
+
+      <WorkflowStepper currentStage={7} className="my-4" />
 
       <ClinicalSafetyBanner />
       <div className="grid gap-4 xl:grid-cols-2">
