@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
+  Check,
   ClipboardList,
   History,
   Lock,
@@ -77,7 +78,31 @@ export function DoseAdjustmentCard({ evaluation }: { evaluation: DoseAdjustmentE
         </Badge>
       }
     >
-      {!active && (
+      {active ? (
+        <div className="flex items-start gap-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3.5">
+          <Check className="mt-0.5 size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-bold text-emerald-800 dark:text-emerald-200">
+                {evaluation.proposedAction}
+              </span>
+              {evaluation.proposedDose !== null && (
+                <Badge className="bg-emerald-600 text-white">
+                  {evaluation.proposedDose === 0
+                    ? "Discontinue daily dose"
+                    : `Proposed Dose: ${evaluation.proposedDose} IU/day`}
+                </Badge>
+              )}
+            </div>
+            {evaluation.rationale && (
+              <p className="text-xs leading-relaxed text-foreground/80">{evaluation.rationale}</p>
+            )}
+            <p className="text-[11px] font-medium text-emerald-700/80 dark:text-emerald-300/80">
+              Triggered rule: {evaluation.firedRule?.ruleName}
+            </p>
+          </div>
+        </div>
+      ) : (
         <div className="flex items-start gap-2 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-3">
           <Lock className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
           <div>

@@ -162,11 +162,7 @@ export const treatmentAlgorithmDefinitions: Record<
   "dose-adjustment": {
     id: "dose-adjustment",
     name: "Dose Adjustment Engine",
-    suppressedOutputs: [
-      "Dose increase or decrease",
-      "Cancellation instruction",
-      "Coasting instruction",
-    ],
+    suppressedOutputs: [],
     requiredEvidence: [
       eshre2025Evidence(
         "ESHRE 2025 ovarian stimulation guideline — monitoring and dose-adjustment recommendation statements",
