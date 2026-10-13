@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, type ErrorComponentProps } from "@tanstack/react-router";
 import {
   Archive,
   ArchiveRestore,
@@ -89,7 +89,47 @@ export const Route = createFileRoute("/_shell/evidence")({
     ],
   }),
   component: EvidenceSearch,
+  errorComponent: EvidenceErrorFallback,
 });
+
+function EvidenceErrorFallback({ error, reset }: ErrorComponentProps) {
+  return (
+    <div className="mx-auto max-w-xl p-8 text-center">
+      <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 shadow-soft">
+        <h2 className="text-lg font-bold text-destructive">Evidence Library Failed to Render</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          An error occurred while displaying the evidence records.
+        </p>
+        {error instanceof Error && (
+          <pre className="mt-4 max-h-40 overflow-auto rounded-lg bg-background p-3 text-left font-mono text-xs text-destructive">
+            {error.message}
+          </pre>
+        )}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <Button onClick={reset} className="rounded-xl">
+            Retry
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded-xl"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                try {
+                  window.localStorage.removeItem("ivf-ai-calc.evidence-store.v1");
+                } catch {
+                  /* ignore */
+                }
+                window.location.reload();
+              }
+            }}
+          >
+            Reset Evidence Store
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function EvidenceSearch() {
   const manager = useEvidenceManager();

@@ -43,6 +43,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
+  const errorMessage =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : "An unexpected runtime error occurred.";
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -52,6 +59,14 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
+        {errorMessage && (
+          <div className="mt-4 max-h-40 overflow-auto rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-left font-mono text-xs text-destructive">
+            <p className="font-semibold">{errorMessage}</p>
+            {error instanceof Error && error.stack && (
+              <pre className="mt-1 whitespace-pre-wrap text-[10px] opacity-75">{error.stack}</pre>
+            )}
+          </div>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -61,6 +76,21 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             Try again
+          </button>
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                try {
+                  window.localStorage.removeItem("ivf-ai-calc.evidence-store.v1");
+                } catch {
+                  /* ignore */
+                }
+                window.location.reload();
+              }
+            }}
+            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          >
+            Reset cache & reload
           </button>
           <a
             href="/"

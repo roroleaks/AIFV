@@ -3,9 +3,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { evidenceLibrary, type EvidenceEntry } from "./library";
 import { logHistory, readEvidenceState, writeEvidenceState, type EvidenceUserState } from "./store";
 
+const defaultState: EvidenceUserState = {
+  favorites: [],
+  archived: [],
+  notes: {},
+  imported: [],
+  history: [],
+};
+
 /** Shared client-side Evidence Manager state (favorites, notes, imports). */
 export function useEvidenceManager() {
-  const [state, setState] = useState<EvidenceUserState>(() => readEvidenceState());
+  const [state, setState] = useState<EvidenceUserState>(defaultState);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -19,16 +27,15 @@ export function useEvidenceManager() {
   }, []);
 
   const library = useMemo<EvidenceEntry[]>(
-    () => [...evidenceLibrary, ...state.imported],
+    () => [...evidenceLibrary, ...(state.imported ?? [])],
     [state.imported],
   );
 
   const toggleFavorite = useCallback(
     (entry: EvidenceEntry) => {
-      const on = state.favorites.includes(entry.id);
-      const favorites = on
-        ? state.favorites.filter((id) => id !== entry.id)
-        : [...state.favorites, entry.id];
+      const favs = state.favorites ?? [];
+      const on = favs.includes(entry.id);
+      const favorites = on ? favs.filter((id) => id !== entry.id) : [...favs, entry.id];
       update(logHistory({ ...state, favorites }, on ? "unfavorited" : "favorited", entry));
     },
     [state, update],
@@ -36,10 +43,9 @@ export function useEvidenceManager() {
 
   const toggleArchived = useCallback(
     (entry: EvidenceEntry) => {
-      const on = state.archived.includes(entry.id);
-      const archived = on
-        ? state.archived.filter((id) => id !== entry.id)
-        : [...state.archived, entry.id];
+      const arch = state.archived ?? [];
+      const on = arch.includes(entry.id);
+      const archived = on ? arch.filter((id) => id !== entry.id) : [...arch, entry.id];
       update(logHistory({ ...state, archived }, on ? "restored" : "archived", entry));
     },
     [state, update],
@@ -47,7 +53,7 @@ export function useEvidenceManager() {
 
   const setNote = useCallback(
     (entry: EvidenceEntry, note: string) => {
-      const notes = { ...state.notes, [entry.id]: note };
+      const notes = { ...(state.notes ?? {}), [entry.id]: note };
       update({ ...state, notes });
     },
     [state, update],
@@ -62,7 +68,8 @@ export function useEvidenceManager() {
 
   const importEntry = useCallback(
     (entry: EvidenceEntry) => {
-      update(logHistory({ ...state, imported: [entry, ...state.imported] }, "imported", entry));
+      const imp = state.imported ?? [];
+      update(logHistory({ ...state, imported: [entry, ...imp] }, "imported", entry));
     },
     [state, update],
   );
@@ -76,7 +83,7 @@ export function useEvidenceManager() {
     setNote,
     commitNote,
     importEntry,
-    isFavorite: (id: string) => state.favorites.includes(id),
-    isArchived: (id: string) => state.archived.includes(id),
+    isFavorite: (id: string) => (state.favorites ?? []).includes(id),
+    isArchived: (id: string) => (state.archived ?? []).includes(id),
   };
 }

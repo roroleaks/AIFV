@@ -41,7 +41,22 @@ export function readEvidenceState(): EvidenceUserState {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return empty;
     const parsed = JSON.parse(raw) as Partial<EvidenceUserState>;
-    return { ...empty, ...parsed };
+    if (!parsed || typeof parsed !== "object") return empty;
+    return {
+      favorites: Array.isArray(parsed.favorites)
+        ? parsed.favorites.filter((x): x is string => typeof x === "string")
+        : [],
+      archived: Array.isArray(parsed.archived)
+        ? parsed.archived.filter((x): x is string => typeof x === "string")
+        : [],
+      notes: parsed.notes && typeof parsed.notes === "object" ? parsed.notes : {},
+      imported: Array.isArray(parsed.imported)
+        ? parsed.imported.filter((x): x is EvidenceEntry =>
+            Boolean(x && typeof x === "object" && x.id),
+          )
+        : [],
+      history: Array.isArray(parsed.history) ? parsed.history.filter(Boolean) : [],
+    };
   } catch {
     return empty;
   }
