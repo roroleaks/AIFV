@@ -200,7 +200,7 @@ function Landing() {
             </div>
           </div>
           <p className="text-center text-[11px] text-muted-foreground sm:text-right">
-            © 2026 IVF Precision Decision Support · Intended for qualified fertility specialists
+            © 2026 AiFV Precision Decision Support · Intended for qualified fertility specialists
             only.
           </p>
         </div>

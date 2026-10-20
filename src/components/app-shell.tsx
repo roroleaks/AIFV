@@ -315,7 +315,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
               </div>
             </div>
             <div className="text-[11px] text-muted-foreground">
-              IVF Ai Calc · ESHRE 2025 Synchronized
+              AiFV Precision · ESHRE 2025 Synchronized
             </div>
           </footer>
         </main>

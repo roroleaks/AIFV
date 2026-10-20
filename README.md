@@ -1,7 +1,7 @@
-# AIFV CDSS — AI-IVF Clinical Decision Support System
+# AiFV Precision — AI-IVF Clinical Decision Support System
 
 <p align="center">
-  <img src="public/icon-512.png" alt="AIFV Logo" width="96" height="96" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
+  <img src="public/icon-512.png" alt="AiFV Logo" width="96" height="96" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@ The system standardizes every phase of controlled ovarian stimulation (COS) by i
 ---
 
 ## 🌐 Live Production Application
- 
+
 - **Primary Live URL**: [https://aivf-precision.vercel.app/](https://aivf-precision.vercel.app/)
 - **Alternative Aliases**: [https://aivf-cdss.vercel.app/](https://aivf-cdss.vercel.app/) · [https://aifv.vercel.app/](https://aifv.vercel.app/)
 - **Hosting Platform**: Vercel Serverless Edge Platform

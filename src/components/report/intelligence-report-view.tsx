@@ -699,7 +699,7 @@ export function DisclaimerPanel({ report }: { report: IntelligenceReport }) {
           </div>
         </div>
         <p className="text-[11px] text-muted-foreground">
-          IVF Clinical Intelligence Report · ESHRE 2025 Synchronized
+          AiFV Clinical Intelligence Report · ESHRE 2025 Synchronized
         </p>
       </div>
     </section>

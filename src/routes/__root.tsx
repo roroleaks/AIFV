@@ -109,7 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AIFV — Evidence-Based IVF Decision Support" },
+      { title: "AiFV Precision — Evidence-Based IVF Decision Support" },
       {
         name: "description",
         content:
@@ -121,12 +121,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { name: "apple-mobile-web-app-title", content: "AiFV" },
       { name: "application-name", content: "AiFV" },
-      { property: "og:site_name", content: "AIFV Precision" },
+      { property: "og:site_name", content: "AiFV Precision" },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "AIFV Precision Decision Support" },
+      { property: "og:image:alt", content: "AiFV Precision Decision Support" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: "/og-image.png" },
     ],
