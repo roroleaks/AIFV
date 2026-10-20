@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://aifv.vercel.app/"><img src="https://img.shields.io/badge/Production%20Deployment-aifv.vercel.app-blue.svg?style=for-the-badge&logo=vercel" alt="Production Deployment" /></a>
+  <a href="https://aivf-precision.vercel.app/"><img src="https://img.shields.io/badge/Production%20Deployment-aivf--precision.vercel.app-blue.svg?style=for-the-badge&logo=vercel" alt="Production Deployment" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.8.3-3178C6.svg?style=for-the-badge&logo=typescript" alt="TypeScript" /></a>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.2.0-61DAFB.svg?style=for-the-badge&logo=react" alt="React 19" /></a>
   <a href="https://tanstack.com/router/latest"><img src="https://img.shields.io/badge/TanStack-Router%20%26%20Start-FF4154.svg?style=for-the-badge" alt="TanStack Router" /></a>
@@ -46,8 +46,9 @@ The system standardizes every phase of controlled ovarian stimulation (COS) by i
 ---
 
 ## 🌐 Live Production Application
-
-- **Live URL**: [https://aifv.vercel.app/](https://aifv.vercel.app/)
+ 
+- **Primary Live URL**: [https://aivf-precision.vercel.app/](https://aivf-precision.vercel.app/)
+- **Alternative Aliases**: [https://aivf-cdss.vercel.app/](https://aivf-cdss.vercel.app/) · [https://aifv.vercel.app/](https://aifv.vercel.app/)
 - **Hosting Platform**: Vercel Serverless Edge Platform
 - **Release Channel**: Synchronized with ESHRE 2025 Guideline Update (Release 2026.25)
 
