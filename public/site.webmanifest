@@ -1,0 +1,39 @@
+{
+  "name": "AIFV — Precision IVF Decision Support",
+  "short_name": "AiFV",
+  "description": "Evidence-Based IVF & ICSI Clinical Decision Support System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0a1d",
+  "theme_color": "#120f2b",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

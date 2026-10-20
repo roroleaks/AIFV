@@ -11,9 +11,11 @@ export function BrandMark({
 }) {
   return (
     <Link to="/" className={cn("flex min-w-0 items-center gap-2.5", className)}>
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl gradient-primary text-primary-foreground shadow-soft">
-        <Activity className="size-4.5" strokeWidth={2.4} />
-      </span>
+      <img
+        src="/icon-192.png"
+        alt="AiFV Logo"
+        className="size-9 shrink-0 rounded-xl object-cover shadow-soft ring-1 ring-border/50"
+      />
       {showWordmark && (
         <span className="min-w-0 leading-tight">
           <span className="block truncate font-display text-sm font-extrabold tracking-tight">

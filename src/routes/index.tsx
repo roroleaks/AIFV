@@ -28,6 +28,11 @@ export const Route = createFileRoute("/")({
         content:
           "Individualized ovarian stimulation planning for reproductive medicine specialists.",
       },
+      { property: "og:image", content: "/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
   }),
   component: Landing,

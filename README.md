@@ -1,7 +1,7 @@
 # AIFV CDSS — AI-IVF Clinical Decision Support System
 
 <p align="center">
-  <img src="public/favicon.ico" alt="AIFV Logo" width="72" height="72" />
+  <img src="public/icon-512.png" alt="AIFV Logo" width="96" height="96" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
 </p>
 
 <p align="center">
