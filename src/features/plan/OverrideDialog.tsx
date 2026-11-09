@@ -133,7 +133,7 @@ export function OverrideDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-full bg-amber-500/10 text-amber-600">
+            <div className="flex size-7 items-center justify-center rounded-full bg-accent-override/10 text-accent-override">
               <AlertTriangle className="size-4" />
             </div>
             <DialogTitle className="text-sm font-bold text-foreground">
@@ -227,7 +227,7 @@ export function OverrideDialog({
               </Label>
               <span
                 className={`text-[10px] font-mono ${
-                  isReasonValid ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600"
+                  isReasonValid ? "text-safety-success" : "text-accent-override"
                 }`}
               >
                 {isReasonValid ? "Requirement met" : `${charsRemaining} chars needed`}
@@ -254,7 +254,7 @@ export function OverrideDialog({
                 onRemoveOverride();
                 onClose();
               }}
-              className="text-xs text-destructive hover:bg-destructive/10 me-auto h-8 px-2"
+              className="text-xs text-safety-danger hover:bg-safety-danger/10 me-auto h-8 px-2"
             >
               <RotateCcw className="size-3 me-1" />
               <span>Revert to Algorithm</span>
@@ -278,7 +278,7 @@ export function OverrideDialog({
               size="sm"
               disabled={!isReasonValid || !isPhysician}
               onClick={handleSave}
-              className="h-8 gap-1 text-xs bg-amber-600 text-white hover:bg-amber-700 shadow-xs"
+              className="h-8 gap-1 text-xs bg-accent-override text-text-on-accent hover:bg-accent-override/90 shadow-xs"
               title={isPhysician ? "Apply structured override" : "Physician role required"}
             >
               <Check className="size-3.5" />

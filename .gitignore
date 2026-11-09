@@ -38,3 +38,6 @@ build
 !.env.example
 sync-bundles/
 backups/
+.chrome-tmp*
+screenshots/
+scripts/capture-snapshots.cjs

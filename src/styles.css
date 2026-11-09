@@ -4,15 +4,53 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * IVF Ai Calc — design system
- * Primary: deep medical blue | Secondary: emerald | Accent: royal purple
- * Warning: amber | Danger: soft red | Background: very light gray | Cards: white
+/* =============================================================================
+ * AiFV PRECISION — ZONE LAYOUT GRID & ACADEMIC VISUAL SYSTEM
+ * =============================================================================
+ * Zone 1: TopBar
+ *   - Height: 3.5rem (56px, h-14) sticky top-0 z-50
+ *   - Clinic identity, Ctrl+K global search, role switcher, EN/AR toggle, theme toggle,
+ *     Insights/Decision toggle (Alt+D), and manual session lock.
+ *
+ * Zone 2: Worklist (LeftRail)
+ *   - Desktop (>= 1024px): 18rem fixed width, vertical patient feed with real-time search,
+ *     status filters (Today, Active, Flagged, Signed, All), + New Case trigger, and context menus.
+ *   - Tablet (768px - 1023px): Collapses to 4rem (w-16) icon rail showing patient initials & alert dots.
+ *   - Mobile (< 768px): Concealed off-canvas; accessible via TopBar hamburger sheet.
+ *
+ * Zone 3: Case Workspace (Main Content)
+ *   - Layout: Two primary content columns strictly enforced (LeftRail + Case Workspace).
+ *   - Flex-1 scrollable viewport hosting CaseHeader, CaseTabs (Encounters, Plan, Report),
+ *     and active workflow cards.
+ *   - No permanent right rail in document flow.
+ *
+ * Zone 4: Contextual Overlays (On-Demand)
+ *   - DecisionSidebar: On-demand slide-in sheet from inline-end (fixed/absolute z-40, w-[28rem]),
+ *     opened via Alt+D, TopBar trigger, or active clinical alert. Never takes layout flow.
+ *   - IntakeDrawer: Slide-in sheet from inline-end (w-[32rem], z-50) for structured patient intake.
+ *   - Modals & Overlays: OverrideDialog, LockOverlay, Sign Confirmations (centered, focus-trapped).
+ * =============================================================================
  */
 
 @theme inline {
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing Scale Foundation (Visual De-Clutter Pass §2.1) */
+  --spacing-space-xs: var(--space-xs);
+  --spacing-space-sm: var(--space-sm);
+  --spacing-space-md: var(--space-md);
+  --spacing-space-lg: var(--space-lg);
+  --spacing-space-xl: var(--space-xl);
+  --spacing-space-2xl: var(--space-2xl);
+
+  /* Typography Scale Foundation (§2.2) */
+  --text-xs: var(--font-size-xs);
+  --text-sm: var(--font-size-sm);
+  --text-base: var(--font-size-base);
+  --text-lg: var(--font-size-lg);
+  --text-xl: var(--font-size-xl);
+  --text-2xl: var(--font-size-2xl);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -22,6 +60,7 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
+  /* Semantic Framework Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -33,12 +72,6 @@
   --color-primary-soft: var(--primary-soft);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-emerald: var(--emerald);
-  --color-emerald-soft: var(--emerald-soft);
-  --color-purple: var(--purple);
-  --color-purple-soft: var(--purple-soft);
-  --color-warning: var(--warning);
-  --color-warning-soft: var(--warning-soft);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
@@ -50,6 +83,38 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
+
+  /* Academic Color System Tokens (§11) */
+  --color-bg-canvas: var(--bg-canvas);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-muted: var(--bg-surface-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-on-accent: var(--text-on-accent);
+
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-primary-hover: var(--accent-primary-hover);
+  --color-accent-classification: var(--accent-classification);
+  --color-accent-override: var(--accent-override);
+  --color-accent-evidence: var(--accent-evidence);
+
+  --color-safety-danger: var(--safety-danger);
+  --color-safety-danger-bg: var(--safety-danger-bg);
+  --color-safety-warning: var(--safety-warning);
+  --color-safety-warning-bg: var(--safety-warning-bg);
+  --color-safety-success: var(--safety-success);
+  --color-safety-success-bg: var(--safety-success-bg);
+
+  /* Legacy chart & sidebar aliases for chart compatibility */
+  --color-emerald: var(--emerald);
+  --color-emerald-soft: var(--emerald-soft);
+  --color-purple: var(--purple);
+  --color-purple-soft: var(--purple-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -73,111 +138,261 @@
 :root {
   --radius: 0.9rem;
 
-  --background: oklch(0.976 0.003 247.9);
-  --foreground: oklch(0.22 0.035 258);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.035 258);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.035 258);
+  /* Spacing Scale Foundation (Visual De-Clutter Pass §2.1) */
+  --space-xs: 0.5rem;   /* 8px */
+  --space-sm: 0.75rem;  /* 12px */
+  --space-md: 1rem;     /* 16px */
+  --space-lg: 1.5rem;   /* 24px */
+  --space-xl: 2rem;     /* 32px */
+  --space-2xl: 3rem;    /* 48px */
 
-  --primary: oklch(0.45 0.13 253);
-  --primary-foreground: oklch(0.99 0.005 250);
-  --primary-soft: oklch(0.95 0.024 250);
+  /* Typography Scale Foundation (§2.2) - Body text >= 16px */
+  --font-size-xs: 0.75rem;     /* 12px - micro badges, shortcuts */
+  --font-size-sm: 0.875rem;    /* 14px - secondary captions, metadata */
+  --font-size-base: 1rem;      /* 16px - body text (>= 16px standard) */
+  --font-size-lg: 1.125rem;    /* 18px - card titles, section subtitles */
+  --font-size-xl: 1.25rem;     /* 20px - tab headers, secondary headings */
+  --font-size-2xl: 1.5rem;     /* 24px - primary headers (h1, CaseHeader title) */
 
-  --secondary: oklch(0.962 0.008 250);
-  --secondary-foreground: oklch(0.3 0.05 255);
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-  --emerald: oklch(0.6 0.13 165);
-  --emerald-soft: oklch(0.95 0.03 165);
-  --purple: oklch(0.52 0.19 295);
-  --purple-soft: oklch(0.95 0.035 295);
-  --warning: oklch(0.75 0.15 75);
-  --warning-soft: oklch(0.96 0.05 85);
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
 
-  --muted: oklch(0.965 0.006 250);
-  --muted-foreground: oklch(0.53 0.03 255);
-  --accent: oklch(0.955 0.015 250);
-  --accent-foreground: oklch(0.32 0.06 255);
+  /* =========================================================================
+   * Academic Color System (§11) - Light Theme (Default: Ward)
+   * ========================================================================= */
+  --bg-canvas: #FAFBFC;           /* Page — warm off-white, reduces fluorescent glare */
+  --bg-surface: #FFFFFF;          /* Cards, panels */
+  --bg-surface-muted: #F4F5F7;    /* Hover states, subtle raised areas */
+  --border-subtle: #E5E7EB;       /* Dividers, card borders */
+  --border-default: #D1D5DB;      /* Inputs, focus borders */
+  --text-primary: #1A1A2E;        /* Near-black charcoal — journal body */
+  --text-secondary: #4B5563;      /* Captions, secondary labels */
+  --text-muted: #6B7280;          /* Placeholders, tertiary */
+  --text-on-accent: #FFFFFF;      /* Text on colored backgrounds */
 
-  --destructive: oklch(0.63 0.17 22);
-  --destructive-foreground: oklch(0.99 0.005 250);
-  --destructive-soft: oklch(0.96 0.03 22);
+  /* Semantic Accents (each means ONE thing) */
+  --accent-primary: #1E3A8A;        /* Deep navy — primary actions, active tab, selected */
+  --accent-primary-hover: #1E40AF;
+  --accent-classification: #475569; /* Slate — POSEIDON/Bologna/phenotype/response chips */
+  --accent-override: #7C2D12;       /* Deep burgundy — OVERRIDDEN values exclusively */
+  --accent-evidence: #0F766E;       /* Muted teal — evidence citations, rationale links */
 
-  --border: oklch(0.915 0.008 255);
-  --input: oklch(0.915 0.008 255);
-  --ring: oklch(0.45 0.13 253);
+  /* Safety (reserved EXCLUSIVELY for safety states) */
+  --safety-danger: #B91C1C;         /* Critical OHSS, hard firewall, blocking error */
+  --safety-danger-bg: #FEF2F2;
+  --safety-warning: #B45309;        /* Moderate OHSS, soft warning */
+  --safety-warning-bg: #FFFBEB;
+  --safety-success: #15803D;        /* Signed, verified, success */
+  --safety-success-bg: #F0FDF4;
 
-  --chart-1: oklch(0.45 0.13 253);
-  --chart-2: oklch(0.6 0.13 165);
-  --chart-3: oklch(0.52 0.19 295);
-  --chart-4: oklch(0.75 0.15 75);
-  --chart-5: oklch(0.63 0.17 22);
+  /* Framework integration mapped to academic tokens */
+  --background: var(--bg-canvas);
+  --foreground: var(--text-primary);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
 
-  --sidebar: oklch(0.995 0.002 250);
-  --sidebar-foreground: oklch(0.3 0.035 258);
-  --sidebar-primary: oklch(0.45 0.13 253);
-  --sidebar-primary-foreground: oklch(0.99 0.005 250);
-  --sidebar-accent: oklch(0.95 0.024 250);
-  --sidebar-accent-foreground: oklch(0.35 0.1 253);
-  --sidebar-border: oklch(0.925 0.008 255);
-  --sidebar-ring: oklch(0.45 0.13 253);
+  --primary: var(--accent-primary);
+  --primary-foreground: var(--text-on-accent);
+  --primary-soft: #EFF6FF;
+
+  --secondary: var(--bg-surface-muted);
+  --secondary-foreground: var(--text-secondary);
+
+  --emerald: var(--safety-success);
+  --emerald-soft: var(--safety-success-bg);
+  --purple: #7E22CE;
+  --purple-soft: #FAF5FF;
+  --warning: var(--safety-warning);
+  --warning-soft: var(--safety-warning-bg);
+
+  --muted: var(--bg-surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--bg-surface-muted);
+  --accent-foreground: var(--text-primary);
+
+  --destructive: var(--safety-danger);
+  --destructive-foreground: var(--text-on-accent);
+  --destructive-soft: var(--safety-danger-bg);
+
+  --border: var(--border-subtle);
+  --input: var(--border-default);
+  --ring: var(--accent-primary);
+
+  --chart-1: #1E3A8A;
+  --chart-2: #0F766E;
+  --chart-3: #475569;
+  --chart-4: #B45309;
+  --chart-5: #B91C1C;
+
+  --sidebar: var(--bg-surface);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--accent-primary);
+  --sidebar-primary-foreground: var(--text-on-accent);
+  --sidebar-accent: var(--bg-surface-muted);
+  --sidebar-accent-foreground: var(--accent-primary);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--accent-primary);
 
   --gradient-hero:
     radial-gradient(120% 90% at 85% 0%, oklch(0.52 0.19 295 / 0.14) 0%, transparent 60%),
     radial-gradient(100% 80% at 0% 10%, oklch(0.45 0.13 253 / 0.16) 0%, transparent 62%),
     radial-gradient(90% 70% at 40% 100%, oklch(0.6 0.13 165 / 0.12) 0%, transparent 65%);
-  --gradient-primary: linear-gradient(135deg, oklch(0.45 0.13 253), oklch(0.55 0.16 268));
+  --gradient-primary: linear-gradient(135deg, #1E3A8A, #1E40AF);
 }
 
 .dark {
-  --background: oklch(0.19 0.025 258);
-  --foreground: oklch(0.965 0.006 250);
-  --card: oklch(0.235 0.028 258);
-  --card-foreground: oklch(0.965 0.006 250);
-  --popover: oklch(0.235 0.028 258);
-  --popover-foreground: oklch(0.965 0.006 250);
+  /* =========================================================================
+   * Academic Color System (§11) - Dark Theme (On-Call Room)
+   * ========================================================================= */
+  --bg-canvas: #0F1115;
+  --bg-surface: #1A1D24;
+  --bg-surface-muted: #21252E;
+  --border-subtle: #2A2F3A;
+  --border-default: #3A3F4B;
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --text-on-accent: #FFFFFF;
 
-  --primary: oklch(0.68 0.14 250);
-  --primary-foreground: oklch(0.17 0.03 258);
-  --primary-soft: oklch(0.3 0.06 253);
+  --accent-primary: #60A5FA;
+  --accent-primary-hover: #93C5FD;
+  --accent-classification: #94A3B8;
+  --accent-override: #C2410C;
+  --accent-evidence: #2DD4BF;
 
-  --secondary: oklch(0.28 0.03 258);
-  --secondary-foreground: oklch(0.95 0.006 250);
+  --safety-danger: #EF4444;
+  --safety-danger-bg: #450A0A;
+  --safety-warning: #F59E0B;
+  --safety-warning-bg: #451A03;
+  --safety-success: #22C55E;
+  --safety-success-bg: #052E16;
 
-  --emerald: oklch(0.72 0.13 165);
-  --emerald-soft: oklch(0.3 0.06 165);
-  --purple: oklch(0.7 0.15 295);
-  --purple-soft: oklch(0.31 0.07 295);
-  --warning: oklch(0.8 0.14 78);
-  --warning-soft: oklch(0.32 0.06 78);
+  /* Framework integration mapped to dark academic tokens */
+  --background: var(--bg-canvas);
+  --foreground: var(--text-primary);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
 
-  --muted: oklch(0.28 0.03 258);
-  --muted-foreground: oklch(0.72 0.025 255);
-  --accent: oklch(0.3 0.035 258);
-  --accent-foreground: oklch(0.96 0.006 250);
+  --primary: var(--accent-primary);
+  --primary-foreground: #0F1115;
+  --primary-soft: #1E293B;
 
-  --destructive: oklch(0.68 0.16 22);
-  --destructive-foreground: oklch(0.17 0.03 258);
-  --destructive-soft: oklch(0.32 0.07 22);
+  --secondary: var(--bg-surface-muted);
+  --secondary-foreground: var(--text-secondary);
 
-  --border: oklch(1 0 0 / 11%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.68 0.14 250);
+  --emerald: var(--safety-success);
+  --emerald-soft: var(--safety-success-bg);
+  --purple: #C084FC;
+  --purple-soft: #3B0764;
+  --warning: var(--safety-warning);
+  --warning-soft: var(--safety-warning-bg);
 
-  --sidebar: oklch(0.215 0.027 258);
-  --sidebar-foreground: oklch(0.95 0.006 250);
-  --sidebar-primary: oklch(0.68 0.14 250);
-  --sidebar-primary-foreground: oklch(0.17 0.03 258);
-  --sidebar-accent: oklch(0.3 0.05 253);
-  --sidebar-accent-foreground: oklch(0.96 0.006 250);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.68 0.14 250);
+  --muted: var(--bg-surface-muted);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--bg-surface-muted);
+  --accent-foreground: var(--text-primary);
+
+  --destructive: var(--safety-danger);
+  --destructive-foreground: #FFFFFF;
+  --destructive-soft: var(--safety-danger-bg);
+
+  --border: var(--border-subtle);
+  --input: var(--border-default);
+  --ring: var(--accent-primary);
+
+  --sidebar: var(--bg-surface);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--accent-primary);
+  --sidebar-primary-foreground: #0F1115;
+  --sidebar-accent: var(--bg-surface-muted);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--accent-primary);
 
   --gradient-hero:
     radial-gradient(120% 90% at 85% 0%, oklch(0.7 0.15 295 / 0.16) 0%, transparent 60%),
     radial-gradient(100% 80% at 0% 10%, oklch(0.68 0.14 250 / 0.18) 0%, transparent 62%),
     radial-gradient(90% 70% at 40% 100%, oklch(0.72 0.13 165 / 0.12) 0%, transparent 65%);
-  --gradient-primary: linear-gradient(135deg, oklch(0.55 0.15 253), oklch(0.62 0.17 275));
+  --gradient-primary: linear-gradient(135deg, #1E3A8A, #2563EB);
+}
+
+[data-theme="high-contrast"],
+.high-contrast {
+  --bg-canvas: #000000;
+  --bg-surface: #0A0A0A;
+  --bg-surface-muted: #1A1A1A;
+  --border-subtle: #FFFFFF;
+  --border-default: #FFFFFF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E0E0E0;
+  --text-muted: #B0B0B0;
+  --text-on-accent: #000000;
+
+  --accent-primary: #FFFF00;
+  --accent-primary-hover: #FFFF66;
+  --accent-classification: #FFFFFF;
+  --accent-override: #FF3333;
+  --accent-evidence: #00FFFF;
+
+  --safety-danger: #FF3333;
+  --safety-danger-bg: #440000;
+  --safety-warning: #FFFF00;
+  --safety-warning-bg: #333300;
+  --safety-success: #00FF66;
+  --safety-success-bg: #003311;
+
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --card: #0A0A0A;
+  --card-foreground: #FFFFFF;
+  --popover: #000000;
+  --popover-foreground: #FFFFFF;
+
+  --primary: #FFFF00;
+  --primary-foreground: #000000;
+  --primary-soft: #222200;
+
+  --secondary: #1A1A1A;
+  --secondary-foreground: #FFFFFF;
+
+  --emerald: #00FF66;
+  --emerald-soft: #003311;
+  --purple: #FF66FF;
+  --purple-soft: #330033;
+  --warning: #FFFF00;
+  --warning-soft: #333300;
+
+  --muted: #1C1C1C;
+  --muted-foreground: #E0E0E0;
+  --accent: #262626;
+  --accent-foreground: #FFFFFF;
+
+  --destructive: #FF3333;
+  --destructive-foreground: #FFFFFF;
+  --destructive-soft: #440000;
+
+  --border: #FFFFFF;
+  --input: #FFFFFF;
+  --ring: #FFFF00;
+
+  --sidebar: #050505;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FFFF00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #222222;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #FFFFFF;
+  --sidebar-ring: #FFFF00;
 }
 
 @layer base {
@@ -189,15 +404,54 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
     -webkit-font-smoothing: antialiased;
   }
 
-  h1,
-  h2,
-  h3,
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
+    letter-spacing: -0.01em;
+  }
+
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+  }
+
+  h5 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+  }
+
+  h6 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
   }
 
   :focus-visible {
@@ -245,50 +499,8 @@
   }
 }
 
-[data-theme="high-contrast"],
-.high-contrast {
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
-  --popover: #000000;
-  --popover-foreground: #ffffff;
-
-  --primary: #ffff00;
-  --primary-foreground: #000000;
-  --primary-soft: #222200;
-
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-
-  --emerald: #00ff66;
-  --emerald-soft: #003311;
-  --purple: #ff66ff;
-  --purple-soft: #330033;
-  --warning: #ffff00;
-  --warning-soft: #333300;
-
-  --muted: #1c1c1c;
-  --muted-foreground: #e0e0e0;
-  --accent: #262626;
-  --accent-foreground: #ffffff;
-
-  --destructive: #ff3333;
-  --destructive-foreground: #ffffff;
-  --destructive-soft: #440000;
-
-  --border: #ffffff;
-  --input: #333333;
-  --ring: #ffff00;
-
-  --sidebar: #050505;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffff00;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #222222;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #ffffff;
-  --sidebar-ring: #ffff00;
+html.large-text-mode {
+  font-size: 110%;
 }
 
 @media print {

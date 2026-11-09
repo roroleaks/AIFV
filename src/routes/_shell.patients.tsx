@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   ArrowDownWideNarrow,
   CircleAlert,
@@ -44,6 +44,11 @@ const sortLabels: Record<SortKey, string> = {
 };
 
 function Patients() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (pathname !== "/patients" && pathname !== "/patients/") {
+    return <Outlet />;
+  }
+
   const { records, hydrated, togglePin, remove } = usePatients();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("recent");

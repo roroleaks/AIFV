@@ -35,7 +35,11 @@
     "bolognaFulfilled": "مستوفية لمعايير Bologna",
     "bolognaNotFulfilled": "غير مستوفية لمعايير Bologna",
     "ohssCritical": "خطر OHSS حرج",
-    "ohssLow": "خطر OHSS منخفض"
+    "ohssLow": "خطر OHSS منخفض",
+    "stratificationSummary": "التصنيف",
+    "expandStratification": "التفاصيل",
+    "collapseStratification": "إخفاء",
+    "moreActions": "المزيد من الإجراءات"
   },
   "leftRail": {
     "newCase": "إدخال مريضة جديدة",
@@ -66,7 +70,10 @@
     "warnings": "التنبيهات السريرية",
     "guidelines": "مراجعة الدلائل الإرشادية",
     "statusActive": "حماية نشطة",
-    "statusPending": "في انتظار القياسات"
+    "statusPending": "في انتظار القياسات",
+    "buttonLabel": "القرارات والرؤى",
+    "close": "إغلاق اللوحة",
+    "dismissAlert": "تأكيد الاطلاع على التنبيه"
   },
   "lockOverlay": {
     "lockedTitle": "الجلسة السريرية مقفلة",
@@ -138,7 +145,14 @@
     "viewRationale": "عرض السند العلمي للخوارزمية",
     "engineRationale": "مسوغات دعم القرار الخوارزمي",
     "guidelineRef": "المرجع الإرشادي المعتمد",
-    "evidenceCitation": "الدليل السريري الموثق"
+    "evidenceCitation": "الدليل السريري الموثق",
+    "prefillFrom": "من",
+    "sectionIdentity": "١. توقيت الزيارة والوزن",
+    "sectionUltrasound": "٢. قياس الجريبات وبطانة الرحم",
+    "sectionLabs": "٣. التحاليل الهرمونية",
+    "sectionMedications": "٤. الأدوية والبروتوكول السريري",
+    "sectionTitration": "٥. تعديل وتعيير الجرعات",
+    "sectionNotes": "٦. الملاحظات السريرية"
   },
   "plan": {
     "protocolTitle": "توصية البروتوكول العلاجي",
@@ -148,6 +162,8 @@
     "applyOverride": "تعديل سريري بقرار الطبيب",
     "reverseOverride": "التراجع عن التعديل السريري",
     "viewEvidence": "عرض المراجع السريرية",
+    "showDetails": "عرض التفاصيل والمسوغات",
+    "hideDetails": "إخفاء التفاصيل",
     "overrideDialogTitle": "تعديل سريري بقرار الطبيب المعالج",
     "overrideFieldLabel": "الحقل المستهدف للتعديل",
     "originalValueLabel": "توصية النظام الخوارزمي",
@@ -174,7 +190,9 @@
     "statusAddendum": "ملحق تعديل نشط",
     "sectionComplete": "مكتمل وموثق",
     "sectionOverridden": "تم تطبيق تعديل الطبيب",
-    "sectionPending": "في انتظار القياسات"
+    "sectionPending": "في انتظار القياسات",
+    "showFull": "عرض القسم كاملاً",
+    "showSummary": "عرض الملخص"
   },
   "common": {
     "close": "إغلاق",

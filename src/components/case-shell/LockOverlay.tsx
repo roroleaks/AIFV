@@ -159,7 +159,7 @@ export function LockOverlay() {
         className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-2xl"
       >
         <div className="flex flex-col items-center text-center">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-4 border border-primary/20">
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-accent-primary/10 text-accent-primary mb-4 border border-accent-primary/20">
             {isFirstRun ? <Key className="size-7" /> : <Lock className="size-7" />}
           </div>
 
@@ -176,7 +176,7 @@ export function LockOverlay() {
                 htmlFor="device-pin-input"
                 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"
               >
-                <KeyRound className="size-3 text-primary" />
+                <KeyRound className="size-3 text-accent-primary" />
                 <span>
                   {isFirstRun
                     ? `${t("lockOverlay.confirmPin")} (≥8 chars)`
@@ -208,9 +208,9 @@ export function LockOverlay() {
                     <span
                       className={cn(
                         "font-semibold",
-                        strength.level === "weak" && "text-destructive",
-                        strength.level === "fair" && "text-amber-500",
-                        strength.level === "strong" && "text-emerald-500",
+                        strength.level === "weak" && "text-safety-danger",
+                        strength.level === "fair" && "text-safety-warning",
+                        strength.level === "strong" && "text-safety-success",
                       )}
                     >
                       {strength.level === "weak" && t("lockOverlay.pinStrengthWeak")}
@@ -222,9 +222,9 @@ export function LockOverlay() {
                     <div
                       className={cn(
                         "h-full transition-all duration-300",
-                        strength.level === "weak" && "bg-destructive",
-                        strength.level === "fair" && "bg-amber-500",
-                        strength.level === "strong" && "bg-emerald-500",
+                        strength.level === "weak" && "bg-safety-danger",
+                        strength.level === "fair" && "bg-safety-warning",
+                        strength.level === "strong" && "bg-safety-success",
                       )}
                       style={{ width: `${strength.percent}%` }}
                     />
@@ -240,7 +240,7 @@ export function LockOverlay() {
                   htmlFor="confirm-pin-input"
                   className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"
                 >
-                  <KeyRound className="size-3 text-primary" />
+                  <KeyRound className="size-3 text-accent-primary" />
                   <span>{t("lockOverlay.confirmPin")}</span>
                 </label>
                 <Input
@@ -261,7 +261,7 @@ export function LockOverlay() {
             {error && (
               <div
                 role="alert"
-                className="flex items-center gap-2 rounded-lg bg-destructive/10 p-2.5 text-xs text-destructive border border-destructive/20 text-start"
+                className="flex items-center gap-2 rounded-lg bg-safety-danger/10 p-2.5 text-xs text-safety-danger border border-safety-danger/20 text-start"
               >
                 <AlertTriangle className="size-4 shrink-0" />
                 <span>{error}</span>
@@ -271,7 +271,7 @@ export function LockOverlay() {
             <Button
               type="submit"
               disabled={isAuthenticating || pin.length < 8 || (isFirstRun && !confirmPin)}
-              className="w-full h-10 font-semibold"
+              className="w-full h-10 font-semibold bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent"
             >
               {isAuthenticating
                 ? "Deriving PBKDF2 Key..."
@@ -282,7 +282,7 @@ export function LockOverlay() {
           </form>
 
           <div className="mt-6 flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
-            <Shield className="size-3 text-emerald-500" />
+            <Shield className="size-3 text-safety-success" />
             <span>{t("topbar.encryptedBadge")}</span>
           </div>
         </div>

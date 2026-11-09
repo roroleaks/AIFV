@@ -35,7 +35,11 @@
     "bolognaFulfilled": "Bologna Fulfilled",
     "bolognaNotFulfilled": "Bologna Not Fulfilled",
     "ohssCritical": "Critical OHSS Risk",
-    "ohssLow": "Low OHSS Risk"
+    "ohssLow": "Low OHSS Risk",
+    "stratificationSummary": "Stratification",
+    "expandStratification": "Details",
+    "collapseStratification": "Collapse",
+    "moreActions": "More actions"
   },
   "leftRail": {
     "newCase": "New Case Intake",
@@ -66,7 +70,10 @@
     "warnings": "Clinical Warnings",
     "guidelines": "Review Guidelines",
     "statusActive": "Active Guard",
-    "statusPending": "Awaiting Telemetry"
+    "statusPending": "Awaiting Telemetry",
+    "buttonLabel": "Decision & Insights",
+    "close": "Close sidebar",
+    "dismissAlert": "Acknowledge Alert"
   },
   "lockOverlay": {
     "lockedTitle": "Clinical Session Locked",
@@ -138,7 +145,14 @@
     "viewRationale": "View Engine Rationale",
     "engineRationale": "Algorithmic Decision Support Rationale",
     "guidelineRef": "Guideline Reference",
-    "evidenceCitation": "Validated Clinical Evidence"
+    "evidenceCitation": "Validated Clinical Evidence",
+    "prefillFrom": "from",
+    "sectionIdentity": "1. Encounter Timing & Weight",
+    "sectionUltrasound": "2. Folliculometry Cohort & Endometrium",
+    "sectionLabs": "3. Hormonal Kinetics (Labs)",
+    "sectionMedications": "4. Medications & Protocol Administration",
+    "sectionTitration": "5. Dose Adjustment & Titration",
+    "sectionNotes": "6. Clinical Observations & Notes"
   },
   "plan": {
     "protocolTitle": "Protocol Recommendation",
@@ -148,6 +162,8 @@
     "applyOverride": "Apply Clinical Override",
     "reverseOverride": "Reverse Override",
     "viewEvidence": "View Evidence Citations",
+    "showDetails": "Show details & rationale",
+    "hideDetails": "Hide details",
     "overrideDialogTitle": "Physician Clinical Override",
     "overrideFieldLabel": "Target Decision Field",
     "originalValueLabel": "Engine Recommendation",
@@ -174,7 +190,9 @@
     "statusAddendum": "Addendum Active",
     "sectionComplete": "Complete",
     "sectionOverridden": "Physician Override Applied",
-    "sectionPending": "Pending Telemetry"
+    "sectionPending": "Pending Telemetry",
+    "showFull": "Show full section",
+    "showSummary": "Show summary"
   },
   "common": {
     "close": "Close",

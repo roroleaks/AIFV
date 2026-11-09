@@ -7,3 +7,6 @@ package-lock.json
 bun.lock
 routeTree.gen.ts
 scripts/fixtures/
+.chrome-tmp*
+screenshots/
+scripts/capture-snapshots.cjs

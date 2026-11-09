@@ -104,12 +104,16 @@ const rechartsChunk = chunks.find((c) => /LineChart|chart/i.test(c.file));
 if (!rechartsChunk) {
   console.warn("  ⚠ Warning: Recharts chunk pattern not matched in split chunks");
 } else {
-  console.log(`  ✓ PASS: Heavy charting library code-split into: ${rechartsChunk.file} (${rechartsChunk.gzipKb} KB gzipped)`);
+  console.log(
+    `  ✓ PASS: Heavy charting library code-split into: ${rechartsChunk.file} (${rechartsChunk.gzipKb} KB gzipped)`,
+  );
 }
 
 // Route chunks isolation
 const routeChunks = chunks.filter((c) => /_shell|case|worklist/i.test(c.file));
-console.log(`  ✓ PASS: Dedicated lazy route chunks identified: ${routeChunks.length} route bundles`);
+console.log(
+  `  ✓ PASS: Dedicated lazy route chunks identified: ${routeChunks.length} route bundles`,
+);
 routeChunks.forEach((rc) => {
   console.log(`     - ${rc.file.padEnd(35)} (${rc.gzipKb} KB gzipped)`);
 });

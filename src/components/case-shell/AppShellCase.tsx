@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useCase } from "@/features/case/useCase";
 import { useReports } from "@/features/report/useReports";
 import { IntakeDrawer } from "@/features/intake/IntakeDrawer";
@@ -18,6 +18,9 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
   const { caseSummary, allPatients, isLoading } = useCase(caseId);
   const [activeRole, setActiveRole] = useState("Physician");
   const [isIntakeOpen, setIsIntakeOpen] = useState(false);
+  const [isDecisionSidebarOpen, setIsDecisionSidebarOpen] = useState(false);
+  const [decisionTargetSection, setDecisionTargetSection] = useState<string | null>(null);
+  const [hasAcknowledgedAlert, setHasAcknowledgedAlert] = useState(false);
 
   const effectiveCaseId = caseSummary?.id ?? caseId ?? "draft";
   const { currentReport } = useReports(effectiveCaseId);
@@ -33,12 +36,52 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
     return caseSummary;
   }, [caseSummary, currentReport.status]);
 
-  return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
-      {/* Zone 1: Persistent Top Bar */}
-      <TopBar activeRole={activeRole} onRoleChange={setActiveRole} />
+  // Auto-open DecisionSidebar if safety firewall is breached or severe OHSS risk escalates (§2.2)
+  useEffect(() => {
+    if (caseSummary && !hasAcknowledgedAlert) {
+      const isSevereRisk = caseSummary.ohssRisk === "high" || caseSummary.ohssRisk === "critical";
+      if (caseSummary.firewallBreached || isSevereRisk) {
+        setIsDecisionSidebarOpen(true);
+        setDecisionTargetSection("firewalls");
+      }
+    }
+  }, [caseSummary, hasAcknowledgedAlert]);
 
-      {/* Zone 2, 3, 4: Main 3-Column Layout */}
+  // Keyboard shortcut: Alt+D toggles sidebar, Esc closes (§2.2)
+  const toggleDecisionSidebar = useCallback(() => {
+    setIsDecisionSidebarOpen((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === "d" || e.key === "D")) {
+        e.preventDefault();
+        toggleDecisionSidebar();
+      } else if (e.key === "Escape" && isDecisionSidebarOpen) {
+        e.preventDefault();
+        setIsDecisionSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isDecisionSidebarOpen, toggleDecisionSidebar]);
+
+  const handleOpenDecisionSection = (sectionId?: string) => {
+    setDecisionTargetSection(sectionId || null);
+    setIsDecisionSidebarOpen(true);
+  };
+
+  return (
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-bg-canvas text-text-primary">
+      {/* Zone 1: Persistent Top Bar */}
+      <TopBar
+        activeRole={activeRole}
+        onRoleChange={setActiveRole}
+        isDecisionOpen={isDecisionSidebarOpen}
+        onToggleDecision={toggleDecisionSidebar}
+      />
+
+      {/* Zone 2 & 3: Two Primary Content Columns (LeftRail + Case Workspace) */}
       <div className="flex flex-1 overflow-hidden">
         {/* Zone 2: Persistent Left Rail Worklist */}
         <LeftRail
@@ -47,48 +90,63 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
           onNewCase={() => setIsIntakeOpen(true)}
         />
 
-        {/* Zone 3: Main Clinical Workspace */}
-        <main className="flex flex-1 flex-col overflow-hidden bg-background">
+        {/* Zone 3: Main Clinical Workspace (fills remaining viewport, strictly two-column) */}
+        <main className="flex flex-1 flex-col overflow-hidden bg-bg-canvas">
           <TestModeBanner />
 
           {isLoading || !effectiveSummary ? (
-            <div className="flex flex-1 items-center justify-center p-8 text-xs text-muted-foreground">
+            <div className="flex flex-1 items-center justify-center p-8 text-xs text-text-muted">
               Loading patient case...
             </div>
           ) : (
             <>
               {/* Persistent Case Header */}
-              <CaseHeader caseSummary={effectiveSummary} />
+              <CaseHeader
+                caseSummary={effectiveSummary}
+                activeRole={activeRole}
+                onOpenDecision={handleOpenDecisionSection}
+              />
 
               {/* Case Tabs (Encounters / Plan / Report) */}
               <CaseTabs caseSummary={effectiveSummary} activeRole={activeRole} />
 
               {/* Dr Raouf Roshdy Footer */}
-              <footer className="mt-auto flex items-center justify-between border-t border-border/60 bg-muted/10 px-6 py-2.5 text-xs text-muted-foreground shrink-0">
+              <footer className="mt-auto flex items-center justify-between border-t border-border-subtle bg-bg-surface-muted/30 px-6 py-2.5 text-xs text-text-muted shrink-0">
                 <div className="flex items-center gap-3">
                   <img
                     src="/dr-raouf-roshdy.jpg"
                     alt="Dr Raouf Roshdy"
-                    className="size-7 rounded-full object-cover ring-1 ring-primary/30"
+                    className="size-7 rounded-full object-cover ring-1 ring-accent-primary/30"
                   />
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-foreground">
+                    <span className="font-semibold text-text-primary">
                       Created by Dr Raouf Roshdy
                     </span>
                     <span>·</span>
                     <span className="text-[11px]">All copyrights reserved 2026</span>
                   </div>
                 </div>
-                <div className="text-[11px] font-mono">
-                  AiFV Precision Hospital CDSS · Phase 1 Case Shell
+                <div className="text-[11px] font-mono text-text-muted">
+                  AiFV Precision Hospital CDSS · Case Workspace
                 </div>
               </footer>
             </>
           )}
         </main>
 
-        {/* Zone 4: Contextual Decision Sidebar */}
-        {caseSummary && <DecisionSidebar caseSummary={caseSummary} />}
+        {/* Zone 4: Contextual Decision Sidebar (On-Demand Slide-In Overlay, Not in layout flow) */}
+        {caseSummary && (
+          <DecisionSidebar
+            caseSummary={caseSummary}
+            open={isDecisionSidebarOpen}
+            onClose={() => setIsDecisionSidebarOpen(false)}
+            onAcknowledgeAlert={() => {
+              setHasAcknowledgedAlert(true);
+              setIsDecisionSidebarOpen(false);
+            }}
+            targetSection={decisionTargetSection}
+          />
+        )}
       </div>
 
       {/* Intake Drawer (§2.1 - §2.6) */}
