@@ -1,13 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  ShieldCheck,
-  Microscope,
-  LineChart,
-  BookMarked,
-  Users,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, ShieldCheck, Microscope, LineChart, BookMarked, Sparkles } from "lucide-react";
 
 import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
@@ -16,13 +8,13 @@ import { WORKFLOW_STAGES } from "@/lib/clinical/workflow-stages";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "IVF Precision — Evidence-Based IVF & ICSI Decision Support" },
+      { title: "AiFV Precision — Hospital IVF Decision Support System" },
       {
         name: "description",
         content:
-          "A clinical decision support workspace helping fertility specialists plan individualized ovarian stimulation using evidence-based methodologies.",
+          "Encounter-based clinical decision support workspace helping fertility specialists plan individualized ovarian stimulation using evidence-based methodologies.",
       },
-      { property: "og:title", content: "IVF Precision — IVF & ICSI Decision Support" },
+      { property: "og:title", content: "AiFV Precision — IVF & ICSI Decision Support" },
       {
         property: "og:description",
         content:
@@ -41,18 +33,18 @@ export const Route = createFileRoute("/")({
 const pillars = [
   {
     icon: Microscope,
-    title: "Structured Assessment",
-    body: "An eight-step clinical intake covering history, laboratory, ultrasound and male factor data.",
+    title: "Case-Centric Hospital Workspace",
+    body: "Longitudinal encounter tracking, persistent patient header, and automated POSEIDON & CONSORT calculation.",
   },
   {
     icon: LineChart,
-    title: "Decision Workspace",
-    body: "A dedicated surface for protocol planning, prepared for evidence-based methodology modules.",
+    title: "Deterministic Engine Layer",
+    body: "Pure headless clinical services strictly enforcing ESHRE 2025 starting dose ceilings and OHSS firewalls.",
   },
   {
     icon: BookMarked,
-    title: "Evidence Library",
-    body: "Guidelines, RCTs, meta-analyses and reviews organised for bedside reference.",
+    title: "Evidence-Gated Reports",
+    body: "16-section clinical dossiers with Vancouver-style citations and immutable sign-off workflow.",
   },
 ];
 
@@ -63,11 +55,8 @@ function Landing() {
         <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3">
           <BrandMark />
           <div className="flex shrink-0 items-center gap-2">
-            <Button variant="ghost" asChild className="hidden sm:inline-flex">
-              <Link to="/evidence">Evidence Library</Link>
-            </Button>
             <Button asChild className="rounded-xl">
-              <Link to="/dashboard">Open Workspace</Link>
+              <Link to="/worklist">Open Hospital Worklist</Link>
             </Button>
           </div>
         </div>
@@ -77,45 +66,39 @@ function Landing() {
         <div className="mx-auto max-w-5xl px-5 py-24 text-center sm:py-32">
           <span className="animate-rise inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-4 py-1.5 text-xs font-medium text-muted-foreground shadow-soft">
             <Sparkles className="size-3.5 text-primary" />
-            For reproductive medicine specialists & IVF consultants
+            Hospital Fertility Unit · Daily Case Worklist &amp; Longitudinal Encounters
           </span>
 
           <h1 className="animate-rise mt-7 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-7xl">
-            IVF Precision
+            AiFV Precision
           </h1>
 
           <p className="animate-rise mx-auto mt-5 max-w-3xl text-lg font-medium text-foreground/80 sm:text-xl">
-            Evidence-Based IVF &amp; ICSI Clinical Decision Support System
+            Case-Centric IVF Clinical Decision Support System (CDSS)
           </p>
 
           <p className="animate-rise mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Designed for fertility specialists to assist with individualized ovarian stimulation
-            planning using internationally recognized evidence-based methodologies.
+            Encounter-based hospital workflow designed for reproductive medicine specialists. Pure
+            headless engines power real-time POSEIDON, CONSORT starting dose, follicular kinetics,
+            and safety firewalls.
           </p>
 
           <div className="animate-rise mt-9 flex flex-wrap items-center justify-center gap-3">
-            <Button asChild size="lg" className="h-12 rounded-xl px-7 text-base shadow-soft">
-              <Link to="/assessment">
-                Start New Patient
-                <ArrowRight className="size-4" />
-              </Link>
-            </Button>
             <Button
               asChild
               size="lg"
-              variant="outline"
-              className="h-12 rounded-xl bg-card px-7 text-base"
+              className="h-12 rounded-xl px-7 text-base shadow-soft font-semibold"
             >
-              <Link to="/patients">
-                <Users className="size-4" />
-                Previous Patients
+              <Link to="/worklist">
+                Open Clinical Worklist
+                <ArrowRight className="size-4" />
               </Link>
             </Button>
           </div>
 
           <p className="mt-8 inline-flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="size-3.5 text-emerald" />
-            Clinician-facing tool — no diagnostic output is generated in this release.
+            Hospital-grade CDSS · Deterministic clinical calculation layer preserved byte-for-byte.
           </p>
         </div>
       </section>
@@ -146,8 +129,7 @@ function Landing() {
             8-Stage Clinical Decision Pipeline
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            A structured, numbered sequence guiding fertility specialists from intake through
-            individualized dosing, monitoring kinetics and final reporting.
+            Specialized modular engine audits for reproductive endocrinology.
           </p>
         </div>
 

@@ -42,7 +42,6 @@ export function WorkflowStepper({
         {WORKFLOW_STAGES.map((stage, idx) => {
           const isActive = currentStage === stage.stageNumber;
           const isPassed = currentStage ? stage.stageNumber < currentStage : false;
-          const Icon = stage.icon;
 
           return (
             <div key={stage.stageNumber} className="flex items-center shrink-0">

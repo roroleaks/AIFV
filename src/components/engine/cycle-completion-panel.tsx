@@ -15,7 +15,6 @@ import {
   Info,
   LineChart as LineChartIcon,
   ListChecks,
-  Lock,
   Printer,
   ShieldAlert,
   ShieldCheck,

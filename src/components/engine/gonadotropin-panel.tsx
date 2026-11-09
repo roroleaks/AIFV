@@ -13,7 +13,6 @@ import {
   FlaskConical,
   History,
   ListChecks,
-  Lock,
   Pill,
   Printer,
   Table2,
@@ -25,7 +24,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { findEvidence } from "@/lib/evidence/library";
 import {
-  GONADOTROPIN_PENDING_MESSAGE,
   gonadotropinConsumerInterfaces,
   gonadotropinReportText,
   selectionStatusLabel,

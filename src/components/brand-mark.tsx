@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Activity } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 export function BrandMark({

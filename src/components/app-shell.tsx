@@ -27,6 +27,7 @@ import {
   Activity,
   FileWarning,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 
 import { BrandMark } from "@/components/brand-mark";
@@ -37,7 +38,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
 
 const topNav = [
-  { label: "Dashboard", to: "/dashboard" },
+  { label: "Hospital Worklist", to: "/worklist" },
   { label: "1. Assessment", to: "/assessment" },
   { label: "2. POSEIDON", to: "/poseidon" },
   { label: "3. Protocols", to: "/protocols" },
@@ -63,10 +64,11 @@ export interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    title: "Workspace",
+    title: "Hospital Workspace",
     items: [
+      { label: "Clinical Worklist", to: "/worklist", icon: LayoutDashboard },
+      { label: "Patients Registry", to: "/patients", icon: ClipboardPlus },
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-      { label: "Patients", to: "/patients", icon: ClipboardPlus },
       { label: "Intelligence Engine", to: "/engine", icon: Cpu },
       { label: "Clinical Calculator", to: "/calculator", icon: Calculator },
     ],
@@ -228,6 +230,13 @@ export function AppShell({ children }: { children?: ReactNode }) {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <Link to="/worklist" className="hidden sm:inline-flex">
+              <Button size="sm" className="h-8 gap-1.5 text-xs font-semibold shadow-xs">
+                <Sparkles className="size-3.5" />
+                <span>Hospital Worklist</span>
+              </Button>
+            </Link>
+
             <div className="relative hidden md:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input

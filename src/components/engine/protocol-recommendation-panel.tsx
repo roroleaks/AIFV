@@ -11,7 +11,6 @@ import {
   FileDown,
   Layers,
   ListChecks,
-  Lock,
   Printer,
   Stethoscope,
   UserRound,
@@ -22,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { findEvidence } from "@/lib/evidence/library";
 import {
-  PROTOCOL_PENDING_MESSAGE,
   protocolConsumerInterfaces,
   protocolReportText,
   recommendationStatusLabel,

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as WorklistRouteImport } from './routes/worklist'
 import { Route as ShellAssessmentRouteImport } from './routes/_shell.assessment'
 import { Route as ShellCalculatorRouteImport } from './routes/_shell.calculator'
 import { Route as ShellConsortRouteImport } from './routes/_shell.consort'
@@ -35,6 +36,7 @@ import { Route as ShellSettingsRouteImport } from './routes/_shell.settings'
 import { Route as ShellStartingDoseRouteImport } from './routes/_shell.starting-dose'
 import { Route as ShellSystemTestRouteImport } from './routes/_shell.system-test'
 import { Route as ShellTriggerRouteImport } from './routes/_shell.trigger'
+import { Route as CaseCaseIdRouteImport } from './routes/case.$caseId'
 import { Route as ShellEvidenceIdRouteImport } from './routes/_shell.evidence_.$id'
 import { Route as ShellPatientIdRouteImport } from './routes/_shell.patient.$id'
 
@@ -45,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorklistRoute = WorklistRouteImport.update({
+  id: '/worklist',
+  path: '/worklist',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShellAssessmentRoute = ShellAssessmentRouteImport.update({
@@ -168,6 +175,11 @@ const ShellTriggerRoute = ShellTriggerRouteImport.update({
   path: '/trigger',
   getParentRoute: () => ShellRoute,
 } as any)
+const CaseCaseIdRoute = CaseCaseIdRouteImport.update({
+  id: '/case/$caseId',
+  path: '/case/$caseId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShellEvidenceIdRoute = ShellEvidenceIdRouteImport.update({
   id: '/evidence_/$id',
   path: '/evidence/$id',
@@ -181,6 +193,7 @@ const ShellPatientIdRoute = ShellPatientIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/worklist': typeof WorklistRoute
   '/assessment': typeof ShellAssessmentRoute
   '/calculator': typeof ShellCalculatorRoute
   '/consort': typeof ShellConsortRoute
@@ -205,11 +218,13 @@ export interface FileRoutesByFullPath {
   '/starting-dose': typeof ShellStartingDoseRoute
   '/system-test': typeof ShellSystemTestRoute
   '/trigger': typeof ShellTriggerRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
   '/evidence/$id': typeof ShellEvidenceIdRoute
   '/patient/$id': typeof ShellPatientIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/worklist': typeof WorklistRoute
   '/assessment': typeof ShellAssessmentRoute
   '/calculator': typeof ShellCalculatorRoute
   '/consort': typeof ShellConsortRoute
@@ -234,6 +249,7 @@ export interface FileRoutesByTo {
   '/starting-dose': typeof ShellStartingDoseRoute
   '/system-test': typeof ShellSystemTestRoute
   '/trigger': typeof ShellTriggerRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
   '/evidence/$id': typeof ShellEvidenceIdRoute
   '/patient/$id': typeof ShellPatientIdRoute
 }
@@ -241,6 +257,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_shell': typeof ShellRouteWithChildren
+  '/worklist': typeof WorklistRoute
   '/_shell/assessment': typeof ShellAssessmentRoute
   '/_shell/calculator': typeof ShellCalculatorRoute
   '/_shell/consort': typeof ShellConsortRoute
@@ -265,6 +282,7 @@ export interface FileRoutesById {
   '/_shell/starting-dose': typeof ShellStartingDoseRoute
   '/_shell/system-test': typeof ShellSystemTestRoute
   '/_shell/trigger': typeof ShellTriggerRoute
+  '/case/$caseId': typeof CaseCaseIdRoute
   '/_shell/evidence_/$id': typeof ShellEvidenceIdRoute
   '/_shell/patient/$id': typeof ShellPatientIdRoute
 }
@@ -272,6 +290,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/worklist'
     | '/assessment'
     | '/calculator'
     | '/consort'
@@ -296,11 +315,13 @@ export interface FileRouteTypes {
     | '/starting-dose'
     | '/system-test'
     | '/trigger'
+    | '/case/$caseId'
     | '/evidence/$id'
     | '/patient/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/worklist'
     | '/assessment'
     | '/calculator'
     | '/consort'
@@ -325,12 +346,14 @@ export interface FileRouteTypes {
     | '/starting-dose'
     | '/system-test'
     | '/trigger'
+    | '/case/$caseId'
     | '/evidence/$id'
     | '/patient/$id'
   id:
     | '__root__'
     | '/'
     | '/_shell'
+    | '/worklist'
     | '/_shell/assessment'
     | '/_shell/calculator'
     | '/_shell/consort'
@@ -355,6 +378,7 @@ export interface FileRouteTypes {
     | '/_shell/starting-dose'
     | '/_shell/system-test'
     | '/_shell/trigger'
+    | '/case/$caseId'
     | '/_shell/evidence_/$id'
     | '/_shell/patient/$id'
   fileRoutesById: FileRoutesById
@@ -362,6 +386,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ShellRoute: typeof ShellRouteWithChildren
+  WorklistRoute: typeof WorklistRoute
+  CaseCaseIdRoute: typeof CaseCaseIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -378,6 +404,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof ShellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/worklist': {
+      id: '/worklist'
+      path: '/worklist'
+      fullPath: '/worklist'
+      preLoaderRoute: typeof WorklistRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_shell/assessment': {
@@ -548,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellTriggerRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/case/$caseId': {
+      id: '/case/$caseId'
+      path: '/case/$caseId'
+      fullPath: '/case/$caseId'
+      preLoaderRoute: typeof CaseCaseIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_shell/evidence_/$id': {
       id: '/_shell/evidence_/$id'
       path: '/evidence/$id'
@@ -628,6 +668,8 @@ const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ShellRoute: ShellRouteWithChildren,
+  WorklistRoute: WorklistRoute,
+  CaseCaseIdRoute: CaseCaseIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

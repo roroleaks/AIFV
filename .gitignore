@@ -31,3 +31,10 @@ dist-ssr
 *.sln
 *.sw?
 *.zip
+
+build
+.env
+.env.*
+!.env.example
+sync-bundles/
+backups/
