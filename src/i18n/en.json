@@ -190,7 +190,9 @@
     "statusAddendum": "Addendum Active",
     "sectionComplete": "Complete",
     "sectionOverridden": "Physician Override Applied",
-    "sectionPending": "Pending Telemetry"
+    "sectionPending": "Pending Telemetry",
+    "showFull": "Show full section",
+    "showSummary": "Show summary"
   },
   "common": {
     "close": "Close",

@@ -15,6 +15,7 @@
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FileText,
   FileCheck2,
@@ -38,6 +39,7 @@ import {
   ListChecks,
   type LucideIcon,
   CheckCircle2,
+  ChevronDown,
 } from "lucide-react";
 import type { Report, ReportSectionContent } from "./types";
 import { exportPdf } from "./exporters/exportPdf";
@@ -95,11 +97,17 @@ export function ReportPreview({
   onOpenAddendum,
   onPrint,
 }: ReportPreviewProps) {
+  const { t } = useTranslation();
   const [showSignDialog, setShowSignDialog] = useState(false);
   const [showAddendumDialog, setShowAddendumDialog] = useState(false);
   const [showCosignDialog, setShowCosignDialog] = useState(false);
   const [addendumReason, setAddendumReason] = useState("");
   const [exportNotice, setExportNotice] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+
+  const toggleSection = (id: string) => {
+    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const isPhysician = activeRole.toLowerCase().includes("physician");
   const isSeniorPhysician = activeRole.toLowerCase().includes("senior");
@@ -203,115 +211,120 @@ export function ReportPreview({
 
         {/* Workflow Actions */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Coordinator Action: Mark Ready for Sign */}
-          {!isSigned && report.status === "Draft" && onSubmitForSign && (
+          {/* Primary Clinical Actions Group */}
+          <div className="flex items-center gap-2">
+            {/* Coordinator Action: Mark Ready for Sign */}
+            {!isSigned && report.status === "Draft" && onSubmitForSign && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={onSubmitForSign}
+                className="h-8 gap-1.5 text-xs font-medium"
+              >
+                Submit for Sign
+              </Button>
+            )}
+
+            {/* Physician Action: Sign Dossier */}
+            {!isSigned && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        size="sm"
+                        disabled={!isPhysician}
+                        onClick={() => setShowSignDialog(true)}
+                        className="h-8 gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs"
+                      >
+                        <FileCheck2 className="size-3.5" />
+                        Sign Report
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {!isPhysician && (
+                    <TooltipContent>
+                      <p className="text-xs">Physician only</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+            )}
+
+            {/* Senior Physician Action: Co-sign */}
+            {isSigned && !report.cosignedBy && isSeniorPhysician && (
+              <Button
+                size="sm"
+                onClick={() => setShowCosignDialog(true)}
+                className="h-8 gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs"
+              >
+                <FileCheck2 className="size-3.5" />
+                Co-sign Report
+              </Button>
+            )}
+
+            {/* Addendum Action: Open Addendum */}
+            {isSigned && onOpenAddendum && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowAddendumDialog(true)}
+                className="h-8 gap-1.5 text-xs text-foreground font-medium"
+              >
+                <FilePlus2 className="size-3.5" />
+                Open Addendum
+              </Button>
+            )}
+          </div>
+
+          <div className="h-5 w-px bg-border/60 mx-1 hidden sm:block" />
+
+          {/* Secondary Exporters & Print Group */}
+          <div className="flex items-center gap-2">
             <Button
               size="sm"
               variant="outline"
-              onClick={onSubmitForSign}
-              className="h-8 gap-1.5 text-xs font-medium"
+              onClick={handleExportPdf}
+              className="h-8 gap-1.5 text-xs"
+              title="Download publication-grade A4 PDF"
             >
-              Submit for Sign
+              <Download className="size-3.5 text-muted-foreground" />
+              PDF
             </Button>
-          )}
 
-          {/* Physician Action: Sign Dossier */}
-          {!isSigned && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span>
-                    <Button
-                      size="sm"
-                      disabled={!isPhysician}
-                      onClick={() => setShowSignDialog(true)}
-                      className="h-8 gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs"
-                    >
-                      <FileCheck2 className="size-3.5" />
-                      Sign Report
-                    </Button>
-                  </span>
-                </TooltipTrigger>
-                {!isPhysician && (
-                  <TooltipContent>
-                    <p className="text-xs">Physician only</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
-          )}
-
-          {/* Senior Physician Action: Co-sign */}
-          {isSigned && !report.cosignedBy && isSeniorPhysician && (
-            <Button
-              size="sm"
-              onClick={() => setShowCosignDialog(true)}
-              className="h-8 gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs"
-            >
-              <FileCheck2 className="size-3.5" />
-              Co-sign Report
-            </Button>
-          )}
-
-          {/* Addendum Action: Open Addendum */}
-          {isSigned && onOpenAddendum && (
             <Button
               size="sm"
               variant="outline"
-              onClick={() => setShowAddendumDialog(true)}
-              className="h-8 gap-1.5 text-xs text-foreground font-medium"
+              onClick={handleExportFhir}
+              className="h-8 gap-1.5 text-xs"
+              title="Download FHIR R4 Bundle JSON"
             >
-              <FilePlus2 className="size-3.5" />
-              Open Addendum
+              <Code className="size-3.5 text-muted-foreground" />
+              FHIR
             </Button>
-          )}
 
-          <div className="h-4 w-px bg-border/60 mx-1" />
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleExportEhr}
+              className="h-8 gap-1.5 text-xs"
+              title="Download EHR Adapter Payload"
+            >
+              <Share2 className="size-3.5 text-muted-foreground" />
+              EHR
+            </Button>
 
-          {/* Exporters */}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleExportPdf}
-            className="h-8 gap-1.5 text-xs"
-            title="Download publication-grade A4 PDF"
-          >
-            <Download className="size-3.5 text-muted-foreground" />
-            PDF
-          </Button>
-
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleExportFhir}
-            className="h-8 gap-1.5 text-xs"
-            title="Download FHIR R4 Bundle JSON"
-          >
-            <Code className="size-3.5 text-muted-foreground" />
-            FHIR
-          </Button>
-
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleExportEhr}
-            className="h-8 gap-1.5 text-xs"
-            title="Download EHR Adapter Payload"
-          >
-            <Share2 className="size-3.5 text-muted-foreground" />
-            EHR
-          </Button>
-
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handlePrint}
-            className="h-8 gap-1.5 text-xs"
-            title="Print dossier summary"
-          >
-            <Printer className="size-3.5 text-muted-foreground" />
-            Print
-          </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handlePrint}
+              className="h-8 gap-1.5 text-xs"
+              title="Print dossier summary"
+            >
+              <Printer className="size-3.5 text-muted-foreground" />
+              Print
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -370,16 +383,21 @@ export function ReportPreview({
         </header>
 
         {/* 16 Clinical Dossier Sections */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {sections.map((sec) => {
             const Icon = ICONS[sec.icon ?? ""] ?? FileText;
             const hasOverrides = sec.overrides && sec.overrides.length > 0;
+            const isCollapsible =
+              sec.tables.length > 0 ||
+              sec.lists.some((l) => l.items.length > 3) ||
+              sec.fields.length > 6;
+            const isExpanded = isCollapsible ? !!expandedSections[sec.id] : true;
 
             return (
               <section
                 key={sec.id}
                 id={sec.id}
-                className="rounded-xl border border-border/60 bg-muted/10 p-6 break-inside-avoid shadow-2xs"
+                className="rounded-xl border border-border/60 bg-muted/10 p-5 sm:p-6 break-inside-avoid shadow-2xs"
               >
                 {/* Section Header */}
                 <div className="flex flex-wrap items-start justify-between gap-2 border-b border-border/50 pb-3">
@@ -408,27 +426,32 @@ export function ReportPreview({
                     {sec.overrides?.map((ov, ovIdx) => (
                       <div
                         key={ovIdx}
-                        className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs"
+                        className="rounded-e-lg border-s-4 border-amber-500 border-y border-e border-border/50 bg-amber-500/5 dark:bg-amber-950/20 p-3 text-xs space-y-1"
                       >
-                        <div className="flex items-center gap-2">
-                          <Badge className="bg-amber-600 text-white hover:bg-amber-700 text-[10px] font-bold tracking-wider uppercase">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge
+                            variant="outline"
+                            className="border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px] font-bold tracking-wider uppercase"
+                          >
                             OVERRIDDEN
                           </Badge>
-                          <span className="font-bold text-amber-900 dark:text-amber-200">
+                          <span className="font-bold text-foreground">
                             {ov.label}:
                           </span>
                           <span className="line-through text-muted-foreground">
                             {ov.originalValue}
                           </span>
-                          <span className="font-bold text-foreground">→ {ov.overrideValue}</span>
+                          <span className="font-bold text-amber-700 dark:text-amber-400">
+                            → {ov.overrideValue}
+                          </span>
                         </div>
-                        <div className="mt-1.5 text-muted-foreground text-[11px]">
+                        <div className="text-muted-foreground text-[11px]">
                           <span className="font-semibold text-foreground/80">
                             Physician Justification:
                           </span>{" "}
                           &quot;{ov.reason}&quot;
                         </div>
-                        <div className="mt-0.5 text-[10px] text-muted-foreground/80">
+                        <div className="text-[10px] text-muted-foreground/80">
                           Prescribed by {ov.overriddenBy} at{" "}
                           {new Date(ov.overriddenAt).toLocaleString()}
                         </div>
@@ -437,94 +460,116 @@ export function ReportPreview({
                   </div>
                 )}
 
-                {/* Key-Value Fields */}
-                {sec.fields.length > 0 && (
-                  <dl className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {sec.fields.map((f, fIdx) => (
-                      <div key={fIdx} className="min-w-0">
-                        <dt className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                          {f.label}
-                        </dt>
-                        <dd
-                          className={cn(
-                            "text-xs truncate mt-0.5",
-                            f.present
-                              ? "font-semibold text-foreground"
-                              : "italic text-muted-foreground",
-                          )}
-                          title={f.value}
-                        >
-                          {f.value}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
+                {/* Progressive Disclosure Toggle Link for Dense Sections */}
+                {isCollapsible && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => toggleSection(sec.id)}
+                    className="mt-3 h-7 px-2.5 text-xs text-primary font-medium hover:underline gap-1.5 p-0 justify-start print:hidden"
+                    aria-expanded={isExpanded}
+                  >
+                    <span>{isExpanded ? t("report.showSummary") : t("report.showFull")}</span>
+                    <ChevronDown
+                      className={cn(
+                        "size-3.5 transition-transform duration-200",
+                        isExpanded && "rotate-180",
+                      )}
+                    />
+                  </Button>
                 )}
 
-                {/* Lists */}
-                {sec.lists.map((l, lIdx) => (
-                  <div key={lIdx} className="mt-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
-                      {l.title}
-                    </span>
-                    {l.items.length === 0 ? (
-                      <p className="mt-1 text-xs italic text-muted-foreground">
-                        {l.emptyLabel ?? "None recorded."}
-                      </p>
-                    ) : (
-                      <ul className="mt-1.5 space-y-1">
-                        {l.items.map((item, iIdx) => (
-                          <li
-                            key={iIdx}
-                            className="flex items-start gap-2 text-xs text-foreground/90"
+                {/* Section Details (Hidden on Screen when Collapsed, Always Visible in Print) */}
+                <div className={cn("mt-4 space-y-4", !isExpanded && "hidden print:block")}>
+                  {/* Key-Value Fields */}
+                  {sec.fields.length > 0 && (
+                    <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {sec.fields.map((f, fIdx) => (
+                        <div key={fIdx} className="min-w-0">
+                          <dt className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                            {f.label}
+                          </dt>
+                          <dd
+                            className={cn(
+                              "text-xs truncate mt-0.5",
+                              f.present
+                                ? "font-semibold text-foreground"
+                                : "italic text-muted-foreground",
+                            )}
+                            title={f.value}
                           >
-                            <span className="size-1 rounded-full bg-primary mt-1.5 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
+                            {f.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
 
-                {/* Tables */}
-                {sec.tables.map((t, tIdx) => (
-                  <div key={tIdx} className="mt-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
-                      {t.title}
-                    </span>
-                    {t.rows.length === 0 ? (
-                      <p className="mt-1 text-xs italic text-muted-foreground">
-                        {t.emptyLabel ?? "No data recorded."}
-                      </p>
-                    ) : (
-                      <div className="mt-2 overflow-x-auto rounded-lg border border-border/60">
-                        <table className="w-full text-start text-xs">
-                          <thead className="bg-muted/40 text-[10px] uppercase tracking-wider text-muted-foreground">
-                            <tr>
-                              {t.columns.map((c, cIdx) => (
-                                <th key={cIdx} className="px-3 py-1.5 font-bold">
-                                  {c}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {t.rows.map((row, rIdx) => (
-                              <tr key={rIdx} className="border-t border-border/40">
-                                {row.map((cell, cellIdx) => (
-                                  <td key={cellIdx} className="px-3 py-1.5 text-foreground/90">
-                                    {cell}
-                                  </td>
+                  {/* Lists */}
+                  {sec.lists.map((l, lIdx) => (
+                    <div key={lIdx}>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                        {l.title}
+                      </span>
+                      {l.items.length === 0 ? (
+                        <p className="mt-1 text-xs italic text-muted-foreground">
+                          {l.emptyLabel ?? "None recorded."}
+                        </p>
+                      ) : (
+                        <ul className="mt-1.5 space-y-1">
+                          {l.items.map((item, iIdx) => (
+                            <li
+                              key={iIdx}
+                              className="flex items-start gap-2 text-xs text-foreground/90"
+                            >
+                              <span className="size-1 rounded-full bg-primary mt-1.5 shrink-0" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Tables */}
+                  {sec.tables.map((t, tIdx) => (
+                    <div key={tIdx}>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
+                        {t.title}
+                      </span>
+                      {t.rows.length === 0 ? (
+                        <p className="mt-1 text-xs italic text-muted-foreground">
+                          {t.emptyLabel ?? "No data recorded."}
+                        </p>
+                      ) : (
+                        <div className="mt-2 overflow-x-auto rounded-lg border border-border/60">
+                          <table className="w-full text-start text-xs">
+                            <thead className="bg-muted/40 text-[10px] uppercase tracking-wider text-muted-foreground">
+                              <tr>
+                                {t.columns.map((c, cIdx) => (
+                                  <th key={cIdx} className="px-3 py-1.5 font-bold">
+                                    {c}
+                                  </th>
                                 ))}
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                            </thead>
+                            <tbody>
+                              {t.rows.map((row, rIdx) => (
+                                <tr key={rIdx} className="border-t border-border/40">
+                                  {row.map((cell, cellIdx) => (
+                                    <td key={cellIdx} className="px-3 py-1.5 text-foreground/90">
+                                      {cell}
+                                    </td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </section>
             );
           })}

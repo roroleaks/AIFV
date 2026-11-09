@@ -190,7 +190,9 @@
     "statusAddendum": "ملحق تعديل نشط",
     "sectionComplete": "مكتمل وموثق",
     "sectionOverridden": "تم تطبيق تعديل الطبيب",
-    "sectionPending": "في انتظار القياسات"
+    "sectionPending": "في انتظار القياسات",
+    "showFull": "عرض القسم كاملاً",
+    "showSummary": "عرض الملخص"
   },
   "common": {
     "close": "إغلاق",
