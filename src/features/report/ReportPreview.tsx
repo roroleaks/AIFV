@@ -198,7 +198,7 @@ export function ReportPreview({
           </Badge>
           {report.locked && (
             <Badge variant="secondary" className="text-[11px] gap-1 font-mono">
-              <CheckCircle2 className="size-3 text-emerald-600" />
+              <CheckCircle2 className="size-3 text-safety-success" />
               Locked & Snapshot Frozen
             </Badge>
           )}
@@ -235,7 +235,7 @@ export function ReportPreview({
                         size="sm"
                         disabled={!isPhysician}
                         onClick={() => setShowSignDialog(true)}
-                        className="h-8 gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs"
+                        className="h-8 gap-1.5 bg-safety-success hover:bg-safety-success/90 text-text-on-accent font-semibold text-xs shadow-xs"
                       >
                         <FileCheck2 className="size-3.5" />
                         Sign Report
@@ -256,7 +256,7 @@ export function ReportPreview({
               <Button
                 size="sm"
                 onClick={() => setShowCosignDialog(true)}
-                className="h-8 gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs"
+                className="h-8 gap-1.5 bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent font-semibold text-xs"
               >
                 <FileCheck2 className="size-3.5" />
                 Co-sign Report
@@ -373,7 +373,10 @@ export function ReportPreview({
               <div>
                 <span className="font-semibold text-foreground">Status:</span>{" "}
                 <span
-                  className={cn("font-semibold", isSigned ? "text-emerald-600" : "text-amber-600")}
+                  className={cn(
+                    "font-semibold",
+                    isSigned ? "text-safety-success" : "text-safety-warning",
+                  )}
                 >
                   {report.status.toUpperCase()}
                 </span>
@@ -402,11 +405,11 @@ export function ReportPreview({
                 {/* Section Header */}
                 <div className="flex flex-wrap items-start justify-between gap-2 border-b border-border/50 pb-3">
                   <div className="flex items-center gap-3">
-                    <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span className="flex size-8 items-center justify-center rounded-lg bg-accent-primary/10 text-accent-primary">
                       <Icon className="size-4" />
                     </span>
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-accent-primary">
                         Section {String(sec.number).padStart(2, "0")}
                       </span>
                       <h2 className="text-base font-bold text-foreground">{sec.title}</h2>
@@ -426,30 +429,28 @@ export function ReportPreview({
                     {sec.overrides?.map((ov, ovIdx) => (
                       <div
                         key={ovIdx}
-                        className="rounded-e-lg border-s-4 border-amber-500 border-y border-e border-border/50 bg-amber-500/5 dark:bg-amber-950/20 p-3 text-xs space-y-1"
+                        className="rounded-e-lg border-s-4 border-accent-override border-y border-e border-border-subtle bg-accent-override/5 p-3 text-xs space-y-1"
                       >
                         <div className="flex items-center gap-2 flex-wrap">
                           <Badge
                             variant="outline"
-                            className="border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px] font-bold tracking-wider uppercase"
+                            className="border-accent-override/60 bg-accent-override/10 text-accent-override text-[10px] font-bold tracking-wider uppercase"
                           >
                             OVERRIDDEN
                           </Badge>
-                          <span className="font-bold text-foreground">{ov.label}:</span>
-                          <span className="line-through text-muted-foreground">
-                            {ov.originalValue}
-                          </span>
-                          <span className="font-bold text-amber-700 dark:text-amber-400">
+                          <span className="font-bold text-text-primary">{ov.label}:</span>
+                          <span className="line-through text-text-muted">{ov.originalValue}</span>
+                          <span className="font-bold text-accent-override">
                             → {ov.overrideValue}
                           </span>
                         </div>
-                        <div className="text-muted-foreground text-[11px]">
-                          <span className="font-semibold text-foreground/80">
+                        <div className="text-text-secondary text-[11px]">
+                          <span className="font-semibold text-text-primary">
                             Physician Justification:
                           </span>{" "}
                           &quot;{ov.reason}&quot;
                         </div>
-                        <div className="text-[10px] text-muted-foreground/80">
+                        <div className="text-[10px] text-text-muted">
                           Prescribed by {ov.overriddenBy} at{" "}
                           {new Date(ov.overriddenAt).toLocaleString()}
                         </div>
@@ -576,20 +577,18 @@ export function ReportPreview({
         {/* Dossier Legal Sign Footer (§2.3, §2.4) */}
         <footer className="mt-12 border-t-2 border-border/80 pt-6 text-xs text-muted-foreground">
           {isSigned ? (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
-              <div className="font-semibold text-emerald-900 dark:text-emerald-300">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 rounded-xl bg-safety-success-bg border border-safety-success/30">
+              <div className="font-semibold text-safety-success">
                 SIGNED — Dr. {report.signedBy} —{" "}
                 {report.signedAt ? new Date(report.signedAt).toLocaleString() : ""}
                 {report.cosignedBy && (
-                  <span className="ms-2 font-bold text-indigo-700 dark:text-indigo-300">
+                  <span className="ms-2 font-bold text-accent-primary">
                     · CO-SIGNED — Dr. {report.cosignedBy} —{" "}
                     {report.cosignedAt ? new Date(report.cosignedAt).toLocaleString() : ""}
                   </span>
                 )}
               </div>
-              <div className="text-[11px] font-mono text-muted-foreground">
-                Document ID: {report.id}
-              </div>
+              <div className="text-[11px] font-mono text-text-muted">Document ID: {report.id}</div>
             </div>
           ) : (
             <div className="flex items-center justify-between text-[11px] italic">
@@ -605,7 +604,7 @@ export function ReportPreview({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-foreground">
-              <FileCheck2 className="size-5 text-emerald-600" />
+              <FileCheck2 className="size-5 text-safety-success" />
               Sign & Lock Clinical Dossier
             </DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground pt-1.5">
@@ -635,7 +634,7 @@ export function ReportPreview({
             <Button
               size="sm"
               onClick={confirmSign}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+              className="bg-safety-success hover:bg-safety-success/90 text-text-on-accent font-semibold"
             >
               Confirm & Lock Dossier
             </Button>
@@ -648,7 +647,7 @@ export function ReportPreview({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-foreground">
-              <FileCheck2 className="size-5 text-indigo-600" />
+              <FileCheck2 className="size-5 text-accent-primary" />
               Co-sign Clinical Dossier
             </DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground pt-1.5">
@@ -664,7 +663,7 @@ export function ReportPreview({
             <Button
               size="sm"
               onClick={confirmCosign}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+              className="bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent font-semibold"
             >
               Endorse & Co-sign
             </Button>
@@ -706,7 +705,7 @@ export function ReportPreview({
               size="sm"
               disabled={addendumReason.trim().length < 5}
               onClick={confirmAddendum}
-              className="bg-primary text-primary-foreground font-semibold"
+              className="bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent font-semibold"
             >
               Create Addendum v{report.version + 1}
             </Button>

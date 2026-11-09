@@ -340,10 +340,11 @@ export function EncounterForm({
                     className={cn(
                       "h-6 text-[10px] px-2 gap-1 font-medium transition-all shadow-2xs",
                       chip.variant === "destructive" &&
-                        "border-destructive/40 bg-destructive/10 text-destructive font-semibold",
+                        "border-safety-danger/40 bg-safety-danger-bg text-safety-danger font-semibold",
                       chip.variant === "warning" &&
-                        "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold",
-                      !isAlert && "border-border/80 bg-background text-muted-foreground",
+                        "border-safety-warning/40 bg-safety-warning-bg text-safety-warning font-semibold",
+                      !isAlert &&
+                        "border-accent-classification/30 bg-accent-classification/10 text-accent-classification",
                     )}
                   >
                     <span>{chip.label}</span>
@@ -1112,13 +1113,13 @@ export function EncounterForm({
 
       {/* Soft Warning Reason Dialog (§5) */}
       <Dialog open={softWarningModalOpen} onOpenChange={setSoftWarningModalOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-bg-surface border-border-subtle">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-amber-600 text-sm font-bold">
+            <DialogTitle className="flex items-center gap-2 text-safety-warning text-sm font-bold">
               <AlertTriangle className="size-4" />
               <span>Clinical Soft Warning Confirmation</span>
             </DialogTitle>
-            <DialogDescription className="text-xs text-muted-foreground pt-1">
+            <DialogDescription className="text-xs text-text-muted pt-1">
               One or more clinical values deviate from typical kinetics. Provide a brief clinical
               reason to record in the immutable audit log:
             </DialogDescription>
@@ -1129,7 +1130,7 @@ export function EncounterForm({
               {validation.softWarnings.map((w, idx) => (
                 <div
                   key={idx}
-                  className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-2.5 text-xs text-amber-800 dark:text-amber-300"
+                  className="rounded-lg bg-safety-warning-bg border border-safety-warning/30 p-2.5 text-xs text-safety-warning"
                 >
                   <span className="font-semibold block">{w.triggerCondition}:</span>
                   <span>{w.message}</span>
@@ -1138,7 +1139,7 @@ export function EncounterForm({
             </div>
 
             <div>
-              <Label htmlFor="warning-reason" className="text-xs font-semibold">
+              <Label htmlFor="warning-reason" className="text-xs font-semibold text-text-primary">
                 Physician / Nurse Clinical Justification *
               </Label>
               <Input
@@ -1148,7 +1149,7 @@ export function EncounterForm({
                 placeholder="e.g. Expected vigorous response in PCOS patient, coasting initiated."
                 value={softWarningReason}
                 onChange={(e) => setSoftWarningReason(e.target.value)}
-                className="mt-1 h-9 text-xs"
+                className="mt-1 h-9 text-xs border-border-default focus-visible:border-accent-primary"
               />
             </div>
           </div>
@@ -1159,6 +1160,7 @@ export function EncounterForm({
               variant="outline"
               size="sm"
               onClick={() => setSoftWarningModalOpen(false)}
+              className="border-border-default text-text-primary hover:bg-bg-surface-muted"
             >
               Review Values
             </Button>
@@ -1167,7 +1169,7 @@ export function EncounterForm({
               size="sm"
               disabled={!softWarningReason.trim()}
               onClick={() => finalizeSave(pendingNextAndSave, softWarningReason)}
-              className="bg-amber-600 text-white hover:bg-amber-700"
+              className="bg-safety-warning text-text-on-accent hover:opacity-90"
             >
               Confirm &amp; Audit Log
             </Button>

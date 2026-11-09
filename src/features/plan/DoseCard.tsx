@@ -122,8 +122,8 @@ export function DoseCard({
             onClick={() => setActiveDialog("dose")}
             className={`h-7 px-2.5 text-xs gap-1 shadow-2xs font-semibold ${
               startingDoseOverride
-                ? "border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20"
-                : "border-border/80 text-foreground hover:bg-muted"
+                ? "border-accent-override/60 bg-accent-override/10 text-accent-override hover:bg-accent-override/20"
+                : "border-border-default text-text-primary hover:bg-bg-surface-muted"
             }`}
             title={
               isPhysician
@@ -133,12 +133,12 @@ export function DoseCard({
           >
             {startingDoseOverride ? (
               <>
-                <AlertTriangle className="size-3 text-amber-600" />
+                <AlertTriangle className="size-3 text-accent-override" />
                 <span>Dose Overridden</span>
               </>
             ) : (
               <>
-                <UserCheck className="size-3 text-primary" />
+                <UserCheck className="size-3 text-accent-primary" />
                 <span>Override Dose</span>
               </>
             )}
@@ -178,10 +178,8 @@ export function DoseCard({
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Safety Ceiling:</span>
-                      <span className="font-mono text-emerald-600 dark:text-emerald-400">
-                        300 IU/day max
-                      </span>
+                      <span className="text-text-muted">Safety Ceiling:</span>
+                      <span className="font-mono text-safety-success">300 IU/day max</span>
                     </div>
                   </div>
                 }
@@ -193,35 +191,35 @@ export function DoseCard({
           {startingDoseOverride ? (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs line-through text-muted-foreground">
+                <span className="text-xs line-through text-text-muted">
                   {rawStartingDoseDisplay}
                 </span>
-                <ArrowRight className="size-3 text-amber-600 shrink-0" />
-                <span className="text-base font-bold text-amber-600 dark:text-amber-400 font-mono">
+                <ArrowRight className="size-3 text-accent-override shrink-0" />
+                <span className="text-base font-bold text-accent-override font-mono">
                   {currentStartingDoseDisplay}
                 </span>
                 <Badge
                   variant="outline"
-                  className="bg-amber-500/10 border-amber-500/50 text-amber-700 dark:text-amber-400 text-[9px] font-bold"
+                  className="bg-accent-override/10 border-accent-override/50 text-accent-override text-[9px] font-bold"
                 >
                   OVERRIDDEN
                 </Badge>
               </div>
 
-              <div className="rounded bg-amber-500/10 border border-amber-500/30 p-2 text-[11px] text-amber-900 dark:text-amber-200 space-y-0.5">
+              <div className="rounded bg-accent-override/10 border border-accent-override/30 p-2 text-[11px] text-accent-override space-y-0.5">
                 <div className="flex justify-between items-center text-[10px] font-semibold">
                   <span>By: {startingDoseOverride.by}</span>
                   <span>{new Date(startingDoseOverride.at).toLocaleDateString()}</span>
                 </div>
-                <p className="italic">"{startingDoseOverride.reason}"</p>
+                <p className="italic">&quot;{startingDoseOverride.reason}&quot;</p>
               </div>
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="text-lg font-bold text-primary font-mono">
+              <span className="text-lg font-bold text-accent-primary font-mono">
                 {rawStartingDoseDisplay}
               </span>
-              <span className="text-muted-foreground text-[11px]">
+              <span className="text-text-muted text-[11px]">
                 ({gonadotropin.selection?.recommended || "rFSH"})
               </span>
             </div>
@@ -282,10 +280,10 @@ export function DoseCard({
                   size="sm"
                   disabled={!isPhysician}
                   onClick={() => setActiveDialog("lh")}
-                  className="h-6 px-1.5 text-[11px] text-muted-foreground hover:text-foreground gap-1"
+                  className="h-6 px-1.5 text-[11px] text-text-muted hover:text-text-primary gap-1"
                 >
                   {lhAddonOverride ? (
-                    <span className="text-amber-600 font-bold">Edit Override</span>
+                    <span className="text-accent-override font-bold">Edit Override</span>
                   ) : (
                     <span>Override</span>
                   )}
@@ -295,20 +293,16 @@ export function DoseCard({
               {lhAddonOverride ? (
                 <div className="space-y-1 pt-0.5">
                   <div className="flex items-center gap-1.5 text-xs flex-wrap">
-                    <span className="line-through text-muted-foreground text-[11px]">
-                      {rawLhDisplay}
-                    </span>
-                    <ArrowRight className="size-3 text-amber-600 shrink-0" />
-                    <span className="font-bold text-amber-600 dark:text-amber-400">
-                      {currentLhDisplay}
-                    </span>
+                    <span className="line-through text-text-muted text-[11px]">{rawLhDisplay}</span>
+                    <ArrowRight className="size-3 text-accent-override shrink-0" />
+                    <span className="font-bold text-accent-override">{currentLhDisplay}</span>
                   </div>
-                  <p className="text-[10px] italic text-muted-foreground">
-                    "{lhAddonOverride.reason}"
+                  <p className="text-[10px] italic text-text-muted">
+                    &quot;{lhAddonOverride.reason}&quot;
                   </p>
                 </div>
               ) : (
-                <div className="text-[11px] font-medium text-foreground">{rawLhDisplay}</div>
+                <div className="text-[11px] font-medium text-text-primary">{rawLhDisplay}</div>
               )}
             </div>
           </div>

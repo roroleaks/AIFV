@@ -8,6 +8,7 @@
  * STRICT REQUIREMENT:
  *  - Classification, not recommendation.
  *  - READ-ONLY: No override buttons permitted.
+ *  - Academic palette: POSEIDON/Bologna/phenotype/response all use --accent-classification (§11)
  *  - Progressive disclosure: 4-metric executive summary with expandable rationale.
  */
 
@@ -30,16 +31,16 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
   const { poseidon, bologna, phenotype, ovarianResponse } = stratification;
 
   return (
-    <Card className="border-border/80 shadow-xs flex flex-col justify-between">
-      <CardHeader className="py-3 px-4 border-b border-border/50 bg-muted/20">
+    <Card className="border-border-subtle bg-bg-surface shadow-2xs flex flex-col justify-between">
+      <CardHeader className="py-2.5 px-4 border-b border-border-subtle bg-bg-surface-muted/40">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-foreground">
-            <Stethoscope className="size-4 text-primary" />
+          <CardTitle className="text-xs font-bold uppercase tracking-wider flex items-center gap-2 text-text-primary">
+            <Stethoscope className="size-4 text-accent-primary" />
             <span>1. Ovarian Reserve Stratification</span>
           </CardTitle>
           <Badge
             variant="outline"
-            className="text-[10px] gap-1 font-mono text-muted-foreground border-border/70"
+            className="text-[10px] gap-1 font-mono text-text-muted border-border-default"
             title="Classification algorithms are strictly deterministic and read-only"
           >
             <Lock className="size-3" />
@@ -49,60 +50,56 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
       </CardHeader>
 
       <CardContent className="p-4 space-y-3.5 text-xs">
-        {/* Executive 4-Metric Grid (Primary View) */}
-        <div className="grid grid-cols-2 gap-2 text-[11px]">
+        {/* Executive 4-Metric Grid (Primary View) - Mapped to Academic Classification Slate */}
+        <div className="grid grid-cols-2 gap-2.5 text-[11px]">
           {/* POSEIDON Group */}
-          <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1">
-            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">
+          <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1">
+            <span className="text-text-muted block text-[10px] uppercase font-semibold">
               POSEIDON
             </span>
-            <span className="text-foreground font-bold text-sm block">
+            <span className="text-text-primary font-bold text-sm block">
               {poseidon.groupLabel ? `Group ${poseidon.groupLabel}` : "Normal Reserve"}
             </span>
-            <span className="text-muted-foreground text-[10px] block line-clamp-1">
+            <span className="text-text-muted text-[10px] block line-clamp-1">
               {poseidon.groupLabel ? `Subgroup ${poseidon.groupLabel}` : "Non-low cohort"}
             </span>
           </div>
 
           {/* Bologna Criteria */}
-          <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1">
-            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">
+          <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1">
+            <span className="text-text-muted block text-[10px] uppercase font-semibold">
               Bologna POR
             </span>
-            <span
-              className={`font-bold text-sm block ${
-                bologna.status === "positive" ? "text-destructive" : "text-foreground"
-              }`}
-            >
+            <span className="font-bold text-sm block text-text-primary">
               {bologna.status === "positive" ? "Fulfilled" : "Not Fulfilled"}
             </span>
-            <span className="text-muted-foreground text-[10px] block line-clamp-1">
+            <span className="text-text-muted text-[10px] block line-clamp-1">
               {bologna.status === "positive" ? "Poor responder" : "Normal criteria"}
             </span>
           </div>
 
           {/* Reserve Phenotype */}
-          <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1">
-            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">
+          <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1">
+            <span className="text-text-muted block text-[10px] uppercase font-semibold">
               Reserve Category
             </span>
-            <span className="text-foreground font-bold capitalize text-sm block">
+            <span className="text-text-primary font-bold capitalize text-sm block">
               {phenotype.reserve?.category || "Normal"}
             </span>
-            <span className="text-muted-foreground text-[10px] block">
+            <span className="text-text-muted text-[10px] block">
               AMH: {phenotype.reserve?.amh ?? "—"} · AFC: {phenotype.reserve?.afc ?? "—"}
             </span>
           </div>
 
           {/* Predicted Response */}
-          <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1">
-            <span className="text-muted-foreground block text-[10px] uppercase font-semibold">
+          <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1">
+            <span className="text-text-muted block text-[10px] uppercase font-semibold">
               Predicted Response
             </span>
-            <span className="text-primary font-bold uppercase text-sm block">
+            <span className="text-accent-classification font-bold uppercase text-sm block">
               {ovarianResponse.category || "Normal"}
             </span>
-            <span className="text-muted-foreground text-[10px] block">
+            <span className="text-text-muted text-[10px] block">
               {ovarianResponse.category === "poor" || ovarianResponse.category === "very-poor"
                 ? "≤ 3 oocytes"
                 : ovarianResponse.category === "suboptimal"
@@ -115,7 +112,7 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
         </div>
 
         {/* 1-Line Clinical Rationale */}
-        <p className="text-[11px] text-muted-foreground line-clamp-2">
+        <p className="text-[11px] text-text-muted line-clamp-2">
           {poseidon.headline ||
             (poseidon.groupLabel
               ? `Patient classifies into POSEIDON Group ${poseidon.groupLabel} based on age and reserve markers.`
@@ -127,7 +124,7 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
           variant="ghost"
           size="sm"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full justify-between h-7 px-2.5 text-[11px] text-muted-foreground hover:text-foreground border border-border/40 hover:bg-muted/40"
+          className="w-full justify-between h-7 px-2.5 text-[11px] text-text-muted hover:text-text-primary border border-border-subtle hover:bg-bg-surface-muted"
           aria-expanded={isExpanded}
         >
           <span>{isExpanded ? t("plan.hideDetails") : t("plan.showDetails")}</span>
@@ -138,21 +135,17 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
 
         {/* Expandable Deep Details & Citations */}
         {isExpanded && (
-          <div className="space-y-3 pt-1 border-t border-border/40">
+          <div className="space-y-3 pt-1 border-t border-border-subtle">
             {/* Detailed POSEIDON */}
-            <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1.5">
+            <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
+                <span className="font-semibold text-text-primary text-[11px] uppercase tracking-wider">
                   POSEIDON Classification
                 </span>
                 <div className="flex items-center gap-1.5">
                   <Badge
                     variant="outline"
-                    className={`font-mono text-xs font-bold ${
-                      poseidon.groupLabel
-                        ? "border-primary/50 text-primary bg-primary/5"
-                        : "border-border text-muted-foreground"
-                    }`}
+                    className="font-mono text-xs font-bold border-accent-classification/30 bg-accent-classification/10 text-accent-classification"
                   >
                     {poseidon.groupLabel ? `Group ${poseidon.groupLabel}` : "Normal Reserve"}
                   </Badge>
@@ -170,7 +163,7 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
                   />
                 </div>
               </div>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-[11px] text-text-muted">
                 {poseidon.headline ||
                   (poseidon.groupLabel
                     ? `Patient classifies into POSEIDON Group ${poseidon.groupLabel} based on age and reserve markers.`
@@ -179,15 +172,15 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
             </div>
 
             {/* Detailed Bologna */}
-            <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1.5">
+            <div className="rounded-lg border border-border-subtle bg-bg-surface p-2.5 space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
+                <span className="font-semibold text-text-primary text-[11px] uppercase tracking-wider">
                   Bologna Criteria (POR)
                 </span>
                 <div className="flex items-center gap-1.5">
                   <Badge
-                    variant={bologna.status === "positive" ? "destructive" : "secondary"}
-                    className="text-[10px] font-semibold"
+                    variant="outline"
+                    className="text-[10px] font-semibold border-accent-classification/30 bg-accent-classification/10 text-accent-classification"
                   >
                     {bologna.status === "positive" ? "Criteria Fulfilled" : "Not Fulfilled"}
                   </Badge>
@@ -203,7 +196,7 @@ export function StratificationCard({ stratification }: StratificationCardProps) 
                   />
                 </div>
               </div>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-[11px] text-text-muted">
                 {bologna.headline ||
                   (bologna.status === "positive"
                     ? "Patient meets international consensus criteria for Poor Ovarian Response."

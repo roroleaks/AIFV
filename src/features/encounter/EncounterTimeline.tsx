@@ -4,6 +4,10 @@
  * Longitudinal vertical timeline rendering all stimulation encounters in the cycle.
  * Provides cohort summary metrics, smart-default quick action macro (+ Add D{n} visit),
  * and links directly to EncounterCard for each visit node.
+ *
+ * Enforces:
+ *  - Academic color system (§11)
+ *  - Responsive spacing scale (§2.1)
  */
 
 import { useMemo } from "react";
@@ -74,17 +78,20 @@ export function EncounterTimeline({
   return (
     <div className="space-y-6">
       {/* Top Action & Cohort Statistics Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border-subtle">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-bold text-foreground">
+            <h2 className="text-base font-bold text-text-primary">
               Longitudinal Stimulation Timeline
             </h2>
-            <Badge variant="outline" className="font-mono text-xs">
+            <Badge
+              variant="outline"
+              className="font-mono text-xs border-border-default text-text-muted"
+            >
               {encounters.length} {encounters.length === 1 ? "Encounter" : "Encounters"}
             </Badge>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-xs text-text-muted mt-0.5">
             Real-time follicular kinetics, laboratory trends, and responsive titration tracking.
           </p>
         </div>
@@ -96,22 +103,22 @@ export function EncounterTimeline({
               variant="outline"
               size="sm"
               onClick={() => onAddEncounter(nextStimDay)}
-              className="gap-1.5 h-9 text-xs border-primary/30 text-primary hover:bg-primary/5 font-semibold"
+              className="gap-1.5 h-9 text-xs border-accent-primary/30 text-accent-primary hover:bg-accent-primary/5 font-semibold"
               title={`Quick-add Day ${nextStimDay} encounter with prior visit pre-fill`}
             >
-              <Zap className="size-3.5 fill-primary/20 text-primary" />
+              <Zap className="size-3.5 fill-accent-primary/20 text-accent-primary" />
               <span>+ Add D{nextStimDay} Visit</span>
             </Button>
           )}
 
           <Button
             onClick={() => onAddEncounter()}
-            className="gap-1.5 h-9 bg-primary text-primary-foreground text-xs font-semibold shadow-xs"
+            className="gap-1.5 h-9 bg-accent-primary text-text-on-accent hover:bg-accent-primary-hover text-xs font-semibold shadow-xs"
             title="Open new stimulation encounter form (Alt+V)"
           >
             <Plus className="size-4" />
             <span>Add Encounter</span>
-            <kbd className="hidden sm:inline-block ms-1 rounded bg-primary-foreground/20 px-1 font-mono text-[10px]">
+            <kbd className="hidden sm:inline-block ms-1 rounded bg-text-on-accent/20 px-1 font-mono text-[10px]">
               Alt+V
             </kbd>
           </Button>
@@ -121,61 +128,66 @@ export function EncounterTimeline({
       {/* Cohort Summary Metrics Ribbon */}
       {summary && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <Card className="bg-muted/30 border-border/60 shadow-2xs">
+          <Card className="bg-bg-surface border-border-subtle shadow-2xs">
             <CardContent className="p-3">
-              <span className="text-[11px] text-muted-foreground block font-medium">
+              <span className="text-[11px] text-text-muted block font-medium">
                 Current Stimulation
               </span>
               <div className="flex items-baseline gap-1 mt-0.5">
-                <span className="text-xl font-bold font-mono text-foreground">
+                <span className="text-xl font-bold font-mono text-text-primary">
                   Day {summary.stimDay}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-text-muted">
                   (of {sortedEncounters.length} visits)
                 </span>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/30 border-border/60 shadow-2xs">
+          <Card className="bg-bg-surface border-border-subtle shadow-2xs">
             <CardContent className="p-3">
-              <span className="text-[11px] text-muted-foreground block font-medium">
+              <span className="text-[11px] text-text-muted block font-medium">
                 Active Cohort &amp; Leads
               </span>
               <div className="flex items-baseline gap-1.5 mt-0.5">
-                <span className="text-xl font-bold font-mono text-foreground">
+                <span className="text-xl font-bold font-mono text-text-primary">
                   {summary.totalCount}
                 </span>
-                <span className="text-xs font-semibold text-primary">({summary.gte17} ≥ 17mm)</span>
+                <span className="text-xs font-semibold text-accent-primary">
+                  ({summary.gte17} ≥ 17mm)
+                </span>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/30 border-border/60 shadow-2xs">
+          <Card className="bg-bg-surface border-border-subtle shadow-2xs">
             <CardContent className="p-3">
-              <span className="text-[11px] text-muted-foreground block font-medium">
+              <span className="text-[11px] text-text-muted block font-medium">
                 Latest Estradiol (E2)
               </span>
               <div className="flex items-baseline gap-1 mt-0.5">
-                <span className="text-xl font-bold font-mono text-foreground">
+                <span className="text-xl font-bold font-mono text-text-primary">
                   {summary.e2 ? `${summary.e2}` : "—"}
                 </span>
-                {summary.e2 && <span className="text-xs text-muted-foreground">pg/mL</span>}
+                {summary.e2 && <span className="text-xs text-text-muted">pg/mL</span>}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/30 border-border/60 shadow-2xs">
+          <Card className="bg-bg-surface border-border-subtle shadow-2xs">
             <CardContent className="p-3">
-              <span className="text-[11px] text-muted-foreground block font-medium">
+              <span className="text-[11px] text-text-muted block font-medium">
                 Current Daily Dose
               </span>
               <div className="flex items-baseline gap-1 mt-0.5">
-                <span className="text-xl font-bold font-mono text-foreground">
+                <span className="text-xl font-bold font-mono text-text-primary">
                   {summary.dailyDose}
                 </span>
-                <span className="text-xs text-muted-foreground">IU/day</span>
-                <Badge variant="outline" className="ms-auto text-[9px] h-4.5 px-1 font-mono">
+                <span className="text-xs text-text-muted">IU/day</span>
+                <Badge
+                  variant="outline"
+                  className="ms-auto text-[9px] h-4.5 px-1 font-mono border-border-default text-text-muted"
+                >
                   {summary.drug}
                 </Badge>
               </div>
@@ -186,13 +198,13 @@ export function EncounterTimeline({
 
       {/* Empty State */}
       {sortedEncounters.length === 0 ? (
-        <Card className="border-dashed border-2">
+        <Card className="border-dashed border-2 border-border-subtle bg-bg-surface">
           <CardContent className="flex flex-col items-center justify-center p-12 text-center">
-            <Activity className="size-10 text-muted-foreground/40 mb-3" />
-            <h3 className="text-sm font-semibold text-foreground">
+            <Activity className="size-10 text-text-muted/40 mb-3" />
+            <h3 className="text-sm font-semibold text-text-primary">
               No stimulation encounters recorded yet
             </h3>
-            <p className="text-xs text-muted-foreground max-w-sm mt-1">
+            <p className="text-xs text-text-muted max-w-sm mt-1">
               Begin cycle monitoring by recording the baseline (Day 2) ultrasound and hormonal labs.
               The fast encounter form lets you record visits in under 60 seconds with strict tab
               order.
@@ -200,7 +212,7 @@ export function EncounterTimeline({
             <Button
               size="sm"
               onClick={() => onAddEncounter(2)}
-              className="mt-4 gap-1.5 bg-primary text-primary-foreground font-semibold shadow-xs"
+              className="mt-4 gap-1.5 bg-accent-primary text-text-on-accent hover:bg-accent-primary-hover font-semibold shadow-xs"
             >
               <Plus className="size-3.5" />
               <span>Record Baseline (Day 2) Visit</span>
@@ -209,7 +221,7 @@ export function EncounterTimeline({
         </Card>
       ) : (
         /* Vertical Longitudinal Timeline */
-        <div className="relative ps-6 space-y-6 before:absolute before:start-2.5 before:top-4 before:bottom-4 before:w-0.5 before:bg-border/60">
+        <div className="relative ps-6 space-y-6 before:absolute before:start-2.5 before:top-4 before:bottom-4 before:w-0.5 before:bg-border-subtle">
           {sortedEncounters.map((encounter, idx) => {
             const isLatest = idx === sortedEncounters.length - 1;
             return (
@@ -217,22 +229,22 @@ export function EncounterTimeline({
                 {/* Timeline Node Icon Indicator */}
                 <div
                   className={cn(
-                    "absolute -start-6 top-3.5 flex size-5 items-center justify-center rounded-full border-2 bg-background transition-transform group-hover:scale-110 shadow-xs",
+                    "absolute -start-6 top-3.5 flex size-5 items-center justify-center rounded-full border-2 bg-bg-surface transition-transform group-hover:scale-110 shadow-xs",
                     encounter.status === "Verified"
-                      ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                      ? "border-safety-success text-safety-success"
                       : isLatest
-                        ? "border-primary text-primary ring-2 ring-primary/20"
-                        : "border-border text-muted-foreground",
+                        ? "border-accent-primary text-accent-primary ring-2 ring-accent-primary/20"
+                        : "border-border-default text-text-muted",
                   )}
                 >
                   <div
                     className={cn(
                       "size-1.5 rounded-full",
                       encounter.status === "Verified"
-                        ? "bg-emerald-500"
+                        ? "bg-safety-success"
                         : isLatest
-                          ? "bg-primary"
-                          : "bg-muted-foreground",
+                          ? "bg-accent-primary"
+                          : "bg-text-muted",
                     )}
                   />
                 </div>
@@ -250,24 +262,24 @@ export function EncounterTimeline({
           {/* Trigger Readiness Milestone Indicator (if criteria met) */}
           {summary?.isTriggerReady && (
             <div className="relative group pt-2">
-              <div className="absolute -start-6 top-5 flex size-5 items-center justify-center rounded-full border-2 border-emerald-500 bg-emerald-500 text-white shadow-xs">
+              <div className="absolute -start-6 top-5 flex size-5 items-center justify-center rounded-full border-2 border-safety-success bg-safety-success text-white shadow-xs">
                 <CheckCircle2 className="size-3.5" />
               </div>
 
-              <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3.5 flex items-center justify-between">
+              <div className="rounded-lg border border-safety-success/40 bg-safety-success-bg p-3.5 flex items-center justify-between">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">
+                    <span className="text-xs font-bold text-safety-success">
                       Cycle Milestone Reached: Trigger Criteria Fulfilled
                     </span>
                     <Badge
                       variant="outline"
-                      className="border-emerald-500/50 bg-background text-[10px] font-semibold text-emerald-700 dark:text-emerald-400"
+                      className="border-safety-success/50 bg-bg-surface text-[10px] font-semibold text-safety-success"
                     >
                       ESHRE 2025 Validated
                     </Badge>
                   </div>
-                  <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
+                  <p className="text-[11px] text-safety-success">
                     Cohorts display {summary.gte17} follicles ≥ 17 mm. Ready for trigger timing and
                     OHSS risk-adapted agent selection.
                   </p>
@@ -279,24 +291,24 @@ export function EncounterTimeline({
       )}
 
       {/* Keyboard Shortcuts Hint Bar */}
-      <div className="rounded-lg border border-border/50 bg-muted/20 px-4 py-2.5 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-2">
+      <div className="rounded-lg border border-border-subtle bg-bg-surface-muted/40 px-4 py-2.5 text-xs text-text-muted flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-foreground">Keyboard-first workflow:</span>
+          <span className="font-semibold text-text-primary">Keyboard-first workflow:</span>
           <span>Press</span>
-          <kbd className="rounded bg-background px-1 py-0.5 font-mono text-[10px] border border-border/80">
+          <kbd className="rounded bg-bg-surface px-1 py-0.5 font-mono text-[10px] border border-border-default text-text-secondary">
             Alt+V
           </kbd>
           <span>to add visit,</span>
-          <kbd className="rounded bg-background px-1 py-0.5 font-mono text-[10px] border border-border/80">
+          <kbd className="rounded bg-bg-surface px-1 py-0.5 font-mono text-[10px] border border-border-default text-text-secondary">
             Enter
           </kbd>
           <span>to jump fields,</span>
-          <kbd className="rounded bg-background px-1 py-0.5 font-mono text-[10px] border border-border/80">
+          <kbd className="rounded bg-bg-surface px-1 py-0.5 font-mono text-[10px] border border-border-default text-text-secondary">
             Ctrl+Enter
           </kbd>
           <span>to save &amp; new.</span>
         </div>
-        <div className="text-[11px]">Touch targets ≥ 44px · Tablet optimized</div>
+        <div className="text-[11px] text-text-muted">Touch targets ≥ 44px · Tablet optimized</div>
       </div>
     </div>
   );

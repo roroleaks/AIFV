@@ -100,8 +100,8 @@ export function ProtocolCard({
             onClick={() => setIsDialogOpen(true)}
             className={`h-7 px-2.5 text-xs gap-1 shadow-2xs font-semibold ${
               override
-                ? "border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20"
-                : "border-border/80 text-foreground hover:bg-muted"
+                ? "border-accent-override/60 bg-accent-override/10 text-accent-override hover:bg-accent-override/20"
+                : "border-border-default text-text-primary hover:bg-bg-surface-muted"
             }`}
             title={
               isPhysician
@@ -111,12 +111,12 @@ export function ProtocolCard({
           >
             {override ? (
               <>
-                <AlertTriangle className="size-3 text-amber-600" />
+                <AlertTriangle className="size-3 text-accent-override" />
                 <span>Overridden</span>
               </>
             ) : (
               <>
-                <UserCheck className="size-3 text-primary" />
+                <UserCheck className="size-3 text-accent-primary" />
                 <span>Override</span>
               </>
             )}
@@ -134,7 +134,7 @@ export function ProtocolCard({
             <div className="flex items-center gap-1.5">
               <Badge
                 variant="outline"
-                className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400 text-[10px] font-semibold"
+                className="border-accent-evidence/40 text-accent-evidence text-[10px] font-semibold"
               >
                 ESHRE Validated
               </Badge>
@@ -156,30 +156,28 @@ export function ProtocolCard({
           {override ? (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs line-through text-muted-foreground">{rawDisplay}</span>
-                <ArrowRight className="size-3 text-amber-600 shrink-0" />
-                <span className="text-sm font-bold text-amber-600 dark:text-amber-400">
-                  {currentDisplay}
-                </span>
+                <span className="text-xs line-through text-text-muted">{rawDisplay}</span>
+                <ArrowRight className="size-3 text-accent-override shrink-0" />
+                <span className="text-sm font-bold text-accent-override">{currentDisplay}</span>
                 <Badge
                   variant="outline"
-                  className="bg-amber-500/10 border-amber-500/50 text-amber-700 dark:text-amber-400 text-[9px] font-bold"
+                  className="bg-accent-override/10 border-accent-override/50 text-accent-override text-[9px] font-bold"
                 >
                   OVERRIDDEN
                 </Badge>
               </div>
 
               {/* Override Audit Banner */}
-              <div className="rounded bg-amber-500/10 border border-amber-500/30 p-2 text-[11px] text-amber-900 dark:text-amber-200 space-y-0.5">
+              <div className="rounded bg-accent-override/10 border border-accent-override/30 p-2 text-[11px] text-accent-override space-y-0.5">
                 <div className="flex justify-between items-center text-[10px] font-semibold">
                   <span>By: {override.by}</span>
                   <span>{new Date(override.at).toLocaleDateString()}</span>
                 </div>
-                <p className="italic">"{override.reason}"</p>
+                <p className="italic">&quot;{override.reason}&quot;</p>
               </div>
             </div>
           ) : (
-            <div className="text-base font-bold text-foreground">{rawDisplay}</div>
+            <div className="text-base font-bold text-text-primary">{rawDisplay}</div>
           )}
 
           <p className="text-[11px] text-muted-foreground pt-0.5 line-clamp-2">
@@ -215,9 +213,9 @@ export function ProtocolCard({
                 .map((opt) => (
                   <div
                     key={opt.value}
-                    className="rounded border border-border/40 p-2 bg-muted/10 text-muted-foreground space-y-0.5"
+                    className="rounded border border-border-subtle p-2 bg-bg-surface-muted text-text-secondary space-y-0.5"
                   >
-                    <span className="font-semibold text-foreground block text-[11px]">
+                    <span className="font-semibold text-text-primary block text-[11px]">
                       {opt.label}
                     </span>
                     <span className="text-[10px] line-clamp-2">{opt.description}</span>

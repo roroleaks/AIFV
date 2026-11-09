@@ -102,33 +102,31 @@ export function TriggerSafetyCard({
       return {
         shape: Octagon,
         label: "CRITICAL OHSS RISK",
-        colorClass: "border-red-600 bg-red-600/10 text-red-700 dark:text-red-400 font-bold",
-        iconClass: "text-red-600",
+        colorClass: "border-safety-danger bg-safety-danger/10 text-safety-danger font-bold",
+        iconClass: "text-safety-danger",
       };
     }
     if (ohssLevel.includes("high") || ohssLevel.includes("severe")) {
       return {
         shape: Triangle,
         label: "HIGH OHSS RISK",
-        colorClass:
-          "border-orange-500 bg-orange-500/10 text-orange-700 dark:text-orange-400 font-bold",
-        iconClass: "text-orange-500",
+        colorClass: "border-safety-danger bg-safety-danger/10 text-safety-danger font-bold",
+        iconClass: "text-safety-danger",
       };
     }
     if (ohssLevel.includes("mod")) {
       return {
         shape: Square,
         label: "MODERATE OHSS RISK",
-        colorClass: "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold",
-        iconClass: "text-amber-500 rotate-45",
+        colorClass: "border-safety-warning bg-safety-warning/10 text-safety-warning font-bold",
+        iconClass: "text-safety-warning rotate-45",
       };
     }
     return {
       shape: Circle,
       label: "LOW OHSS RISK",
-      colorClass:
-        "border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold",
-      iconClass: "text-emerald-500",
+      colorClass: "border-safety-success/50 bg-safety-success/10 text-safety-success font-bold",
+      iconClass: "text-safety-success",
     };
   };
 
@@ -152,8 +150,8 @@ export function TriggerSafetyCard({
             onClick={() => setIsDialogOpen(true)}
             className={`h-7 px-2.5 text-xs gap-1 shadow-2xs font-semibold ${
               override
-                ? "border-amber-500/60 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20"
-                : "border-border/80 text-foreground hover:bg-muted"
+                ? "border-accent-override/60 bg-accent-override/10 text-accent-override hover:bg-accent-override/20"
+                : "border-border-default text-text-primary hover:bg-bg-surface-muted"
             }`}
             title={
               isPhysician
@@ -163,12 +161,12 @@ export function TriggerSafetyCard({
           >
             {override ? (
               <>
-                <AlertTriangle className="size-3 text-amber-600" />
+                <AlertTriangle className="size-3 text-accent-override" />
                 <span>Trigger Overridden</span>
               </>
             ) : (
               <>
-                <UserCheck className="size-3 text-primary" />
+                <UserCheck className="size-3 text-accent-primary" />
                 <span>Override Trigger</span>
               </>
             )}
@@ -188,8 +186,8 @@ export function TriggerSafetyCard({
                 variant="outline"
                 className={`text-[10px] font-semibold ${
                   trigger.readiness?.statusLabel?.includes("READY")
-                    ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-                    : "border-border text-muted-foreground"
+                    ? "border-safety-success/50 bg-safety-success/10 text-safety-success"
+                    : "border-border-default text-text-muted"
                 }`}
               >
                 {trigger.readiness?.statusLabel || "Stimulation Ongoing"}
@@ -211,31 +209,29 @@ export function TriggerSafetyCard({
           {override ? (
             <div className="space-y-1.5 pt-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs line-through text-muted-foreground">
-                  {rawTriggerDisplay}
-                </span>
-                <ArrowRight className="size-3 text-amber-600 shrink-0" />
-                <span className="text-sm font-bold text-amber-600 dark:text-amber-400">
+                <span className="text-xs line-through text-text-muted">{rawTriggerDisplay}</span>
+                <ArrowRight className="size-3 text-accent-override shrink-0" />
+                <span className="text-sm font-bold text-accent-override">
                   {currentTriggerDisplay}
                 </span>
                 <Badge
                   variant="outline"
-                  className="bg-amber-500/10 border-amber-500/50 text-amber-700 dark:text-amber-400 text-[9px] font-bold"
+                  className="bg-accent-override/10 border-accent-override/50 text-accent-override text-[9px] font-bold"
                 >
                   OVERRIDDEN
                 </Badge>
               </div>
 
-              <div className="rounded bg-amber-500/10 border border-amber-500/30 p-2 text-[11px] text-amber-900 dark:text-amber-200 space-y-0.5">
+              <div className="rounded bg-accent-override/10 border border-accent-override/30 p-2 text-[11px] text-accent-override space-y-0.5">
                 <div className="flex justify-between items-center text-[10px] font-semibold">
                   <span>By: {override.by}</span>
                   <span>{new Date(override.at).toLocaleDateString()}</span>
                 </div>
-                <p className="italic">"{override.reason}"</p>
+                <p className="italic">&quot;{override.reason}&quot;</p>
               </div>
             </div>
           ) : (
-            <div className="text-sm font-bold text-foreground">{rawTriggerDisplay}</div>
+            <div className="text-sm font-bold text-text-primary">{rawTriggerDisplay}</div>
           )}
 
           <p className="text-[11px] text-muted-foreground pt-0.5 line-clamp-2">
@@ -284,42 +280,44 @@ export function TriggerSafetyCard({
               Clinical Safety Firewalls (Hard Ceilings)
             </span>
             <div className="space-y-1">
-              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-                <span className="text-foreground">ESHRE Starting Dose Ceiling (≤ 300 IU/day)</span>
+              <div className="flex items-center justify-between p-2 rounded bg-bg-surface-muted border border-border-subtle text-[11px]">
+                <span className="text-text-primary">
+                  ESHRE Starting Dose Ceiling (≤ 300 IU/day)
+                </span>
                 <Badge
                   variant="outline"
                   className={
                     safetyFirewalls.eshre300CeilingBreached
-                      ? "border-destructive text-destructive font-bold"
-                      : "border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
+                      ? "border-safety-danger text-safety-danger font-bold"
+                      : "border-safety-success/40 text-safety-success"
                   }
                 >
                   {safetyFirewalls.eshre300CeilingBreached ? "BREACHED" : "Enforced"}
                 </Badge>
               </div>
 
-              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-                <span className="text-foreground">Coasting Trigger (E2 ≥ 4,500 pg/mL)</span>
+              <div className="flex items-center justify-between p-2 rounded bg-bg-surface-muted border border-border-subtle text-[11px]">
+                <span className="text-text-primary">Coasting Trigger (E2 ≥ 4,500 pg/mL)</span>
                 <Badge
                   variant="outline"
                   className={
                     safetyFirewalls.coastingTriggerBreached
-                      ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
-                      : "text-muted-foreground"
+                      ? "border-safety-warning text-safety-warning font-bold"
+                      : "text-text-muted"
                   }
                 >
                   {safetyFirewalls.coastingTriggerBreached ? "TRIGGERED" : "Not Active"}
                 </Badge>
               </div>
 
-              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-                <span className="text-foreground">Freeze-All Policy (OHSS Prevention)</span>
+              <div className="flex items-center justify-between p-2 rounded bg-bg-surface-muted border border-border-subtle text-[11px]">
+                <span className="text-text-primary">Freeze-All Policy (OHSS Prevention)</span>
                 <Badge
                   variant="outline"
                   className={
                     safetyFirewalls.freezeAllTriggerBreached
-                      ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
-                      : "text-muted-foreground"
+                      ? "border-safety-warning text-safety-warning font-bold"
+                      : "text-text-muted"
                   }
                 >
                   {cycleCompletion.freezeAll?.status || "Not Indicated"}
