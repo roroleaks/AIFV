@@ -4,7 +4,7 @@ import { AppShellCase } from "@/components/case-shell/AppShellCase";
 export const Route = createFileRoute("/worklist")({
   head: () => ({
     meta: [
-      { title: "Clinical Worklist — AiFV Precision Hospital CDSS" },
+      { title: "Clinical Worklist — AIVF Precision Hospital CDSS v3.1" },
       {
         name: "description",
         content:

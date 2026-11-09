@@ -817,8 +817,8 @@ export function AppShell({ children }: { children?: ReactNode }) {
                   </span>
                 </div>
               </div>
-              <div className="text-[11px] text-muted-foreground">
-                AiFV Precision · ESHRE 2025 Synchronized
+              <div className="text-[11px] text-muted-foreground font-medium">
+                AIVF v3.1 · ESHRE 2025 Synchronized
               </div>
             </footer>
           </main>

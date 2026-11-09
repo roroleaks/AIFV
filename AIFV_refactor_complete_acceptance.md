@@ -17,42 +17,42 @@ The AIFV interface redesign is **complete and accepted**. The repository has bee
 
 ## 2. Phase summary
 
-| Phase | Scope | Defining property |
-|---|---|---|
-| 1 | Case-centric 4-zone shell (TopBar, LeftRail worklist, CaseHeader + tabs, DecisionSidebar) | Tabs replace the stepper; worklist is the landing page |
-| 2 | Encounters timeline + keyboard-first entry form | Smart-default pre-fill from prior visit; ≤60s entry |
-| 3 | Plan cards (Stratification / Protocol / Dose / Trigger&Safety) + override workflow | Overrides are presentation-only; engines never see them (proven byte-identical) |
-| 4 | Report tab + sign workflow + PDF/FHIR/EHR exporters | Snapshot-at-sign-time immutability; addenda for corrections; co-sign |
-| 5 | Intake drawer replaces 8-step wizard | Reactive auto-stratification (no Calculate button); baseline D0 pre-drafted |
-| 6 | Encrypted IndexedDB + sync queue + hash-chained audit + RBAC + session lock | AES-GCM-256 + PBKDF2 600K; SHA-256 audit chain; service-layer `requireRole()` |
-| 7 | i18n (en/ar RTL) + axe-core a11y + 3 themes + PIN ≥8 | Logical Tailwind properties everywhere; AAA high-contrast; 0 axe critical/serious |
-| 8 | Legacy removal + first-run PIN + production build + DEPLOYMENT.md | 106 KB gz initial bundle; centralized config; deployment guide |
+| Phase | Scope                                                                                     | Defining property                                                                 |
+| ----- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 1     | Case-centric 4-zone shell (TopBar, LeftRail worklist, CaseHeader + tabs, DecisionSidebar) | Tabs replace the stepper; worklist is the landing page                            |
+| 2     | Encounters timeline + keyboard-first entry form                                           | Smart-default pre-fill from prior visit; ≤60s entry                               |
+| 3     | Plan cards (Stratification / Protocol / Dose / Trigger&Safety) + override workflow        | Overrides are presentation-only; engines never see them (proven byte-identical)   |
+| 4     | Report tab + sign workflow + PDF/FHIR/EHR exporters                                       | Snapshot-at-sign-time immutability; addenda for corrections; co-sign              |
+| 5     | Intake drawer replaces 8-step wizard                                                      | Reactive auto-stratification (no Calculate button); baseline D0 pre-drafted       |
+| 6     | Encrypted IndexedDB + sync queue + hash-chained audit + RBAC + session lock               | AES-GCM-256 + PBKDF2 600K; SHA-256 audit chain; service-layer `requireRole()`     |
+| 7     | i18n (en/ar RTL) + axe-core a11y + 3 themes + PIN ≥8                                      | Logical Tailwind properties everywhere; AAA high-contrast; 0 axe critical/serious |
+| 8     | Legacy removal + first-run PIN + production build + DEPLOYMENT.md                         | 106 KB gz initial bundle; centralized config; deployment guide                    |
 
 ---
 
 ## 3. Final regression gate (19 checks, all PASS on production build)
 
-| # | Check | Result |
-|---|---|---|
-| 1 | Engine snapshot byte-equality (Cases A–E) | PASS |
-| 2 | E2E negative boundary + firewall audit | 37/37 PASS |
-| 3 | TypeScript `tsc --noEmit` | 0 errors |
-| 4 | ESLint | 0 errors (9 legacy warnings) |
-| 5 | Production build (`npm run build`) | 2.44s, clean |
-| 6 | Engine directory diff (`src/lib/engine/**`, `src/lib/report/**`, `src/data/**`) | empty |
-| 7 | Scoped diff (no out-of-phase modifications) | empty |
-| 8 | Report immutability (signed report unchanged after case mutation) | PASS |
-| 9 | PDF export (<3s, >10KB, 0 PHI in filename, 0 Markdown artifacts) | 86ms, 63.1 KB |
-| 10 | Intake auto-stratification (zero Calculate button) | 26/26 PASS |
-| 11 | Encryption round-trip (AES-GCM-256 + PBKDF2 600K) | 15/15 PASS |
-| 12 | Sync queue drain + conflict resolution | 13/13 PASS |
-| 13 | Audit chain integrity (SHA-256 hash chain, tamper detection, append-only) | 19/19 PASS |
-| 14 | Offline full-cycle (intake → sign → export, 0 network calls) | 16/16 PASS |
-| 15 | i18n completeness (en↔ar 1:1 key parity, 0 hardcoded English) | 163/163 keys |
-| 16 | RTL layout (0 physical Tailwind classes, layout mirrors) | PASS |
-| 17 | axe-core a11y (0 critical, 0 serious across 6 scenarios) | PASS |
-| 18 | Production bundle size (initial JS < 350 KB gz) | 106.45 KB gz |
-| 19 | Dead-code scan (0 localStorage, 0 raw PINs, 0 legacy routes, 0 console.log) | PASS |
+| #   | Check                                                                           | Result                       |
+| --- | ------------------------------------------------------------------------------- | ---------------------------- |
+| 1   | Engine snapshot byte-equality (Cases A–E)                                       | PASS                         |
+| 2   | E2E negative boundary + firewall audit                                          | 37/37 PASS                   |
+| 3   | TypeScript `tsc --noEmit`                                                       | 0 errors                     |
+| 4   | ESLint                                                                          | 0 errors (9 legacy warnings) |
+| 5   | Production build (`npm run build`)                                              | 2.44s, clean                 |
+| 6   | Engine directory diff (`src/lib/engine/**`, `src/lib/report/**`, `src/data/**`) | empty                        |
+| 7   | Scoped diff (no out-of-phase modifications)                                     | empty                        |
+| 8   | Report immutability (signed report unchanged after case mutation)               | PASS                         |
+| 9   | PDF export (<3s, >10KB, 0 PHI in filename, 0 Markdown artifacts)                | 86ms, 63.1 KB                |
+| 10  | Intake auto-stratification (zero Calculate button)                              | 26/26 PASS                   |
+| 11  | Encryption round-trip (AES-GCM-256 + PBKDF2 600K)                               | 15/15 PASS                   |
+| 12  | Sync queue drain + conflict resolution                                          | 13/13 PASS                   |
+| 13  | Audit chain integrity (SHA-256 hash chain, tamper detection, append-only)       | 19/19 PASS                   |
+| 14  | Offline full-cycle (intake → sign → export, 0 network calls)                    | 16/16 PASS                   |
+| 15  | i18n completeness (en↔ar 1:1 key parity, 0 hardcoded English)                   | 163/163 keys                 |
+| 16  | RTL layout (0 physical Tailwind classes, layout mirrors)                        | PASS                         |
+| 17  | axe-core a11y (0 critical, 0 serious across 6 scenarios)                        | PASS                         |
+| 18  | Production bundle size (initial JS < 350 KB gz)                                 | 106.45 KB gz                 |
+| 19  | Dead-code scan (0 localStorage, 0 raw PINs, 0 legacy routes, 0 console.log)     | PASS                         |
 
 **Performance benchmarks:** encounter entry ≤60s (smart-default pre-fill), intake ≤120s (90s measured), physician sign ≤90s (36s measured, 3 interactions), PDF export <3s (86ms), override ≤15s (code-path instant + 10-char reason).
 
@@ -61,6 +61,7 @@ The AIFV interface redesign is **complete and accepted**. The repository has bee
 ## 4. What the app is now
 
 A deployable, single-device hospital IVF CDSS with:
+
 - **Case-centric 4-zone shell** — worklist, case header with auto-derived chips, 3 tabs (Encounters / Plan / Report), decision sidebar
 - **Encounter-based longitudinal data model** — timeline of visits with keyboard-first entry and inline non-blocking engine chips
 - **Presentation-layer overrides** — physicians override protocol/dose/LH-add-on/trigger-agent with mandatory reason; engines never mutated
@@ -115,4 +116,4 @@ The original complaint — "good engines, impractical interface" — is resolved
 
 The refactor is complete.
 
-*Acceptance issued on the basis of 19/19 regression checks passing on the production build, zero engine drift across all 8 phases, and the three human-review gates documented for pre-pilot sign-off.*
+_Acceptance issued on the basis of 19/19 regression checks passing on the production build, zero engine drift across all 8 phases, and the three human-review gates documented for pre-pilot sign-off._

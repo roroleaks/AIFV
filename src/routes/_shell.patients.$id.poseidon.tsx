@@ -48,7 +48,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/poseidon")({
   head: () => ({
     meta: [
-      { title: "Stage 2: POSEIDON Stratification & Phenotyping — AiFV CDSS" },
+      { title: "Stage 2: POSEIDON Stratification & Phenotyping — AIVF CDSS v3.1" },
       {
         name: "description",
         content:

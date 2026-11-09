@@ -51,7 +51,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/dose")({
   head: () => ({
     meta: [
-      { title: "Stage 4: Starting Dose Engine & CONSORT Nomogram — AiFV CDSS" },
+      { title: "Stage 4: Starting Dose Engine & CONSORT Nomogram — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -445,10 +445,6 @@ export function PatientDoseStage4View() {
             <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl mt-0.5">
               CONSORT Nomogram Starting Dose
             </h1>
-            <p className="text-xs text-muted-foreground">
-              Individualized recombinant FSH dose calculation using validated multi-variable
-              nomogram and ESHRE 2025 ceiling safety protocol.
-            </p>
           </div>
         </div>
 

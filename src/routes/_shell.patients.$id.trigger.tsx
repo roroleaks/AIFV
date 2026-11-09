@@ -53,7 +53,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/trigger")({
   head: () => ({
     meta: [
-      { title: "Stage 6: Trigger Decision & Safety Firewall — AiFV CDSS" },
+      { title: "Stage 6: Trigger Decision & Safety Firewall — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -399,10 +399,6 @@ export function PatientTriggerStage6View() {
           <h1 className="text-2xl font-bold tracking-tight text-foreground mt-1">
             Trigger Decision & Safety Firewall
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Structured criteria evaluation for final follicular maturation, dual-trigger selection,
-            and ESHRE 2025 OHSS prevention firewalls.
-          </p>
         </div>
 
         {/* Top Action Buttons */}

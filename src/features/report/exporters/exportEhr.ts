@@ -38,9 +38,9 @@ export function buildHl7OruMessage(report: Report): string {
   const docName = (report.signedBy || "Physician").replace(/\s+/g, "^");
 
   const segments: string[] = [
-    `MSH|^~\\&|AIFV_CDSS|AIFV_CLINIC|HOSPITAL_EHR|LAB_DEPT|${ts}||ORU^R01^ORU_R01|${msgId}|P|2.5.1`,
-    `PID|1||${mrn}^^^AIFV^MR||${pName}|||F`,
-    `PV1|1|O|REPRO_MED^^^AIFV|||||||||||||||||||||||||||||||||||||||||`,
+    `MSH|^~\\&|AIVF_CDSS|AIVF_CLINIC|HOSPITAL_EHR|LAB_DEPT|${ts}||ORU^R01^ORU_R01|${msgId}|P|2.5.1`,
+    `PID|1||${mrn}^^^AIVF^MR||${pName}|||F`,
+    `PV1|1|O|REPRO_MED^^^AIVF|||||||||||||||||||||||||||||||||||||||||`,
     `ORC|RE|${report.id}|${report.id}||CM||||${ts}|||${docName}^^^^MD`,
     `OBR|1|${report.id}|${report.id}|IVF_DOSSIER^IVF Clinical Dossier^LN|||${ts}|||||||||||||||F`,
   ];

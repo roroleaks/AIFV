@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hospital Clinical Worklist — AiFV Precision Hospital CDSS" },
+      { title: "AIVF Clinical Worklist — v3.1" },
       {
         name: "description",
         content:
@@ -357,13 +357,9 @@ function HospitalWorklist() {
                 <Stethoscope className="size-4" />
               </span>
               <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                Hospital Clinical Worklist
+                AIVF Clinical Worklist
               </h1>
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Daily controlled ovarian stimulation management, active cycles Kanban, and real-time
-              safety surveillance.
-            </p>
           </div>
 
           {/* Top Primary Actions: [New Patient] [Resume Last] [Lock Screen] */}
@@ -648,9 +644,6 @@ function HospitalWorklist() {
                 Active Cycles Kanban
               </h2>
             </div>
-            <p className="text-xs text-muted-foreground hidden sm:block">
-              Organized by clinical decision workflow stage
-            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3 max-h-[720px] overflow-y-auto pr-1">
@@ -680,9 +673,7 @@ function HospitalWorklist() {
                   {/* Stage Cards */}
                   <div className="mt-2.5 flex flex-col gap-2">
                     {column.patients.length === 0 ? (
-                      <div className="py-6 text-center text-[11px] text-muted-foreground">
-                        No active cycles
-                      </div>
+                      <div className="py-3 text-center text-[11px] text-muted-foreground/50">—</div>
                     ) : (
                       column.patients.map((p) => {
                         const stage = getPatientWorkflowStage(p);

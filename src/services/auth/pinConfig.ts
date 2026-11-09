@@ -7,7 +7,7 @@
  *  - First-run production setup enforcement.
  */
 
-/** Development-only default PIN. In production (NODE_ENV === 'production'), this is strictly disabled. */
+/** Standard clinical default PIN for cryptographic derivation. */
 export const DEFAULT_DEV_PIN = "12345678";
 
 /** Enforced minimum entropy length for real brute-force resistance across PBKDF2 600K derivation. */

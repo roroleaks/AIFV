@@ -416,8 +416,8 @@ function SettingsPage() {
       <div className="space-y-6 pb-20">
         <PageHeader
           eyebrow="Clinical Workstation Governance"
-          title="Hospital Settings & Security"
-          description="Manage clinician profile, idle-lock countdown, auto-save interval, accessibility scaling, and cryptographic audit records."
+          title="AIVF Settings & Preferences"
+          description=""
           actions={
             <div className="flex flex-wrap items-center gap-2">
               <PolishedButton
@@ -477,9 +477,6 @@ function SettingsPage() {
                   Active Session
                 </Badge>
               </div>
-              <CardDescription className="text-xs">
-                Electronic signature identity, clinical role privilege, and department unit.
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4 text-xs">
@@ -567,10 +564,6 @@ function SettingsPage() {
                   Mandatory Security
                 </Badge>
               </div>
-              <CardDescription className="text-xs">
-                Hospital mandate: workstation locks and wipes active cryptographic keys when
-                inactive.
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4 text-xs">
@@ -635,9 +628,6 @@ function SettingsPage() {
                   Zero Data Loss
                 </Badge>
               </div>
-              <CardDescription className="text-xs">
-                Controls background persistence frequency across active clinical forms.
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4 text-xs">
@@ -707,9 +697,6 @@ function SettingsPage() {
                   Clinical Ergonomics
                 </Badge>
               </div>
-              <CardDescription className="text-xs">
-                High-contrast typography scaling and dual-confirmation safety firewalls.
-              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-4 text-xs">

@@ -57,7 +57,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/report")({
   head: () => ({
     meta: [
-      { title: "Stage 8: Clinical Intelligence Report — AiFV CDSS" },
+      { title: "Stage 8: Clinical Intelligence Report — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -435,12 +435,8 @@ export function PatientReportStage8View() {
               </Badge>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground mt-1">
-              IVF Clinical Intelligence Dossier
+              AIVF Clinical Intelligence Dossier
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Unified 16-section explainable report synthesizing intake, POSEIDON stratification,
-              starting dose nomogram, folliculometry, and embryology.
-            </p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -908,7 +904,7 @@ export function PatientReportStage8View() {
               </AccordionTrigger>
               <AccordionContent className="pt-2 text-xs text-muted-foreground space-y-3 border-t">
                 <p>
-                  Primary cycle documented in AiFV electronic system. Zero negative longitudinal
+                  Primary cycle documented in AIVF electronic system. Zero negative longitudinal
                   drift observed across stimulation parameters.
                 </p>
               </AccordionContent>

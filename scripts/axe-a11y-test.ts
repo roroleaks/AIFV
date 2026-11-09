@@ -55,8 +55,8 @@ const SCENARIOS: TestScenario[] = [
 function buildHtmlForScenario(s: TestScenario): string {
   const isAr = s.lang === "ar";
   const title = isAr
-    ? "نظام دعم القرار السريري — AiFV"
-    : "Patient Case — AiFV Precision Hospital CDSS";
+    ? "نظام دعم القرار السريري — AIVF"
+    : "Patient Case — AIVF Precision Hospital CDSS v3.1";
 
   let tabContent = "";
   if (s.tab === "encounters") {

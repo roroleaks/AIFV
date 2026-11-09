@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id")({
   head: () => ({
     meta: [
-      { title: "Patient Master Record — AiFV Precision Hospital CDSS" },
+      { title: "Patient Master Record — AIVF v3.1" },
       {
         name: "description",
         content:
@@ -98,19 +98,8 @@ const DEFAULT_CONSENTS: ConsentDocument[] = [
   },
 ];
 
-export function PatientMasterRecordView() {
+function PatientMasterRecordInner() {
   const { id } = useParams({ strict: false }) as { id?: string };
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isMaster =
-    !id ||
-    pathname.endsWith(`/${id}`) ||
-    pathname.endsWith(`/${id}/`) ||
-    pathname.endsWith(`/patient/${id}`) ||
-    pathname.endsWith(`/patient/${id}/`);
-  if (!isMaster) {
-    return <Outlet />;
-  }
-
   const { records } = usePatients();
   const auditSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -419,7 +408,7 @@ export function PatientMasterRecordView() {
     // Generate text/pdf simulation download
     const blob = new Blob(
       [
-        `AiFV Precision Clinical CDSS\nDocument: ${doc.title}\nVersion: ${doc.version}\nStatus: ${doc.status}\nPatient: ${patient.name} (${patient.fileNumber})\nAuthorizing Physician: ${doc.authorizedBy}\nSigned Date: ${doc.signedAt}\nSHA-256 Seal: ${doc.sha256}\n\nESHRE 2025 Synchronized Hospital Master Record`,
+        `AIVF Precision Clinical CDSS v3.1\nDocument: ${doc.title}\nVersion: ${doc.version}\nStatus: ${doc.status}\nPatient: ${patient.name} (${patient.fileNumber})\nAuthorizing Physician: ${doc.authorizedBy}\nSigned Date: ${doc.signedAt}\nSHA-256 Seal: ${doc.sha256}\n\nESHRE 2025 Synchronized Hospital Master Record`,
       ],
       { type: "text/plain" },
     );
@@ -558,9 +547,6 @@ export function PatientMasterRecordView() {
               >
                 Section 1: Demographics & Reproductive Profile
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Core patient identification, partner background, and infertility diagnosis.
-              </p>
             </div>
           </div>
 
@@ -783,10 +769,6 @@ export function PatientMasterRecordView() {
               <h2 id="allergies-title" className="text-sm font-bold text-foreground sm:text-base">
                 Section 2: Allergies & Chronic Clinical Conditions
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Documented drug sensitivities, systemic diseases, surgical history, and OHSS risk
-                predisposition.
-              </p>
             </div>
           </div>
         </div>
@@ -890,10 +872,6 @@ export function PatientMasterRecordView() {
               >
                 Section 3: Prior IVF / Controlled Ovarian Stimulation Cycles
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Historical stimulation protocols, starting doses, embryological yields, and clinical
-                outcomes.
-              </p>
             </div>
           </div>
 
@@ -994,10 +972,6 @@ export function PatientMasterRecordView() {
               <h2 id="consents-title" className="text-sm font-bold text-foreground sm:text-base">
                 Section 4: Clinical & Legal Consent Documents
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Informed consent forms, embryology authorizations, and cryptographic document
-                integrity hashes.
-              </p>
             </div>
           </div>
 
@@ -1091,10 +1065,6 @@ export function PatientMasterRecordView() {
               <h2 id="audit-title" className="text-sm font-bold text-foreground sm:text-base">
                 Section 5: Immutable Cryptographic Audit Trail
               </h2>
-              <p className="text-xs text-muted-foreground">
-                Tamper-evident SHA-256 hash chain recording every patient mutation and clinical
-                governance event.
-              </p>
             </div>
           </div>
 
@@ -1131,4 +1101,19 @@ export function PatientMasterRecordView() {
       </section>
     </div>
   );
+}
+
+export function PatientMasterRecordView() {
+  const { id } = useParams({ strict: false }) as { id?: string };
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isMaster =
+    !id ||
+    pathname.endsWith(`/${id}`) ||
+    pathname.endsWith(`/${id}/`) ||
+    pathname.endsWith(`/patient/${id}`) ||
+    pathname.endsWith(`/patient/${id}/`);
+  if (!isMaster) {
+    return <Outlet />;
+  }
+  return <PatientMasterRecordInner />;
 }

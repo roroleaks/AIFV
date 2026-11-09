@@ -344,7 +344,7 @@ export function ReportPreview({
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <span className="text-[11px] font-bold tracking-widest uppercase text-primary">
-                AIFV Clinical Decision Support System
+                AIVF Clinical Decision Support System v3.1
               </span>
               <h1 className="text-2xl font-extrabold text-foreground tracking-tight mt-1">
                 Clinical Intelligence Dossier

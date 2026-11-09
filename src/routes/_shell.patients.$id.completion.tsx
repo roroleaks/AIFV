@@ -48,7 +48,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/completion")({
   head: () => ({
     meta: [
-      { title: "Stage 7: Cycle Completion & Safety — AiFV CDSS" },
+      { title: "Stage 7: Cycle Completion & Safety — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -448,10 +448,6 @@ export function PatientCompletionStage7View() {
           <h1 className="text-2xl font-bold tracking-tight text-foreground mt-1">
             Cycle Completion &amp; Safety Verification
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Post-retrieval outcome documentation, embryological KPIs, mandatory 12-item patient
-            safety checklist, and cycle sign-off.
-          </p>
         </div>
 
         {/* Top Action Buttons */}

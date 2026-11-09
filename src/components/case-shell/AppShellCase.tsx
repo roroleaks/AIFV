@@ -127,7 +127,7 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
                   </div>
                 </div>
                 <div className="text-[11px] font-mono text-text-muted">
-                  AiFV Precision Hospital CDSS · Case Workspace
+                  AIVF Precision Hospital CDSS v3.1 · Case Workspace
                 </div>
               </footer>
             </>

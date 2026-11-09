@@ -54,7 +54,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/monitoring")({
   head: () => ({
     meta: [
-      { title: "Stage 5: Monitoring & Dose Adjustment — AiFV CDSS" },
+      { title: "Stage 5: Monitoring & Dose Adjustment — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -509,10 +509,6 @@ export function PatientMonitoringStage5View() {
             <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl mt-0.5">
               Cycle Monitoring & Follicular Trajectory
             </h1>
-            <p className="text-xs text-muted-foreground">
-              Day-by-day telemetry tracking of follicular kinetics, serum estradiol/progesterone,
-              and clinical safety thresholds.
-            </p>
           </div>
         </div>
 
@@ -647,9 +643,6 @@ export function PatientMonitoringStage5View() {
               Stimulation Timeline Grid (Day 1 .. Day 14)
             </h2>
           </div>
-          <span className="text-2xs text-muted-foreground">
-            Click any day to inspect telemetry, edit visit values, or log new laboratory entries
-          </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5">

@@ -17,7 +17,7 @@ export interface ClinicBrandingConfig {
 }
 
 export const DEFAULT_CLINIC_BRANDING: ClinicBrandingConfig = {
-  clinicName: "AiFV Precision Hospital CDSS",
+  clinicName: "AIVF Clinical CDSS",
   unitSubtitle: "Fertility Medicine Unit",
   systemName: "Hospital CDSS",
   legalEntityText: "All copyrights reserved 2026",

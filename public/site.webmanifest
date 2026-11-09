@@ -1,11 +1,11 @@
 {
-  "name": "AiFV Precision — Clinical Decision Support",
-  "short_name": "AiFV",
+  "name": "AIVF — Clinical Decision Support",
+  "short_name": "AIVF",
   "description": "Evidence-Based IVF & ICSI Clinical Decision Support System",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0a1d",
-  "theme_color": "#120f2b",
+  "background_color": "#0f172a",
+  "theme_color": "#0f3b6c",
   "icons": [
     {
       "src": "/favicon-16x16.png",

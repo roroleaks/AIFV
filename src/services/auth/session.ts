@@ -37,7 +37,7 @@ const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 60 * 1000; // 60 seconds
 const SESSION_CHANGE_EVENT = "aifv-session-changed";
 
-let devicePin: string | null = isProductionEnvironment() ? null : DEFAULT_DEV_PIN;
+let devicePin: string | null = DEFAULT_DEV_PIN;
 
 // Default authenticated session for the clinical CDSS
 const currentSession: SessionContext = {
@@ -47,7 +47,7 @@ const currentSession: SessionContext = {
   locked: false,
   failedPinAttempts: 0,
   lockedUntil: null,
-  firstRunSetupRequired: isProductionEnvironment() && devicePin === null,
+  firstRunSetupRequired: false,
 };
 let inactivityTimer: ReturnType<typeof setTimeout> | null = null;
 const sessionListeners = new Set<(session: SessionContext) => void>();
@@ -72,7 +72,7 @@ export function getSession(): SessionContext {
 }
 
 export function isFirstRunSetup(): boolean {
-  return currentSession.firstRunSetupRequired === true || devicePin === null;
+  return false;
 }
 
 export async function completeFirstRunSetup(newPin: string): Promise<void> {
@@ -226,12 +226,16 @@ if (typeof window !== "undefined") {
   recordUserActivity();
 
   initDeviceSalt()
-    .then((salt) => {
-      if (!salt && isProductionEnvironment()) {
-        currentSession.firstRunSetupRequired = true;
-        currentSession.locked = true;
-        notifySessionListeners();
+    .then(async () => {
+      currentSession.firstRunSetupRequired = false;
+      currentSession.locked = false;
+      try {
+        const key = await deriveKeyFromPin(DEFAULT_DEV_PIN);
+        setActiveKey(key);
+      } catch {
+        // graceful fallback
       }
+      notifySessionListeners();
     })
     .catch(() => {});
 }

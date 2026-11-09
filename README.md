@@ -1,7 +1,7 @@
-# AiFV Precision — AI-IVF Clinical Decision Support System
+# AIVF Precision v3.1 — AI-IVF Clinical Decision Support System
 
 <p align="center">
-  <img src="public/icon-512.png" alt="AiFV Logo" width="96" height="96" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
+  <img src="public/icon-512.png" alt="AIVF Logo" width="96" height="96" style="border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);" />
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
 
 ## 📌 Executive Overview
 
-**AIFV CDSS** (_Artificial Intelligence In-Vitro Fertilization Clinical Decision Support System_) is an enterprise-grade, deterministic, evidence-grounded software platform engineered for reproductive endocrinologists, fertility consultants, IVF lab directors, and clinical researchers.
+**AIVF CDSS** (_Artificial Intelligence In-Vitro Fertilization Clinical Decision Support System_) is an enterprise-grade, deterministic, evidence-grounded software platform engineered for reproductive endocrinologists, fertility consultants, IVF lab directors, and clinical researchers.
 
 The system standardizes every phase of controlled ovarian stimulation (COS) by integrating:
 
@@ -41,7 +41,7 @@ The system standardizes every phase of controlled ovarian stimulation (COS) by i
 6. **Unified 16-Section Clinical Intelligence Dossier** with automated multi-variable conflict checking and instant export to EHR-ready PDF, Markdown, JSON, CSV, and TXT formats.
 
 > [!IMPORTANT]
-> **Deterministic & Auditable**: AIFV CDSS contains **zero black-box heuristic guesswork**. Every calculation is executed through transparent, published, peer-reviewed clinical algorithms and verified by our Section 9 Safety Firewalls.
+> **Deterministic & Auditable**: AIVF CDSS contains **zero black-box heuristic guesswork**. Every calculation is executed through transparent, published, peer-reviewed clinical algorithms and verified by our Section 9 Safety Firewalls.
 
 ---
 
@@ -56,7 +56,7 @@ The system standardizes every phase of controlled ovarian stimulation (COS) by i
 
 ## 🧭 The Canonical 8-Stage Clinical Decision Workflow
 
-AIFV guides clinicians through an intuitive, sequential **8-Stage Clinical Progression**. The application features an interactive, persistent workflow stepper bar (`WorkflowStepper`) mounted across every module for seamless navigation:
+AIVF guides clinicians through an intuitive, sequential **8-Stage Clinical Progression**. The application features an interactive, persistent workflow stepper bar (`WorkflowStepper`) mounted across every module for seamless navigation:
 
 ```mermaid
 flowchart LR
@@ -95,7 +95,7 @@ flowchart LR
 
 ## 🏛️ System Architecture
 
-AIFV CDSS is architected around a strict unidirectional clinical data pipe with built-in auditability:
+AIVF CDSS is architected around a strict unidirectional clinical data pipe with built-in auditability:
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -433,7 +433,7 @@ Clinics can customize the application's appearance through the **Settings Page**
 > [!WARNING]
 > **Clinical Decision Support Notice**
 >
-> AIFV CDSS is an evidence-based clinical decision support tool designed strictly to assist licensed reproductive endocrinologists, fertility specialists, and gynecologists. It does **not** replace independent clinical judgment, personalized diagnostic evaluations, or direct medical consultation.
+> AIVF CDSS is an evidence-based clinical decision support tool designed strictly to assist licensed reproductive endocrinologists, fertility specialists, and gynecologists. It does **not** replace independent clinical judgment, personalized diagnostic evaluations, or direct medical consultation.
 >
 > Prescribing decisions, gonadotropin starting doses, mid-cycle dose adjustments, trigger selection, and OHSS prevention protocols remain the sole responsibility of the treating physician.
 
@@ -450,6 +450,6 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
   <br />
   <strong>Created by Dr Raouf Roshdy</strong><br />
   <em>All copyrights reserved 2026</em><br /><br />
-  <sub>AIFV CDSS — Precision Ovarian Stimulation Guided by Evidence</sub><br />
+  <sub>AIVF CDSS — Precision Ovarian Stimulation Guided by Evidence</sub><br />
   <sub>European Society of Human Reproduction and Embryology (ESHRE) 2025 Synchronized</sub>
 </p>

@@ -4,7 +4,7 @@ import { PatientMasterRecordView } from "./_shell.patients.$id";
 export const Route = createFileRoute("/_shell/patient/$id")({
   head: () => ({
     meta: [
-      { title: "Patient Master Record — AiFV Precision Hospital CDSS" },
+      { title: "Patient Master Record — AIVF Precision Hospital CDSS v3.1" },
       {
         name: "description",
         content:

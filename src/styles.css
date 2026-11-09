@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* =============================================================================
- * AiFV PRECISION — ZONE LAYOUT GRID & ACADEMIC VISUAL SYSTEM
+ * AIVF PRECISION — ZONE LAYOUT GRID & ACADEMIC VISUAL SYSTEM
  * =============================================================================
  * Zone 1: TopBar
  *   - Height: 3.5rem (56px, h-14) sticky top-0 z-50
@@ -139,20 +139,20 @@
   --radius: 0.9rem;
 
   /* Spacing Scale Foundation (Visual De-Clutter Pass §2.1) */
-  --space-xs: 0.5rem;   /* 8px */
-  --space-sm: 0.75rem;  /* 12px */
-  --space-md: 1rem;     /* 16px */
-  --space-lg: 1.5rem;   /* 24px */
-  --space-xl: 2rem;     /* 32px */
-  --space-2xl: 3rem;    /* 48px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
 
   /* Typography Scale Foundation (§2.2) - Body text >= 16px */
-  --font-size-xs: 0.75rem;     /* 12px - micro badges, shortcuts */
-  --font-size-sm: 0.875rem;    /* 14px - secondary captions, metadata */
-  --font-size-base: 1rem;      /* 16px - body text (>= 16px standard) */
-  --font-size-lg: 1.125rem;    /* 18px - card titles, section subtitles */
-  --font-size-xl: 1.25rem;     /* 20px - tab headers, secondary headings */
-  --font-size-2xl: 1.5rem;     /* 24px - primary headers (h1, CaseHeader title) */
+  --font-size-xs: 0.75rem; /* 12px - micro badges, shortcuts */
+  --font-size-sm: 0.875rem; /* 14px - secondary captions, metadata */
+  --font-size-base: 1rem; /* 16px - body text (>= 16px standard) */
+  --font-size-lg: 1.125rem; /* 18px - card titles, section subtitles */
+  --font-size-xl: 1.25rem; /* 20px - tab headers, secondary headings */
+  --font-size-2xl: 1.5rem; /* 24px - primary headers (h1, CaseHeader title) */
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -166,30 +166,30 @@
   /* =========================================================================
    * Academic Color System (§11) - Light Theme (Default: Ward)
    * ========================================================================= */
-  --bg-canvas: #FAFBFC;           /* Page — warm off-white, reduces fluorescent glare */
-  --bg-surface: #FFFFFF;          /* Cards, panels */
-  --bg-surface-muted: #F4F5F7;    /* Hover states, subtle raised areas */
-  --border-subtle: #E5E7EB;       /* Dividers, card borders */
-  --border-default: #D1D5DB;      /* Inputs, focus borders */
-  --text-primary: #1A1A2E;        /* Near-black charcoal — journal body */
-  --text-secondary: #4B5563;      /* Captions, secondary labels */
-  --text-muted: #6B7280;          /* Placeholders, tertiary */
-  --text-on-accent: #FFFFFF;      /* Text on colored backgrounds */
+  --bg-canvas: #fafbfc; /* Page — warm off-white, reduces fluorescent glare */
+  --bg-surface: #ffffff; /* Cards, panels */
+  --bg-surface-muted: #f4f5f7; /* Hover states, subtle raised areas */
+  --border-subtle: #e5e7eb; /* Dividers, card borders */
+  --border-default: #d1d5db; /* Inputs, focus borders */
+  --text-primary: #1a1a2e; /* Near-black charcoal — journal body */
+  --text-secondary: #4b5563; /* Captions, secondary labels */
+  --text-muted: #6b7280; /* Placeholders, tertiary */
+  --text-on-accent: #ffffff; /* Text on colored backgrounds */
 
   /* Semantic Accents (each means ONE thing) */
-  --accent-primary: #1E3A8A;        /* Deep navy — primary actions, active tab, selected */
-  --accent-primary-hover: #1E40AF;
+  --accent-primary: #1e3a8a; /* Deep navy — primary actions, active tab, selected */
+  --accent-primary-hover: #1e40af;
   --accent-classification: #475569; /* Slate — POSEIDON/Bologna/phenotype/response chips */
-  --accent-override: #7C2D12;       /* Deep burgundy — OVERRIDDEN values exclusively */
-  --accent-evidence: #0F766E;       /* Muted teal — evidence citations, rationale links */
+  --accent-override: #7c2d12; /* Deep burgundy — OVERRIDDEN values exclusively */
+  --accent-evidence: #0f766e; /* Muted teal — evidence citations, rationale links */
 
   /* Safety (reserved EXCLUSIVELY for safety states) */
-  --safety-danger: #B91C1C;         /* Critical OHSS, hard firewall, blocking error */
-  --safety-danger-bg: #FEF2F2;
-  --safety-warning: #B45309;        /* Moderate OHSS, soft warning */
-  --safety-warning-bg: #FFFBEB;
-  --safety-success: #15803D;        /* Signed, verified, success */
-  --safety-success-bg: #F0FDF4;
+  --safety-danger: #b91c1c; /* Critical OHSS, hard firewall, blocking error */
+  --safety-danger-bg: #fef2f2;
+  --safety-warning: #b45309; /* Moderate OHSS, soft warning */
+  --safety-warning-bg: #fffbeb;
+  --safety-success: #15803d; /* Signed, verified, success */
+  --safety-success-bg: #f0fdf4;
 
   /* Framework integration mapped to academic tokens */
   --background: var(--bg-canvas);
@@ -201,15 +201,15 @@
 
   --primary: var(--accent-primary);
   --primary-foreground: var(--text-on-accent);
-  --primary-soft: #EFF6FF;
+  --primary-soft: #eff6ff;
 
   --secondary: var(--bg-surface-muted);
   --secondary-foreground: var(--text-secondary);
 
   --emerald: var(--safety-success);
   --emerald-soft: var(--safety-success-bg);
-  --purple: #7E22CE;
-  --purple-soft: #FAF5FF;
+  --purple: #7e22ce;
+  --purple-soft: #faf5ff;
   --warning: var(--safety-warning);
   --warning-soft: var(--safety-warning-bg);
 
@@ -226,11 +226,11 @@
   --input: var(--border-default);
   --ring: var(--accent-primary);
 
-  --chart-1: #1E3A8A;
-  --chart-2: #0F766E;
+  --chart-1: #1e3a8a;
+  --chart-2: #0f766e;
   --chart-3: #475569;
-  --chart-4: #B45309;
-  --chart-5: #B91C1C;
+  --chart-4: #b45309;
+  --chart-5: #b91c1c;
 
   --sidebar: var(--bg-surface);
   --sidebar-foreground: var(--text-primary);
@@ -245,35 +245,35 @@
     radial-gradient(120% 90% at 85% 0%, oklch(0.52 0.19 295 / 0.14) 0%, transparent 60%),
     radial-gradient(100% 80% at 0% 10%, oklch(0.45 0.13 253 / 0.16) 0%, transparent 62%),
     radial-gradient(90% 70% at 40% 100%, oklch(0.6 0.13 165 / 0.12) 0%, transparent 65%);
-  --gradient-primary: linear-gradient(135deg, #1E3A8A, #1E40AF);
+  --gradient-primary: linear-gradient(135deg, #1e3a8a, #1e40af);
 }
 
 .dark {
   /* =========================================================================
    * Academic Color System (§11) - Dark Theme (On-Call Room)
    * ========================================================================= */
-  --bg-canvas: #0F1115;
-  --bg-surface: #1A1D24;
-  --bg-surface-muted: #21252E;
-  --border-subtle: #2A2F3A;
-  --border-default: #3A3F4B;
-  --text-primary: #E5E7EB;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
-  --text-on-accent: #FFFFFF;
+  --bg-canvas: #0f1115;
+  --bg-surface: #1a1d24;
+  --bg-surface-muted: #21252e;
+  --border-subtle: #2a2f3a;
+  --border-default: #3a3f4b;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --text-on-accent: #ffffff;
 
-  --accent-primary: #60A5FA;
-  --accent-primary-hover: #93C5FD;
-  --accent-classification: #94A3B8;
-  --accent-override: #C2410C;
-  --accent-evidence: #2DD4BF;
+  --accent-primary: #60a5fa;
+  --accent-primary-hover: #93c5fd;
+  --accent-classification: #94a3b8;
+  --accent-override: #c2410c;
+  --accent-evidence: #2dd4bf;
 
-  --safety-danger: #EF4444;
-  --safety-danger-bg: #450A0A;
-  --safety-warning: #F59E0B;
-  --safety-warning-bg: #451A03;
-  --safety-success: #22C55E;
-  --safety-success-bg: #052E16;
+  --safety-danger: #ef4444;
+  --safety-danger-bg: #450a0a;
+  --safety-warning: #f59e0b;
+  --safety-warning-bg: #451a03;
+  --safety-success: #22c55e;
+  --safety-success-bg: #052e16;
 
   /* Framework integration mapped to dark academic tokens */
   --background: var(--bg-canvas);
@@ -284,16 +284,16 @@
   --popover-foreground: var(--text-primary);
 
   --primary: var(--accent-primary);
-  --primary-foreground: #0F1115;
-  --primary-soft: #1E293B;
+  --primary-foreground: #0f1115;
+  --primary-soft: #1e293b;
 
   --secondary: var(--bg-surface-muted);
   --secondary-foreground: var(--text-secondary);
 
   --emerald: var(--safety-success);
   --emerald-soft: var(--safety-success-bg);
-  --purple: #C084FC;
-  --purple-soft: #3B0764;
+  --purple: #c084fc;
+  --purple-soft: #3b0764;
   --warning: var(--safety-warning);
   --warning-soft: var(--safety-warning-bg);
 
@@ -303,7 +303,7 @@
   --accent-foreground: var(--text-primary);
 
   --destructive: var(--safety-danger);
-  --destructive-foreground: #FFFFFF;
+  --destructive-foreground: #ffffff;
   --destructive-soft: var(--safety-danger-bg);
 
   --border: var(--border-subtle);
@@ -313,7 +313,7 @@
   --sidebar: var(--bg-surface);
   --sidebar-foreground: var(--text-primary);
   --sidebar-primary: var(--accent-primary);
-  --sidebar-primary-foreground: #0F1115;
+  --sidebar-primary-foreground: #0f1115;
   --sidebar-accent: var(--bg-surface-muted);
   --sidebar-accent-foreground: var(--text-primary);
   --sidebar-border: var(--border-subtle);
@@ -323,76 +323,76 @@
     radial-gradient(120% 90% at 85% 0%, oklch(0.7 0.15 295 / 0.16) 0%, transparent 60%),
     radial-gradient(100% 80% at 0% 10%, oklch(0.68 0.14 250 / 0.18) 0%, transparent 62%),
     radial-gradient(90% 70% at 40% 100%, oklch(0.72 0.13 165 / 0.12) 0%, transparent 65%);
-  --gradient-primary: linear-gradient(135deg, #1E3A8A, #2563EB);
+  --gradient-primary: linear-gradient(135deg, #1e3a8a, #2563eb);
 }
 
 [data-theme="high-contrast"],
 .high-contrast {
   --bg-canvas: #000000;
-  --bg-surface: #0A0A0A;
-  --bg-surface-muted: #1A1A1A;
-  --border-subtle: #FFFFFF;
-  --border-default: #FFFFFF;
-  --text-primary: #FFFFFF;
-  --text-secondary: #E0E0E0;
-  --text-muted: #B0B0B0;
+  --bg-surface: #0a0a0a;
+  --bg-surface-muted: #1a1a1a;
+  --border-subtle: #ffffff;
+  --border-default: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-muted: #b0b0b0;
   --text-on-accent: #000000;
 
-  --accent-primary: #FFFF00;
-  --accent-primary-hover: #FFFF66;
-  --accent-classification: #FFFFFF;
-  --accent-override: #FF3333;
-  --accent-evidence: #00FFFF;
+  --accent-primary: #ffff00;
+  --accent-primary-hover: #ffff66;
+  --accent-classification: #ffffff;
+  --accent-override: #ff3333;
+  --accent-evidence: #00ffff;
 
-  --safety-danger: #FF3333;
+  --safety-danger: #ff3333;
   --safety-danger-bg: #440000;
-  --safety-warning: #FFFF00;
+  --safety-warning: #ffff00;
   --safety-warning-bg: #333300;
-  --safety-success: #00FF66;
+  --safety-success: #00ff66;
   --safety-success-bg: #003311;
 
   --background: #000000;
-  --foreground: #FFFFFF;
-  --card: #0A0A0A;
-  --card-foreground: #FFFFFF;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
   --popover: #000000;
-  --popover-foreground: #FFFFFF;
+  --popover-foreground: #ffffff;
 
-  --primary: #FFFF00;
+  --primary: #ffff00;
   --primary-foreground: #000000;
   --primary-soft: #222200;
 
-  --secondary: #1A1A1A;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
 
-  --emerald: #00FF66;
+  --emerald: #00ff66;
   --emerald-soft: #003311;
-  --purple: #FF66FF;
+  --purple: #ff66ff;
   --purple-soft: #330033;
-  --warning: #FFFF00;
+  --warning: #ffff00;
   --warning-soft: #333300;
 
-  --muted: #1C1C1C;
-  --muted-foreground: #E0E0E0;
+  --muted: #1c1c1c;
+  --muted-foreground: #e0e0e0;
   --accent: #262626;
-  --accent-foreground: #FFFFFF;
+  --accent-foreground: #ffffff;
 
-  --destructive: #FF3333;
-  --destructive-foreground: #FFFFFF;
+  --destructive: #ff3333;
+  --destructive-foreground: #ffffff;
   --destructive-soft: #440000;
 
-  --border: #FFFFFF;
-  --input: #FFFFFF;
-  --ring: #FFFF00;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffff00;
 
   --sidebar: #050505;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #FFFF00;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffff00;
   --sidebar-primary-foreground: #000000;
   --sidebar-accent: #222222;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: #FFFFFF;
-  --sidebar-ring: #FFFF00;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #ffffff;
+  --sidebar-ring: #ffff00;
 }
 
 @layer base {

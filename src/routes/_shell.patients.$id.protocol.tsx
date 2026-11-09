@@ -43,7 +43,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/protocol")({
   head: () => ({
     meta: [
-      { title: "Stage 3: Protocol Recommendation & Selection — AiFV CDSS" },
+      { title: "Stage 3: Protocol Recommendation & Selection — AIVF CDSS v3.1" },
       {
         name: "description",
         content:
@@ -434,10 +434,6 @@ export function PatientProtocolStage3View() {
             <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl mt-0.5">
               Ovarian Stimulation Protocol Selection
             </h1>
-            <p className="text-xs text-muted-foreground">
-              ESHRE 2025 evidence-guided protocol recommendation with multi-parameter rationale and
-              alternative regimen analysis.
-            </p>
           </div>
         </div>
 

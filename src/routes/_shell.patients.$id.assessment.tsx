@@ -42,7 +42,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_shell/patients/$id/assessment")({
   head: () => ({
     meta: [
-      { title: "Stage 1: Patient Assessment & Clinical Intake — AiFV Precision CDSS" },
+      { title: "Stage 1: Patient Assessment & Clinical Intake — AIVF v3.1" },
       {
         name: "description",
         content:

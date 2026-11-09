@@ -140,7 +140,7 @@ export function generatePdfBuffer(report: Report): { buffer: Uint8Array; extract
     false,
   );
   currentPage.drawText(
-    "AIFV CLINICAL INTELLIGENCE DOSSIER",
+    "AIVF CLINICAL INTELLIGENCE DOSSIER",
     MARGIN_LEFT + 12,
     cursorY - 14,
     "/F2",
@@ -456,7 +456,7 @@ export function generatePdfBuffer(report: Report): { buffer: Uint8Array; extract
     // Running Header
     page.drawLine(MARGIN_LEFT, HEADER_Y - 5, MARGIN_RIGHT, HEADER_Y - 5, 0.75, 0.75, 0.75);
     page.drawText(
-      "AIFV CLINICAL DECISION SUPPORT SYSTEM",
+      "AIVF CLINICAL DECISION SUPPORT SYSTEM",
       MARGIN_LEFT,
       HEADER_Y + 4,
       "/F2",

@@ -43,12 +43,7 @@ const sortLabels: Record<SortKey, string> = {
   alerts: "Most alerts",
 };
 
-function Patients() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  if (pathname !== "/patients" && pathname !== "/patients/") {
-    return <Outlet />;
-  }
-
+function PatientsContent() {
   const { records, hydrated, togglePin, remove } = usePatients();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("recent");
@@ -221,4 +216,12 @@ function Patients() {
       </SectionCard>
     </>
   );
+}
+
+function Patients() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (pathname !== "/patients" && pathname !== "/patients/") {
+    return <Outlet />;
+  }
+  return <PatientsContent />;
 }
