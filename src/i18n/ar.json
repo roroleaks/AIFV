@@ -145,7 +145,14 @@
     "viewRationale": "عرض السند العلمي للخوارزمية",
     "engineRationale": "مسوغات دعم القرار الخوارزمي",
     "guidelineRef": "المرجع الإرشادي المعتمد",
-    "evidenceCitation": "الدليل السريري الموثق"
+    "evidenceCitation": "الدليل السريري الموثق",
+    "prefillFrom": "من",
+    "sectionIdentity": "١. توقيت الزيارة والوزن",
+    "sectionUltrasound": "٢. قياس الجريبات وبطانة الرحم",
+    "sectionLabs": "٣. التحاليل الهرمونية",
+    "sectionMedications": "٤. الأدوية والبروتوكول السريري",
+    "sectionTitration": "٥. تعديل وتعيير الجرعات",
+    "sectionNotes": "٦. الملاحظات السريرية"
   },
   "plan": {
     "protocolTitle": "توصية البروتوكول العلاجي",

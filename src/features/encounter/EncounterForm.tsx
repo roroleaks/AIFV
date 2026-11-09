@@ -321,314 +321,362 @@ export function EncounterForm({
           attemptSubmit(false);
         }}
       >
-        <CardContent className="p-6 space-y-5 text-sm">
-          {/* Reactive Inline Engine Chips Banner (§4) */}
+        <CardContent className="p-6 space-y-6 text-sm">
+          {/* Reactive Inline Engine Chips Banner (§2.4) — Muted gray unless warning */}
           {engineChips.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
-              <span className="text-[11px] font-bold text-primary flex items-center gap-1">
-                <Sparkles className="size-3" />
+            <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-muted/30 border border-border/70">
+              <span className="text-[11px] font-bold text-foreground/80 flex items-center gap-1.5 me-1">
+                <Sparkles className="size-3 text-primary" />
                 <span>Live Engine Feedback:</span>
               </span>
-              {engineChips.map((chip) => (
-                <Badge
-                  key={chip.id}
-                  variant="outline"
-                  className={cn(
-                    "h-6 text-[11px] px-2 gap-1 font-medium transition-all",
-                    chip.variant === "destructive" &&
-                      "border-destructive/40 bg-destructive/10 text-destructive font-semibold",
-                    chip.variant === "warning" &&
-                      "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold",
-                    chip.variant === "success" &&
-                      "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
-                    chip.variant === "info" && "border-primary/30 bg-primary/10 text-primary",
-                  )}
-                >
-                  <span>{chip.label}</span>
-                  <RationalePopover chip={chip} />
-                </Badge>
-              ))}
+              {engineChips.map((chip) => {
+                const isAlert = chip.variant === "warning" || chip.variant === "destructive";
+                return (
+                  <Badge
+                    key={chip.id}
+                    variant="outline"
+                    className={cn(
+                      "h-6 text-[10px] px-2 gap-1 font-medium transition-all shadow-2xs",
+                      chip.variant === "destructive" &&
+                        "border-destructive/40 bg-destructive/10 text-destructive font-semibold",
+                      chip.variant === "warning" &&
+                        "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold",
+                      !isAlert && "border-border/80 bg-background text-muted-foreground",
+                    )}
+                  >
+                    <span>{chip.label}</span>
+                    <RationalePopover chip={chip} />
+                  </Badge>
+                );
+              })}
             </div>
           )}
 
-          {/* Section 1: Encounter Timing & Anthropometrics */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="enc-date" className="text-xs font-semibold">
-                Date *
-              </Label>
-              <Input
-                id="enc-date"
-                ref={firstInputRef}
-                type="date"
-                tabIndex={1}
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="enc-day" className="text-xs font-semibold">
-                Stimulation Day (0–20) *
-              </Label>
-              <Input
-                id="enc-day"
-                type="number"
-                tabIndex={2}
-                min={0}
-                max={20}
-                value={formData.day}
-                onChange={(e) => setFormData({ ...formData, day: Number(e.target.value) })}
-                onKeyDown={handleNumericKeyDown}
-                className={cn(
-                  "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono",
-                  hasHardError("day") && "border-destructive ring-1 ring-destructive",
-                )}
-                required
-              />
-              {hasHardError("day") && (
-                <span className="text-[11px] text-destructive block mt-1">
-                  {getHardErrorMessage("day")}
+          {/* Section 1: Encounter Timing & Anthropometrics (§2.4) */}
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <div className="flex items-center justify-between border-b border-border/50 pb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                {t("encounter.sectionIdentity")}
+              </span>
+              {previousEncounter && (
+                <span className="text-[10px] text-muted-foreground">
+                  ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
                 </span>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="enc-weight" className="text-xs font-semibold">
-                Weight (kg, 30–150)
-              </Label>
-              <Input
-                id="enc-weight"
-                type="number"
-                tabIndex={3}
-                step="0.5"
-                min={30}
-                max={150}
-                placeholder="e.g. 64"
-                value={formData.weightKg ?? ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    weightKg: e.target.value ? Number(e.target.value) : undefined,
-                  })
-                }
-                onKeyDown={handleNumericKeyDown}
-                className={cn(
-                  "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono",
-                  hasHardError("weightKg") && "border-destructive ring-1 ring-destructive",
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="enc-date" className="text-xs font-semibold">
+                  Date *
+                </Label>
+                <Input
+                  id="enc-date"
+                  ref={firstInputRef}
+                  type="date"
+                  tabIndex={1}
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="enc-day" className="text-xs font-semibold">
+                  Stimulation Day (0–20) *
+                </Label>
+                <Input
+                  id="enc-day"
+                  type="number"
+                  tabIndex={2}
+                  min={0}
+                  max={20}
+                  value={formData.day}
+                  onChange={(e) => setFormData({ ...formData, day: Number(e.target.value) })}
+                  onKeyDown={handleNumericKeyDown}
+                  className={cn(
+                    "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono",
+                    hasHardError("day") && "border-destructive ring-1 ring-destructive",
+                  )}
+                  required
+                />
+                {hasHardError("day") && (
+                  <span className="text-[11px] text-destructive block mt-1">
+                    {getHardErrorMessage("day")}
+                  </span>
                 )}
-              />
-              {hasHardError("weightKg") && (
-                <span className="text-[11px] text-destructive block mt-1">
-                  {getHardErrorMessage("weightKg")}
-                </span>
-              )}
+              </div>
+
+              <div>
+                <Label htmlFor="enc-weight" className="text-xs font-semibold">
+                  Weight (kg, 30–150)
+                </Label>
+                <Input
+                  id="enc-weight"
+                  type="number"
+                  tabIndex={3}
+                  step="0.5"
+                  min={30}
+                  max={150}
+                  placeholder="e.g. 64"
+                  value={formData.weightKg ?? ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      weightKg: e.target.value ? Number(e.target.value) : undefined,
+                    })
+                  }
+                  onKeyDown={handleNumericKeyDown}
+                  className={cn(
+                    "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono",
+                    hasHardError("weightKg") && "border-destructive ring-1 ring-destructive",
+                  )}
+                />
+                {hasHardError("weightKg") && (
+                  <span className="text-[11px] text-destructive block mt-1">
+                    {getHardErrorMessage("weightKg")}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Section 2: Ultrasound Folliculometry by Ovary & Size Buckets */}
-          <div className="rounded-lg border border-border/80 bg-muted/10 p-4 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-foreground block">
-              Folliculometry by Ovary (
-              <span className="text-muted-foreground font-normal">
+          {/* Section 2: Ultrasound Folliculometry by Ovary — Two-Column Paired Layout (§2.4) */}
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <div className="flex items-center justify-between border-b border-border/50 pb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                {t("encounter.sectionUltrasound")}
+              </span>
+              <span className="text-[10px] text-muted-foreground font-mono">
                 &lt;10 · 10–13 · 14–16 · ≥17 mm
               </span>
-              )
-            </span>
-
-            {/* Right Ovary */}
-            <div className="grid grid-cols-5 items-center gap-2 text-xs">
-              <span className="font-semibold text-foreground">Right Ovary:</span>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={4}
-                  min={0}
-                  placeholder="<10mm"
-                  value={formData.ultrasound.folliclesRight.lt10 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesRight: {
-                          ...formData.ultrasound.folliclesRight,
-                          lt10: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={5}
-                  min={0}
-                  placeholder="10–13"
-                  value={formData.ultrasound.folliclesRight.b10_13 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesRight: {
-                          ...formData.ultrasound.folliclesRight,
-                          b10_13: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={6}
-                  min={0}
-                  placeholder="14–16"
-                  value={formData.ultrasound.folliclesRight.b14_16 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesRight: {
-                          ...formData.ultrasound.folliclesRight,
-                          b14_16: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={7}
-                  min={0}
-                  placeholder="≥17mm"
-                  value={formData.ultrasound.folliclesRight.gte17 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesRight: {
-                          ...formData.ultrasound.folliclesRight,
-                          gte17: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center font-bold text-primary"
-                />
-              </div>
             </div>
 
-            {/* Left Ovary */}
-            <div className="grid grid-cols-5 items-center gap-2 text-xs">
-              <span className="font-semibold text-foreground">Left Ovary:</span>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={8}
-                  min={0}
-                  placeholder="<10mm"
-                  value={formData.ultrasound.folliclesLeft.lt10 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesLeft: {
-                          ...formData.ultrasound.folliclesLeft,
-                          lt10: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
+            {/* Two-Column Side-by-Side Ovary Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Right Ovary (R) */}
+              <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-foreground">
+                    Right Ovary (R)
+                  </span>
+                  {previousEncounter && (
+                    <span className="text-[10px] text-muted-foreground">
+                      ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-center">
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">&lt;10mm</Label>
+                    <Input
+                      type="number"
+                      tabIndex={4}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesRight.lt10 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesRight: {
+                              ...formData.ultrasound.folliclesRight,
+                              lt10: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">10–13</Label>
+                    <Input
+                      type="number"
+                      tabIndex={5}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesRight.b10_13 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesRight: {
+                              ...formData.ultrasound.folliclesRight,
+                              b10_13: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">14–16</Label>
+                    <Input
+                      type="number"
+                      tabIndex={6}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesRight.b14_16 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesRight: {
+                              ...formData.ultrasound.folliclesRight,
+                              b14_16: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] font-bold text-primary block mb-1">≥17mm</Label>
+                    <Input
+                      type="number"
+                      tabIndex={7}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesRight.gte17 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesRight: {
+                              ...formData.ultrasound.folliclesRight,
+                              gte17: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center font-bold text-primary border-primary/40"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={9}
-                  min={0}
-                  placeholder="10–13"
-                  value={formData.ultrasound.folliclesLeft.b10_13 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesLeft: {
-                          ...formData.ultrasound.folliclesLeft,
-                          b10_13: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={10}
-                  min={0}
-                  placeholder="14–16"
-                  value={formData.ultrasound.folliclesLeft.b14_16 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesLeft: {
-                          ...formData.ultrasound.folliclesLeft,
-                          b14_16: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center"
-                />
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  tabIndex={11}
-                  min={0}
-                  placeholder="≥17mm"
-                  value={formData.ultrasound.folliclesLeft.gte17 || ""}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      ultrasound: {
-                        ...formData.ultrasound,
-                        folliclesLeft: {
-                          ...formData.ultrasound.folliclesLeft,
-                          gte17: Number(e.target.value) || 0,
-                        },
-                      },
-                    })
-                  }
-                  onKeyDown={handleNumericKeyDown}
-                  className="h-10 text-base sm:h-8 sm:text-xs font-mono text-center font-bold text-primary"
-                />
+
+              {/* Left Ovary (L) */}
+              <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-foreground">
+                    Left Ovary (L)
+                  </span>
+                  {previousEncounter && (
+                    <span className="text-[10px] text-muted-foreground">
+                      ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-center">
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">&lt;10mm</Label>
+                    <Input
+                      type="number"
+                      tabIndex={8}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesLeft.lt10 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesLeft: {
+                              ...formData.ultrasound.folliclesLeft,
+                              lt10: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">10–13</Label>
+                    <Input
+                      type="number"
+                      tabIndex={9}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesLeft.b10_13 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesLeft: {
+                              ...formData.ultrasound.folliclesLeft,
+                              b10_13: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] text-muted-foreground block mb-1">14–16</Label>
+                    <Input
+                      type="number"
+                      tabIndex={10}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesLeft.b14_16 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesLeft: {
+                              ...formData.ultrasound.folliclesLeft,
+                              b14_16: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-[10px] font-bold text-primary block mb-1">≥17mm</Label>
+                    <Input
+                      type="number"
+                      tabIndex={11}
+                      min={0}
+                      placeholder="0"
+                      value={formData.ultrasound.folliclesLeft.gte17 || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          ultrasound: {
+                            ...formData.ultrasound,
+                            folliclesLeft: {
+                              ...formData.ultrasound.folliclesLeft,
+                              gte17: Number(e.target.value) || 0,
+                            },
+                          },
+                        })
+                      }
+                      onKeyDown={handleNumericKeyDown}
+                      className="h-9 text-xs font-mono text-center font-bold text-primary border-primary/40"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -688,12 +736,19 @@ export function EncounterForm({
             </div>
           </div>
 
-          {/* Section 3: Hormonal Labs & Scanner Hook */}
-          <div className="rounded-lg border border-border/80 p-4 space-y-3 bg-muted/10">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-foreground">
-                Hormonal Kinetics (Labs)
-              </span>
+          {/* Section 3: Hormonal Labs & Scanner Hook (§2.4) — Compact 3-Column Row */}
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <div className="flex items-center justify-between border-b border-border/50 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                  {t("encounter.sectionLabs")}
+                </span>
+                {previousEncounter && (
+                  <span className="text-[10px] text-muted-foreground">
+                    ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
+                  </span>
+                )}
+              </div>
               <Button
                 type="button"
                 variant="ghost"
@@ -805,183 +860,207 @@ export function EncounterForm({
             </div>
           </div>
 
-          {/* Section 4: Medications & Titration Adjustments */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="enc-med" className="text-xs font-semibold">
-                Gonadotropin Type
-              </Label>
-              <Select
-                value={formData.medications.gonadotropinType}
-                onValueChange={(val) =>
-                  setFormData({
-                    ...formData,
-                    medications: { ...formData.medications, gonadotropinType: val },
-                  })
-                }
-              >
-                <SelectTrigger
-                  id="enc-med"
-                  tabIndex={17}
-                  className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
-                >
-                  <SelectValue placeholder="Select drug" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rFSH">rFSH (Follitropin alfa/beta)</SelectItem>
-                  <SelectItem value="hp-hMG">hp-hMG (Menotropin)</SelectItem>
-                  <SelectItem value="rFSH+rLH">rFSH + rLH (Pergoveris)</SelectItem>
-                  <SelectItem value="Corifollitropin alfa">Corifollitropin alfa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="enc-dose" className="text-xs font-semibold">
-                Daily Dose (IU, 37.5–600) *
-              </Label>
-              <Input
-                id="enc-dose"
-                type="number"
-                tabIndex={18}
-                step="12.5"
-                min={37.5}
-                max={600}
-                value={formData.medications.gonadotropinDoseIU}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    medications: {
-                      ...formData.medications,
-                      gonadotropinDoseIU: Number(e.target.value) || 0,
-                    },
-                  })
-                }
-                onKeyDown={handleNumericKeyDown}
-                className={cn(
-                  "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono font-bold",
-                  hasHardError("gonadotropinDoseIU") &&
-                    "border-destructive ring-1 ring-destructive",
-                )}
-                required
-              />
-              {hasHardError("gonadotropinDoseIU") && (
-                <span className="text-[11px] text-destructive block mt-1">
-                  {getHardErrorMessage("gonadotropinDoseIU")}
+          {/* Section 4: Medications & Administration (§2.4) */}
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <div className="flex items-center justify-between border-b border-border/50 pb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                {t("encounter.sectionMedications")}
+              </span>
+              {previousEncounter && (
+                <span className="text-[10px] text-muted-foreground">
+                  ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
                 </span>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="enc-antagonist" className="text-xs font-semibold">
-                Antagonist (mg)
-              </Label>
-              <Input
-                id="enc-antagonist"
-                type="number"
-                tabIndex={19}
-                step="0.25"
-                min={0}
-                max={5}
-                placeholder="e.g. 0.25 mg"
-                value={formData.medications.antagonistDoseMg ?? ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    medications: {
-                      ...formData.medications,
-                      antagonistDoseMg: e.target.value ? Number(e.target.value) : undefined,
-                    },
-                  })
-                }
-                onKeyDown={handleNumericKeyDown}
-                className="mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="enc-med" className="text-xs font-semibold">
+                  Gonadotropin Type
+                </Label>
+                <Select
+                  value={formData.medications.gonadotropinType}
+                  onValueChange={(val) =>
+                    setFormData({
+                      ...formData,
+                      medications: { ...formData.medications, gonadotropinType: val },
+                    })
+                  }
+                >
+                  <SelectTrigger
+                    id="enc-med"
+                    tabIndex={17}
+                    className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
+                  >
+                    <SelectValue placeholder="Select drug" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rFSH">rFSH (Follitropin alfa/beta)</SelectItem>
+                    <SelectItem value="hp-hMG">hp-hMG (Menotropin)</SelectItem>
+                    <SelectItem value="rFSH+rLH">rFSH + rLH (Pergoveris)</SelectItem>
+                    <SelectItem value="Corifollitropin alfa">Corifollitropin alfa</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="enc-dose" className="text-xs font-semibold">
+                  Daily Dose (IU, 37.5–600) *
+                </Label>
+                <Input
+                  id="enc-dose"
+                  type="number"
+                  tabIndex={18}
+                  step="12.5"
+                  min={37.5}
+                  max={600}
+                  value={formData.medications.gonadotropinDoseIU}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      medications: {
+                        ...formData.medications,
+                        gonadotropinDoseIU: Number(e.target.value) || 0,
+                      },
+                    })
+                  }
+                  onKeyDown={handleNumericKeyDown}
+                  className={cn(
+                    "mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono font-bold",
+                    hasHardError("gonadotropinDoseIU") &&
+                      "border-destructive ring-1 ring-destructive",
+                  )}
+                  required
+                />
+                {hasHardError("gonadotropinDoseIU") && (
+                  <span className="text-[11px] text-destructive block mt-1">
+                    {getHardErrorMessage("gonadotropinDoseIU")}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="enc-antagonist" className="text-xs font-semibold">
+                  Antagonist (mg)
+                </Label>
+                <Input
+                  id="enc-antagonist"
+                  type="number"
+                  tabIndex={19}
+                  step="0.25"
+                  min={0}
+                  max={5}
+                  placeholder="e.g. 0.25 mg"
+                  value={formData.medications.antagonistDoseMg ?? ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      medications: {
+                        ...formData.medications,
+                        antagonistDoseMg: e.target.value ? Number(e.target.value) : undefined,
+                      },
+                    })
+                  }
+                  onKeyDown={handleNumericKeyDown}
+                  className="mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono"
+                />
+              </div>
             </div>
           </div>
 
           {/* Section 5: Titration Direction & Reason */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <Label className="text-xs font-semibold">Adjustment Action</Label>
-              <Select
-                value={formData.adjustment.direction}
-                onValueChange={(val: DoseAdjustmentDirection) =>
-                  setFormData({
-                    ...formData,
-                    adjustment: { ...formData.adjustment, direction: val },
-                  })
-                }
-              >
-                <SelectTrigger tabIndex={20} className="mt-1 h-11 text-base sm:h-9 sm:text-xs">
-                  <SelectValue placeholder="Action" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="hold">Maintain Dose (Hold)</SelectItem>
-                  <SelectItem value="up">Step-up (Increase)</SelectItem>
-                  <SelectItem value="down">Step-down (Decrease)</SelectItem>
-                  <SelectItem value="coast">Coast (Withhold Gonadotropins)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <span className="text-xs font-bold uppercase tracking-wider text-foreground block border-b border-border/50 pb-2">
+              {t("encounter.sectionTitration")}
+            </span>
 
-            <div>
-              <Label htmlFor="enc-delta" className="text-xs font-semibold">
-                Delta Dose (IU)
-              </Label>
-              <Input
-                id="enc-delta"
-                type="number"
-                tabIndex={21}
-                step="12.5"
-                placeholder="e.g. 75"
-                value={formData.adjustment.deltaIU || ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    adjustment: { ...formData.adjustment, deltaIU: Number(e.target.value) || 0 },
-                  })
-                }
-                onKeyDown={handleNumericKeyDown}
-                className="mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono"
-              />
-            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <Label className="text-xs font-semibold">Adjustment Action</Label>
+                <Select
+                  value={formData.adjustment.direction}
+                  onValueChange={(val: DoseAdjustmentDirection) =>
+                    setFormData({
+                      ...formData,
+                      adjustment: { ...formData.adjustment, direction: val },
+                    })
+                  }
+                >
+                  <SelectTrigger tabIndex={20} className="mt-1 h-11 text-base sm:h-9 sm:text-xs">
+                    <SelectValue placeholder="Action" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hold">Maintain Dose (Hold)</SelectItem>
+                    <SelectItem value="up">Step-up (Increase)</SelectItem>
+                    <SelectItem value="down">Step-down (Decrease)</SelectItem>
+                    <SelectItem value="coast">Coast (Withhold Gonadotropins)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-            <div>
-              <Label htmlFor="enc-reason" className="text-xs font-semibold">
-                Titration Reason
-              </Label>
-              <Input
-                id="enc-reason"
-                type="text"
-                tabIndex={22}
-                placeholder="e.g. Hypo-response / E2 plateau"
-                value={formData.adjustment.reason}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    adjustment: { ...formData.adjustment, reason: e.target.value },
-                  })
-                }
-                className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
-              />
+              <div>
+                <Label htmlFor="enc-delta" className="text-xs font-semibold">
+                  Delta Dose (IU)
+                </Label>
+                <Input
+                  id="enc-delta"
+                  type="number"
+                  tabIndex={21}
+                  step="12.5"
+                  placeholder="e.g. 75"
+                  value={formData.adjustment.deltaIU || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      adjustment: { ...formData.adjustment, deltaIU: Number(e.target.value) || 0 },
+                    })
+                  }
+                  onKeyDown={handleNumericKeyDown}
+                  className="mt-1 h-11 text-base sm:h-9 sm:text-xs font-mono"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="enc-reason" className="text-xs font-semibold">
+                  Titration Reason
+                </Label>
+                <Input
+                  id="enc-reason"
+                  type="text"
+                  tabIndex={22}
+                  placeholder="e.g. Hypo-response / E2 plateau"
+                  value={formData.adjustment.reason}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      adjustment: { ...formData.adjustment, reason: e.target.value },
+                    })
+                  }
+                  className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Section 6: Clinical Notes */}
-          <div>
-            <Label htmlFor="enc-note" className="text-xs font-semibold">
-              Clinical Note
-            </Label>
-            <Input
-              id="enc-note"
-              type="text"
-              tabIndex={23}
-              placeholder="e.g. Right lead 16mm, continue antagonist, re-evaluate in 48h."
-              value={formData.note ?? ""}
-              onChange={(e) => setFormData({ ...formData, note: e.target.value })}
-              className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
-            />
+          {/* Section 6: Clinical Observations & Notes */}
+          <div className="rounded-xl border border-border/70 bg-card p-5 space-y-4 shadow-2xs">
+            <span className="text-xs font-bold uppercase tracking-wider text-foreground block border-b border-border/50 pb-2">
+              {t("encounter.sectionNotes")}
+            </span>
+            <div>
+              <Label htmlFor="enc-note" className="text-xs font-semibold">
+                Clinical Note
+              </Label>
+              <Input
+                id="enc-note"
+                type="text"
+                tabIndex={23}
+                placeholder="e.g. Right lead 16mm, continue antagonist, re-evaluate in 48h."
+                value={formData.note ?? ""}
+                onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                className="mt-1 h-11 text-base sm:h-9 sm:text-xs"
+              />
+            </div>
           </div>
         </CardContent>
 

@@ -145,7 +145,14 @@
     "viewRationale": "View Engine Rationale",
     "engineRationale": "Algorithmic Decision Support Rationale",
     "guidelineRef": "Guideline Reference",
-    "evidenceCitation": "Validated Clinical Evidence"
+    "evidenceCitation": "Validated Clinical Evidence",
+    "prefillFrom": "from",
+    "sectionIdentity": "1. Encounter Timing & Weight",
+    "sectionUltrasound": "2. Folliculometry Cohort & Endometrium",
+    "sectionLabs": "3. Hormonal Kinetics (Labs)",
+    "sectionMedications": "4. Medications & Protocol Administration",
+    "sectionTitration": "5. Dose Adjustment & Titration",
+    "sectionNotes": "6. Clinical Observations & Notes"
   },
   "plan": {
     "protocolTitle": "Protocol Recommendation",
