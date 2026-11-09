@@ -312,7 +312,7 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
         {/* Tab A: Encounters (Longitudinal Timeline & Fast Entry Form) */}
         <TabsContent
           value="encounters"
-          className="flex-1 overflow-y-auto p-6 focus-visible:outline-hidden"
+          className="flex-1 overflow-y-auto p-8 focus-visible:outline-hidden"
         >
           <div className="mx-auto max-w-5xl">
             {isAddingEncounter || editingEncounter ? (
@@ -345,7 +345,7 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
         {/* Tab B: Plan (Consolidated 4 Decision Cards with Orchestrators & Overrides) */}
         <TabsContent
           value="plan"
-          className="flex-1 overflow-y-auto p-6 focus-visible:outline-hidden"
+          className="flex-1 overflow-y-auto p-8 focus-visible:outline-hidden"
         >
           <div className="mx-auto max-w-5xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-border/60">
@@ -369,7 +369,7 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
             </div>
 
             {/* The 4 Consolidated Decision Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Card 1: Stratification (Read-Only) */}
               <StratificationCard stratification={stratification} />
 
@@ -411,7 +411,7 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
         {/* Tab C: Report (Deliverable Dossier) */}
         <TabsContent
           value="report"
-          className="flex-1 overflow-y-auto p-6 focus-visible:outline-hidden"
+          className="flex-1 overflow-y-auto p-8 focus-visible:outline-hidden"
         >
           <div className="mx-auto max-w-5xl">
             <ReportPreview

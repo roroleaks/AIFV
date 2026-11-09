@@ -205,10 +205,10 @@ export function CaseHeader({
       {/* Auto-derived Clinical Engine Chips & Lifecycle Strip - ARIA live polite (§2.4) */}
       <div
         aria-live="polite"
-        className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/20 px-4 py-2 text-xs"
+        className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 bg-muted/20 px-4 py-2.5 text-xs"
       >
         {/* Start: Reactive Engine Summary Chips */}
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* POSEIDON Chip or Stratification Incomplete (§2.5) */}
           {derived.poseidon.status === "insufficient-data" ? (
             <Badge
