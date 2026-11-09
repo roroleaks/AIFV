@@ -67,7 +67,7 @@ export function DecisionSidebar({
           {/* Sidebar Header */}
           <div className="flex items-center justify-between border-b border-border/60 pb-3">
             <div className="flex items-center gap-2">
-              <Brain className="size-4 text-primary" />
+              <Brain className="size-4 text-accent-primary" />
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                   {t("decisionSidebar.title")}
@@ -98,17 +98,17 @@ export function DecisionSidebar({
               <div
                 role="alert"
                 aria-live="assertive"
-                className="rounded-lg border border-destructive/40 bg-destructive/10 p-3.5 space-y-2"
+                className="rounded-lg border border-safety-danger/40 bg-safety-danger/10 p-3.5 space-y-2"
               >
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="size-4 text-destructive shrink-0 mt-0.5" />
+                  <AlertTriangle className="size-4 text-safety-danger shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-bold text-destructive">
+                    <h4 className="text-xs font-bold text-safety-danger">
                       {firewallBreached
                         ? "Safety Ceiling Breached"
                         : `Elevated OHSS Alert: ${ohssRisk.toUpperCase()}`}
                     </h4>
-                    <p className="text-[11px] text-destructive/90 mt-0.5 leading-snug">
+                    <p className="text-[11px] text-safety-danger/90 mt-0.5 leading-snug">
                       {firewallMessage ||
                         "Patient parameters indicate heightened hyperstimulation risk. Follow ESHRE Rec 20/31 safety guidelines."}
                     </p>
@@ -120,7 +120,7 @@ export function DecisionSidebar({
                       size="sm"
                       variant="outline"
                       onClick={onAcknowledgeAlert}
-                      className="h-6.5 text-[11px] font-semibold border-destructive/40 text-destructive hover:bg-destructive/15"
+                      className="h-6.5 text-[11px] font-semibold border-safety-danger/40 text-safety-danger hover:bg-safety-danger/15"
                     >
                       {t("decisionSidebar.dismissAlert")}
                     </Button>
@@ -140,8 +140,8 @@ export function DecisionSidebar({
                   className={cn(
                     "h-4.5 px-1.5 text-[10px]",
                     firewallBreached
-                      ? "border-destructive text-destructive bg-destructive/10 font-bold"
-                      : "border-emerald-500/40 text-emerald-600 bg-emerald-500/10 font-medium",
+                      ? "border-safety-danger text-safety-danger bg-safety-danger/10 font-bold"
+                      : "border-safety-success/40 text-safety-success bg-safety-success/10 font-medium",
                   )}
                 >
                   {firewallBreached ? "Ceiling Breached" : t("decisionSidebar.statusActive")}
@@ -153,7 +153,7 @@ export function DecisionSidebar({
                   {/* ESHRE 300 IU Firewall */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-start gap-1.5">
-                      <span className="text-emerald-500 mt-0.5">●</span>
+                      <span className="text-safety-success mt-0.5">●</span>
                       <div>
                         <span className="font-semibold text-foreground block text-[11px]">
                           ESHRE Rec 20 Ceiling
@@ -188,7 +188,7 @@ export function DecisionSidebar({
                   {/* Rec 31 Combination Caution */}
                   <div className="flex items-start justify-between gap-2 pt-2 border-t border-border/40">
                     <div className="flex items-start gap-1.5">
-                      <span className="text-emerald-500 mt-0.5">●</span>
+                      <span className="text-safety-success mt-0.5">●</span>
                       <div>
                         <span className="font-semibold text-foreground block text-[11px]">
                           ESHRE Rec 31 Combination
@@ -254,7 +254,7 @@ export function DecisionSidebar({
             {/* Engine Transparency Notice */}
             <div className="rounded-lg bg-muted/40 p-3.5 text-[11px] text-muted-foreground">
               <div className="flex items-center gap-1.5 font-semibold text-foreground mb-1">
-                <Info className="size-3.5 text-primary" />
+                <Info className="size-3.5 text-accent-primary" />
                 <span>Pure Headless Services</span>
               </div>
               <p>

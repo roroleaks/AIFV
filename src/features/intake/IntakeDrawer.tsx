@@ -237,7 +237,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs animate-in fade-in duration-200">
       {/* Drawer Surface */}
-      <div className="flex h-full w-full max-w-2xl flex-col bg-card border-l border-border/80 shadow-2xl animate-in slide-in-from-right duration-250 sm:max-w-3xl overflow-hidden">
+      <div className="flex h-full w-full max-w-2xl flex-col bg-card border-s border-border/80 shadow-2xl animate-in slide-in-from-right rtl:slide-in-from-left duration-250 sm:max-w-3xl overflow-hidden">
         {/* Drawer Header */}
         <div className="flex items-center justify-between border-b border-border/70 px-6 py-4 bg-muted/20">
           <div>
@@ -265,9 +265,9 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
         </div>
 
         {/* Reactive Auto-Stratification Live Strip (§2.2 - ZERO Calculate Button) */}
-        <div className="border-b border-border/60 bg-primary/5 px-6 py-3">
+        <div className="border-b border-border/60 bg-muted/20 px-6 py-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-accent-primary flex items-center gap-1.5">
               <Sparkles className="size-3.5" />
               Live Stratification Engine
             </span>
@@ -278,14 +278,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
                   <Badge
                     key={idx}
                     variant="outline"
-                    className={cn(
-                      "text-xs gap-1 font-medium px-2 py-0.5",
-                      chip.variant === "destructive"
-                        ? "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/40"
-                        : chip.variant === "warning"
-                          ? "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/40"
-                          : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/40",
-                    )}
+                    className="text-xs gap-1 font-medium px-2 py-0.5 border-border-default bg-bg-surface-muted text-accent-classification"
                   >
                     <span>{chip.icon}</span>
                     <span>{chip.label}</span>
@@ -303,7 +296,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
 
         {/* Hard Validation Issue Notice */}
         {!validation.isValid && (
-          <div className="bg-red-500/10 border-b border-red-500/30 px-6 py-2 text-xs text-red-600 dark:text-red-400 flex items-center gap-2">
+          <div className="bg-safety-danger/10 border-b border-safety-danger/30 px-6 py-2 text-xs text-safety-danger flex items-center gap-2">
             <AlertTriangle className="size-4 shrink-0" />
             <span>{validation.hardIssues[0]?.message} (Resolve blocking errors to proceed)</span>
           </div>
@@ -1056,10 +1049,10 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
               size="sm"
               disabled={!validation.isValid}
               onClick={() => handleSaveAttempt(true)}
-              className="h-9 gap-1.5 bg-primary text-primary-foreground text-xs font-semibold shadow-xs"
+              className="h-9 gap-1.5 bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent text-xs font-semibold shadow-xs"
             >
               <span>Save & Open Case</span>
-              <ArrowRight className="size-3.5" />
+              <ArrowRight className="size-3.5 rtl:rotate-180" />
             </Button>
           </div>
         </div>
@@ -1069,7 +1062,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
       <Dialog open={showSoftWarningModal} onOpenChange={setShowSoftWarningModal}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+            <DialogTitle className="flex items-center gap-2 text-safety-warning">
               <AlertTriangle className="size-5" />
               Clinical Attention Flags
             </DialogTitle>
@@ -1083,7 +1076,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
             {validation.softWarnings.map((warn, idx) => (
               <div
                 key={idx}
-                className="p-3 rounded-lg border border-amber-500/40 bg-amber-500/10 text-xs text-amber-900 dark:text-amber-200"
+                className="p-3 rounded-lg border border-safety-warning/40 bg-safety-warning-bg text-xs text-safety-warning"
               >
                 <div className="font-semibold">{warn.message}</div>
                 <div className="text-[10px] text-muted-foreground mt-0.5">
@@ -1103,7 +1096,7 @@ export function IntakeDrawer({ open, onClose, onCaseCreated }: IntakeDrawerProps
                 setShowSoftWarningModal(false);
                 softWarningProceedAction?.();
               }}
-              className="bg-primary text-primary-foreground font-semibold"
+              className="bg-accent-primary hover:bg-accent-primary-hover text-text-on-accent font-semibold"
             >
               Confirm & Open Case
             </Button>
