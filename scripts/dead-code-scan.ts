@@ -44,10 +44,17 @@ try {
     'git grep --untracked -n "localStorage" src/features src/components src/services src/hooks',
     { cwd: ROOT, encoding: "utf-8" },
   );
-  assert(false, "Zero localStorage in src/features, src/components, src/services, src/hooks", output);
+  assert(
+    false,
+    "Zero localStorage in src/features, src/components, src/services, src/hooks",
+    output,
+  );
 } catch {
   // Exit code 1 means 0 matches found -> PASS
-  assert(true, "Zero localStorage in src/features, src/components, src/services, src/hooks (0 hits)");
+  assert(
+    true,
+    "Zero localStorage in src/features, src/components, src/services, src/hooks (0 hits)",
+  );
 }
 
 // -----------------------------------------------------------------------------
@@ -55,11 +62,14 @@ try {
 // -----------------------------------------------------------------------------
 console.log("\n[TEST 2] Hardcoded PIN Scan ('123456' / '12345678')");
 try {
-  const output = execSync(
-    'git grep --untracked -n "123456\\|12345678" src/',
-    { cwd: ROOT, encoding: "utf-8" },
-  );
-  const lines = output.trim().split("\n").filter((l) => l.trim().length > 0);
+  const output = execSync('git grep --untracked -n "123456\\|12345678" src/', {
+    cwd: ROOT,
+    encoding: "utf-8",
+  });
+  const lines = output
+    .trim()
+    .split("\n")
+    .filter((l) => l.trim().length > 0);
   const nonConfigHits = lines.filter((l) => !l.includes("pinConfig.ts"));
   if (nonConfigHits.length === 0) {
     assert(true, "Zero hardcoded PINs in src/ outside pinConfig.ts (single source of truth)");
@@ -99,7 +109,15 @@ try {
   tscOutput = (execErr.stdout || "") + (execErr.stderr || "");
 }
 
-const tscLines = tscOutput.split("\n").filter((l) => l.includes("error TS6133") || l.includes("error TS6192") || l.includes("error TS6196") || l.includes("error TS4111"));
+const tscLines = tscOutput
+  .split("\n")
+  .filter(
+    (l) =>
+      l.includes("error TS6133") ||
+      l.includes("error TS6192") ||
+      l.includes("error TS6196") ||
+      l.includes("error TS4111"),
+  );
 // Filter out pure engine directories (which remain byte-untouched by design)
 const appCodeErrors = tscLines.filter((l) => {
   return (
@@ -129,7 +147,24 @@ try {
   );
   assert(false, "Zero console.log/console.debug in production services and components", output);
 } catch {
-  assert(true, "Zero console.log/console.debug in src/features, src/components, src/services (0 hits)");
+  assert(
+    true,
+    "Zero console.log/console.debug in src/features, src/components, src/services (0 hits)",
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Check 6: Zero raw hex colors in src/components/case-shell and src/features
+// -----------------------------------------------------------------------------
+console.log("\n[TEST 6] Raw Hex Color Scan in Component & Feature Code");
+try {
+  const output = execSync(
+    'git grep -n -E "#[0-9A-Fa-f]{3,8}" src/components/case-shell src/features',
+    { cwd: ROOT, encoding: "utf-8" },
+  );
+  assert(false, "Zero raw hex colors in src/components/case-shell and src/features", output);
+} catch {
+  assert(true, "Zero raw hex colors in src/components/case-shell and src/features (0 hits)");
 }
 
 console.log("\n================================================================================");
