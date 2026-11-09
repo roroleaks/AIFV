@@ -39,6 +39,12 @@ import { Route as ShellTriggerRouteImport } from './routes/_shell.trigger'
 import { Route as CaseCaseIdRouteImport } from './routes/case.$caseId'
 import { Route as ShellEvidenceIdRouteImport } from './routes/_shell.evidence_.$id'
 import { Route as ShellPatientIdRouteImport } from './routes/_shell.patient.$id'
+import { Route as ShellPatientsIdRouteImport } from './routes/_shell.patients.$id'
+import { Route as ShellPatientsIdAssessmentRouteImport } from './routes/_shell.patients.$id.assessment'
+import { Route as ShellPatientsIdDoseRouteImport } from './routes/_shell.patients.$id.dose'
+import { Route as ShellPatientsIdMonitoringRouteImport } from './routes/_shell.patients.$id.monitoring'
+import { Route as ShellPatientsIdPoseidonRouteImport } from './routes/_shell.patients.$id.poseidon'
+import { Route as ShellPatientsIdProtocolRouteImport } from './routes/_shell.patients.$id.protocol'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -190,6 +196,38 @@ const ShellPatientIdRoute = ShellPatientIdRouteImport.update({
   path: '/patient/$id',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellPatientsIdRoute = ShellPatientsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ShellPatientsRoute,
+} as any)
+const ShellPatientsIdAssessmentRoute =
+  ShellPatientsIdAssessmentRouteImport.update({
+    id: '/assessment',
+    path: '/assessment',
+    getParentRoute: () => ShellPatientsIdRoute,
+  } as any)
+const ShellPatientsIdDoseRoute = ShellPatientsIdDoseRouteImport.update({
+  id: '/dose',
+  path: '/dose',
+  getParentRoute: () => ShellPatientsIdRoute,
+} as any)
+const ShellPatientsIdMonitoringRoute =
+  ShellPatientsIdMonitoringRouteImport.update({
+    id: '/monitoring',
+    path: '/monitoring',
+    getParentRoute: () => ShellPatientsIdRoute,
+  } as any)
+const ShellPatientsIdPoseidonRoute = ShellPatientsIdPoseidonRouteImport.update({
+  id: '/poseidon',
+  path: '/poseidon',
+  getParentRoute: () => ShellPatientsIdRoute,
+} as any)
+const ShellPatientsIdProtocolRoute = ShellPatientsIdProtocolRouteImport.update({
+  id: '/protocol',
+  path: '/protocol',
+  getParentRoute: () => ShellPatientsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -210,7 +248,7 @@ export interface FileRoutesByFullPath {
   '/gonadotropins': typeof ShellGonadotropinsRoute
   '/help': typeof ShellHelpRoute
   '/monitoring': typeof ShellMonitoringRoute
-  '/patients': typeof ShellPatientsRoute
+  '/patients': typeof ShellPatientsRouteWithChildren
   '/poseidon': typeof ShellPoseidonRoute
   '/protocols': typeof ShellProtocolsRoute
   '/reports': typeof ShellReportsRoute
@@ -221,6 +259,12 @@ export interface FileRoutesByFullPath {
   '/case/$caseId': typeof CaseCaseIdRoute
   '/evidence/$id': typeof ShellEvidenceIdRoute
   '/patient/$id': typeof ShellPatientIdRoute
+  '/patients/$id': typeof ShellPatientsIdRouteWithChildren
+  '/patients/$id/assessment': typeof ShellPatientsIdAssessmentRoute
+  '/patients/$id/dose': typeof ShellPatientsIdDoseRoute
+  '/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
+  '/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
+  '/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -241,7 +285,7 @@ export interface FileRoutesByTo {
   '/gonadotropins': typeof ShellGonadotropinsRoute
   '/help': typeof ShellHelpRoute
   '/monitoring': typeof ShellMonitoringRoute
-  '/patients': typeof ShellPatientsRoute
+  '/patients': typeof ShellPatientsRouteWithChildren
   '/poseidon': typeof ShellPoseidonRoute
   '/protocols': typeof ShellProtocolsRoute
   '/reports': typeof ShellReportsRoute
@@ -252,6 +296,12 @@ export interface FileRoutesByTo {
   '/case/$caseId': typeof CaseCaseIdRoute
   '/evidence/$id': typeof ShellEvidenceIdRoute
   '/patient/$id': typeof ShellPatientIdRoute
+  '/patients/$id': typeof ShellPatientsIdRouteWithChildren
+  '/patients/$id/assessment': typeof ShellPatientsIdAssessmentRoute
+  '/patients/$id/dose': typeof ShellPatientsIdDoseRoute
+  '/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
+  '/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
+  '/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -274,7 +324,7 @@ export interface FileRoutesById {
   '/_shell/gonadotropins': typeof ShellGonadotropinsRoute
   '/_shell/help': typeof ShellHelpRoute
   '/_shell/monitoring': typeof ShellMonitoringRoute
-  '/_shell/patients': typeof ShellPatientsRoute
+  '/_shell/patients': typeof ShellPatientsRouteWithChildren
   '/_shell/poseidon': typeof ShellPoseidonRoute
   '/_shell/protocols': typeof ShellProtocolsRoute
   '/_shell/reports': typeof ShellReportsRoute
@@ -285,6 +335,12 @@ export interface FileRoutesById {
   '/case/$caseId': typeof CaseCaseIdRoute
   '/_shell/evidence_/$id': typeof ShellEvidenceIdRoute
   '/_shell/patient/$id': typeof ShellPatientIdRoute
+  '/_shell/patients/$id': typeof ShellPatientsIdRouteWithChildren
+  '/_shell/patients/$id/assessment': typeof ShellPatientsIdAssessmentRoute
+  '/_shell/patients/$id/dose': typeof ShellPatientsIdDoseRoute
+  '/_shell/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
+  '/_shell/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
+  '/_shell/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -318,6 +374,12 @@ export interface FileRouteTypes {
     | '/case/$caseId'
     | '/evidence/$id'
     | '/patient/$id'
+    | '/patients/$id'
+    | '/patients/$id/assessment'
+    | '/patients/$id/dose'
+    | '/patients/$id/monitoring'
+    | '/patients/$id/poseidon'
+    | '/patients/$id/protocol'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -349,6 +411,12 @@ export interface FileRouteTypes {
     | '/case/$caseId'
     | '/evidence/$id'
     | '/patient/$id'
+    | '/patients/$id'
+    | '/patients/$id/assessment'
+    | '/patients/$id/dose'
+    | '/patients/$id/monitoring'
+    | '/patients/$id/poseidon'
+    | '/patients/$id/protocol'
   id:
     | '__root__'
     | '/'
@@ -381,6 +449,12 @@ export interface FileRouteTypes {
     | '/case/$caseId'
     | '/_shell/evidence_/$id'
     | '/_shell/patient/$id'
+    | '/_shell/patients/$id'
+    | '/_shell/patients/$id/assessment'
+    | '/_shell/patients/$id/dose'
+    | '/_shell/patients/$id/monitoring'
+    | '/_shell/patients/$id/poseidon'
+    | '/_shell/patients/$id/protocol'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -602,8 +676,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellPatientIdRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/patients/$id': {
+      id: '/_shell/patients/$id'
+      path: '/$id'
+      fullPath: '/patients/$id'
+      preLoaderRoute: typeof ShellPatientsIdRouteImport
+      parentRoute: typeof ShellPatientsRoute
+    }
+    '/_shell/patients/$id/assessment': {
+      id: '/_shell/patients/$id/assessment'
+      path: '/assessment'
+      fullPath: '/patients/$id/assessment'
+      preLoaderRoute: typeof ShellPatientsIdAssessmentRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
+    '/_shell/patients/$id/dose': {
+      id: '/_shell/patients/$id/dose'
+      path: '/dose'
+      fullPath: '/patients/$id/dose'
+      preLoaderRoute: typeof ShellPatientsIdDoseRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
+    '/_shell/patients/$id/monitoring': {
+      id: '/_shell/patients/$id/monitoring'
+      path: '/monitoring'
+      fullPath: '/patients/$id/monitoring'
+      preLoaderRoute: typeof ShellPatientsIdMonitoringRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
+    '/_shell/patients/$id/poseidon': {
+      id: '/_shell/patients/$id/poseidon'
+      path: '/poseidon'
+      fullPath: '/patients/$id/poseidon'
+      preLoaderRoute: typeof ShellPatientsIdPoseidonRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
+    '/_shell/patients/$id/protocol': {
+      id: '/_shell/patients/$id/protocol'
+      path: '/protocol'
+      fullPath: '/patients/$id/protocol'
+      preLoaderRoute: typeof ShellPatientsIdProtocolRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
   }
 }
+
+interface ShellPatientsIdRouteChildren {
+  ShellPatientsIdAssessmentRoute: typeof ShellPatientsIdAssessmentRoute
+  ShellPatientsIdDoseRoute: typeof ShellPatientsIdDoseRoute
+  ShellPatientsIdMonitoringRoute: typeof ShellPatientsIdMonitoringRoute
+  ShellPatientsIdPoseidonRoute: typeof ShellPatientsIdPoseidonRoute
+  ShellPatientsIdProtocolRoute: typeof ShellPatientsIdProtocolRoute
+}
+
+const ShellPatientsIdRouteChildren: ShellPatientsIdRouteChildren = {
+  ShellPatientsIdAssessmentRoute: ShellPatientsIdAssessmentRoute,
+  ShellPatientsIdDoseRoute: ShellPatientsIdDoseRoute,
+  ShellPatientsIdMonitoringRoute: ShellPatientsIdMonitoringRoute,
+  ShellPatientsIdPoseidonRoute: ShellPatientsIdPoseidonRoute,
+  ShellPatientsIdProtocolRoute: ShellPatientsIdProtocolRoute,
+}
+
+const ShellPatientsIdRouteWithChildren = ShellPatientsIdRoute._addFileChildren(
+  ShellPatientsIdRouteChildren,
+)
+
+interface ShellPatientsRouteChildren {
+  ShellPatientsIdRoute: typeof ShellPatientsIdRouteWithChildren
+}
+
+const ShellPatientsRouteChildren: ShellPatientsRouteChildren = {
+  ShellPatientsIdRoute: ShellPatientsIdRouteWithChildren,
+}
+
+const ShellPatientsRouteWithChildren = ShellPatientsRoute._addFileChildren(
+  ShellPatientsRouteChildren,
+)
 
 interface ShellRouteChildren {
   ShellAssessmentRoute: typeof ShellAssessmentRoute
@@ -622,7 +770,7 @@ interface ShellRouteChildren {
   ShellGonadotropinsRoute: typeof ShellGonadotropinsRoute
   ShellHelpRoute: typeof ShellHelpRoute
   ShellMonitoringRoute: typeof ShellMonitoringRoute
-  ShellPatientsRoute: typeof ShellPatientsRoute
+  ShellPatientsRoute: typeof ShellPatientsRouteWithChildren
   ShellPoseidonRoute: typeof ShellPoseidonRoute
   ShellProtocolsRoute: typeof ShellProtocolsRoute
   ShellReportsRoute: typeof ShellReportsRoute
@@ -651,7 +799,7 @@ const ShellRouteChildren: ShellRouteChildren = {
   ShellGonadotropinsRoute: ShellGonadotropinsRoute,
   ShellHelpRoute: ShellHelpRoute,
   ShellMonitoringRoute: ShellMonitoringRoute,
-  ShellPatientsRoute: ShellPatientsRoute,
+  ShellPatientsRoute: ShellPatientsRouteWithChildren,
   ShellPoseidonRoute: ShellPoseidonRoute,
   ShellProtocolsRoute: ShellProtocolsRoute,
   ShellReportsRoute: ShellReportsRoute,
