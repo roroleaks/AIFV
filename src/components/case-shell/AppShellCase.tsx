@@ -103,6 +103,7 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
               {/* Persistent Case Header */}
               <CaseHeader
                 caseSummary={effectiveSummary}
+                activeRole={activeRole}
                 onOpenDecision={handleOpenDecisionSection}
               />
 

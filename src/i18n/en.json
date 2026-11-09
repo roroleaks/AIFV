@@ -35,7 +35,11 @@
     "bolognaFulfilled": "Bologna Fulfilled",
     "bolognaNotFulfilled": "Bologna Not Fulfilled",
     "ohssCritical": "Critical OHSS Risk",
-    "ohssLow": "Low OHSS Risk"
+    "ohssLow": "Low OHSS Risk",
+    "stratificationSummary": "Stratification",
+    "expandStratification": "Details",
+    "collapseStratification": "Collapse",
+    "moreActions": "More actions"
   },
   "leftRail": {
     "newCase": "New Case Intake",

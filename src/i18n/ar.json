@@ -35,7 +35,11 @@
     "bolognaFulfilled": "مستوفية لمعايير Bologna",
     "bolognaNotFulfilled": "غير مستوفية لمعايير Bologna",
     "ohssCritical": "خطر OHSS حرج",
-    "ohssLow": "خطر OHSS منخفض"
+    "ohssLow": "خطر OHSS منخفض",
+    "stratificationSummary": "التصنيف",
+    "expandStratification": "التفاصيل",
+    "collapseStratification": "إخفاء",
+    "moreActions": "المزيد من الإجراءات"
   },
   "leftRail": {
     "newCase": "إدخال مريضة جديدة",
