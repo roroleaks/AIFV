@@ -499,6 +499,10 @@
   }
 }
 
+html.large-text-mode {
+  font-size: 110%;
+}
+
 @media print {
   .print\:hidden {
     display: none !important;

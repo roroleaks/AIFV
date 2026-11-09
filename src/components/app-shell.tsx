@@ -241,6 +241,7 @@ function getStageInfo(pathname: string): { title: string; stageNumber?: number }
   if (pathname.startsWith("/engine")) return { title: "Intelligence Engine" };
   if (pathname.startsWith("/calculator")) return { title: "Clinical Calculator" };
   if (pathname.startsWith("/evidence")) return { title: "Evidence Library & Governance" };
+  if (pathname.startsWith("/settings")) return { title: "System & Clinical Settings" };
   return { title: "Clinical Workspace" };
 }
 
@@ -394,8 +395,18 @@ function StickyBreadcrumb({
 // -----------------------------------------------------------------------------
 // Main AppShell Component
 // -----------------------------------------------------------------------------
-const IDLE_TIMEOUT_SECONDS = 300; // 05:00
+const DEFAULT_IDLE_TIMEOUT = 300; // 05:00
 const STORAGE_KEY = "lastActiveAt";
+
+function getStoredIdleTimeout(): number {
+  if (typeof window === "undefined") return DEFAULT_IDLE_TIMEOUT;
+  const stored = window.sessionStorage.getItem("aifv_idle_timeout");
+  if (stored) {
+    const parsed = parseInt(stored, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return DEFAULT_IDLE_TIMEOUT;
+}
 
 export function AppShell({ children }: { children?: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -406,6 +417,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
   // Patient assessment draft data
   const { draft, savedAt } = useAssessment();
   const [isSaving, setIsSaving] = useState(false);
+  const [idleTimeoutSeconds, setIdleTimeoutSeconds] = useState<number>(getStoredIdleTimeout);
   const [lastSavedText, setLastSavedText] = useState("Auto-Save Active (30s)");
 
   // Sync savedAt to lastSavedText
@@ -419,8 +431,34 @@ export function AppShell({ children }: { children?: ReactNode }) {
     }
   }, [savedAt]);
 
+  // Settings listener for idle-lock timer, auto-save interval and accessibility text sizing
+  useEffect(() => {
+    const handleSettingsUpdate = () => {
+      const newTimeout = getStoredIdleTimeout();
+      setIdleTimeoutSeconds(newTimeout);
+      setSecondsRemaining(newTimeout);
+
+      if (typeof window !== "undefined") {
+        const intervalStored = window.sessionStorage.getItem("aifv_autosave_interval");
+        if (intervalStored) {
+          setLastSavedText(`Auto-Save Active (${intervalStored}s)`);
+        }
+        const isLarge = window.sessionStorage.getItem("aifv_large_text") === "true";
+        if (isLarge) {
+          document.documentElement.classList.add("large-text-mode");
+        } else {
+          document.documentElement.classList.remove("large-text-mode");
+        }
+      }
+    };
+
+    window.addEventListener("aifv-settings-updated", handleSettingsUpdate);
+    handleSettingsUpdate();
+    return () => window.removeEventListener("aifv-settings-updated", handleSettingsUpdate);
+  }, []);
+
   // 3. Top-Right Idle Countdown & Hospital Inactivity Lock State
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(IDLE_TIMEOUT_SECONDS);
+  const [secondsRemaining, setSecondsRemaining] = useState<number>(getStoredIdleTimeout);
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [pin, setPin] = useState("");
   const [pinError, setPinError] = useState<string | null>(null);
@@ -442,8 +480,8 @@ export function AppShell({ children }: { children?: ReactNode }) {
     if (typeof window !== "undefined") {
       window.sessionStorage.setItem(STORAGE_KEY, now.toString());
     }
-    setSecondsRemaining(IDLE_TIMEOUT_SECONDS);
-  }, [isLocked]);
+    setSecondsRemaining(idleTimeoutSeconds);
+  }, [isLocked, idleTimeoutSeconds]);
 
   const lockScreen = useCallback(() => {
     setIsLocked(true);
@@ -504,7 +542,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
       const stored = window.sessionStorage.getItem(STORAGE_KEY);
       const lastActive = stored ? parseInt(stored, 10) : Date.now();
       const elapsed = Math.floor((Date.now() - lastActive) / 1000);
-      const remaining = Math.max(0, IDLE_TIMEOUT_SECONDS - elapsed);
+      const remaining = Math.max(0, idleTimeoutSeconds - elapsed);
 
       setSecondsRemaining(remaining);
 
@@ -514,7 +552,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isLocked, lockScreen]);
+  }, [isLocked, lockScreen, idleTimeoutSeconds]);
 
   // Auto-focus PIN input when screen locks
   useEffect(() => {
