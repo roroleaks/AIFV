@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useCase } from "@/features/case/useCase";
 import { useReports } from "@/features/report/useReports";
 import { IntakeDrawer } from "@/features/intake/IntakeDrawer";
@@ -18,6 +18,9 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
   const { caseSummary, allPatients, isLoading } = useCase(caseId);
   const [activeRole, setActiveRole] = useState("Physician");
   const [isIntakeOpen, setIsIntakeOpen] = useState(false);
+  const [isDecisionSidebarOpen, setIsDecisionSidebarOpen] = useState(false);
+  const [decisionTargetSection, setDecisionTargetSection] = useState<string | null>(null);
+  const [hasAcknowledgedAlert, setHasAcknowledgedAlert] = useState(false);
 
   const effectiveCaseId = caseSummary?.id ?? caseId ?? "draft";
   const { currentReport } = useReports(effectiveCaseId);
@@ -33,12 +36,52 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
     return caseSummary;
   }, [caseSummary, currentReport.status]);
 
+  // Auto-open DecisionSidebar if safety firewall is breached or severe OHSS risk escalates (§2.2)
+  useEffect(() => {
+    if (caseSummary && !hasAcknowledgedAlert) {
+      const isSevereRisk = caseSummary.ohssRisk === "high" || caseSummary.ohssRisk === "critical";
+      if (caseSummary.firewallBreached || isSevereRisk) {
+        setIsDecisionSidebarOpen(true);
+        setDecisionTargetSection("firewalls");
+      }
+    }
+  }, [caseSummary, hasAcknowledgedAlert]);
+
+  // Keyboard shortcut: Alt+D toggles sidebar, Esc closes (§2.2)
+  const toggleDecisionSidebar = useCallback(() => {
+    setIsDecisionSidebarOpen((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === "d" || e.key === "D")) {
+        e.preventDefault();
+        toggleDecisionSidebar();
+      } else if (e.key === "Escape" && isDecisionSidebarOpen) {
+        e.preventDefault();
+        setIsDecisionSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isDecisionSidebarOpen, toggleDecisionSidebar]);
+
+  const handleOpenDecisionSection = (sectionId?: string) => {
+    setDecisionTargetSection(sectionId || null);
+    setIsDecisionSidebarOpen(true);
+  };
+
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
       {/* Zone 1: Persistent Top Bar */}
-      <TopBar activeRole={activeRole} onRoleChange={setActiveRole} />
+      <TopBar
+        activeRole={activeRole}
+        onRoleChange={setActiveRole}
+        isDecisionOpen={isDecisionSidebarOpen}
+        onToggleDecision={toggleDecisionSidebar}
+      />
 
-      {/* Zone 2, 3, 4: Main 3-Column Layout */}
+      {/* Zone 2, 3, 4: Main Layout (Main Content expands to full width when sidebar is overlay) */}
       <div className="flex flex-1 overflow-hidden">
         {/* Zone 2: Persistent Left Rail Worklist */}
         <LeftRail
@@ -47,7 +90,7 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
           onNewCase={() => setIsIntakeOpen(true)}
         />
 
-        {/* Zone 3: Main Clinical Workspace */}
+        {/* Zone 3: Main Clinical Workspace (Reclaims ~300px horizontal space) */}
         <main className="flex flex-1 flex-col overflow-hidden bg-background">
           <TestModeBanner />
 
@@ -58,7 +101,10 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
           ) : (
             <>
               {/* Persistent Case Header */}
-              <CaseHeader caseSummary={effectiveSummary} />
+              <CaseHeader
+                caseSummary={effectiveSummary}
+                onOpenDecision={handleOpenDecisionSection}
+              />
 
               {/* Case Tabs (Encounters / Plan / Report) */}
               <CaseTabs caseSummary={effectiveSummary} activeRole={activeRole} />
@@ -87,8 +133,19 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
           )}
         </main>
 
-        {/* Zone 4: Contextual Decision Sidebar */}
-        {caseSummary && <DecisionSidebar caseSummary={caseSummary} />}
+        {/* Zone 4: Contextual Decision Sidebar (On-Demand Slide-In Overlay §2.2) */}
+        {caseSummary && (
+          <DecisionSidebar
+            caseSummary={caseSummary}
+            open={isDecisionSidebarOpen}
+            onClose={() => setIsDecisionSidebarOpen(false)}
+            onAcknowledgeAlert={() => {
+              setHasAcknowledgedAlert(true);
+              setIsDecisionSidebarOpen(false);
+            }}
+            targetSection={decisionTargetSection}
+          />
+        )}
       </div>
 
       {/* Intake Drawer (§2.1 - §2.6) */}

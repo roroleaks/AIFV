@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Search, Globe, Settings, Sun, Moon, Eye, Shield, Building2, Lock } from "lucide-react";
+import { Search, Globe, Settings, Sun, Moon, Eye, Shield, Building2, Lock, Brain } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useTheme } from "@/hooks/use-theme";
 import { lockSession, setSessionRole, type Role } from "@/services/auth/session";
+import { cn } from "@/lib/utils";
 
 interface TopBarProps {
   onSearch?: (term: string) => void;
   activeRole?: string;
   onRoleChange?: (role: string) => void;
+  isDecisionOpen?: boolean;
+  onToggleDecision?: () => void;
 }
 
-export function TopBar({ onSearch, activeRole = "Physician", onRoleChange }: TopBarProps) {
+export function TopBar({
+  onSearch,
+  activeRole = "Physician",
+  onRoleChange,
+  isDecisionOpen,
+  onToggleDecision,
+}: TopBarProps) {
   const { t, i18n } = useTranslation();
   const { theme, toggle } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,8 +80,32 @@ export function TopBar({ onSearch, activeRole = "Physician", onRoleChange }: Top
         <span>{t("topbar.encryptedBadge")}</span>
       </div>
 
-      {/* End: Role, Language, Theme, Legacy Switcher & Settings */}
+      {/* End: Decision, Role, Language, Theme, Legacy Switcher & Settings */}
       <div className="flex items-center gap-2">
+        {/* Decision & Insights Trigger (Alt+D) */}
+        {onToggleDecision && (
+          <Button
+            variant={isDecisionOpen ? "secondary" : "outline"}
+            size="sm"
+            onClick={onToggleDecision}
+            className={cn(
+              "h-8 gap-1.5 px-2.5 text-xs font-semibold shadow-2xs transition-all",
+              isDecisionOpen
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "border-primary/30 text-primary hover:bg-primary/10",
+            )}
+            title="Toggle Clinical Decision Support (Alt+D)"
+            aria-expanded={isDecisionOpen}
+            aria-controls="decision-sidebar-panel"
+          >
+            <Brain className="size-3.5" />
+            <span className="hidden sm:inline">{t("decisionSidebar.buttonLabel")}</span>
+            <kbd className="hidden lg:inline-block rounded bg-muted/70 px-1 py-0.2 text-[9px] font-mono opacity-80">
+              Alt+D
+            </kbd>
+          </Button>
+        )}
+
         {/* Role Indicator */}
         <div className="hidden items-center gap-1.5 md:flex">
           <Badge

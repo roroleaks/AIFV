@@ -21,6 +21,7 @@ interface CaseHeaderProps {
   onPrint?: () => void;
   onSign?: () => void;
   onExport?: () => void;
+  onOpenDecision?: (sectionId?: string) => void;
 }
 
 const LIFECYCLE_STAGES: CaseLifecycleStatus[] = [
@@ -39,6 +40,7 @@ export function CaseHeader({
   onPrint,
   onSign,
   onExport,
+  onOpenDecision,
 }: CaseHeaderProps) {
   const { t } = useTranslation();
   const {
@@ -110,9 +112,13 @@ export function CaseHeader({
         >
           <ShieldAlert className="size-4 shrink-0" />
           <span>{firewallMessage}</span>
-          <span className="ms-auto text-[11px] font-normal underline cursor-pointer">
+          <button
+            type="button"
+            onClick={() => onOpenDecision?.("firewalls")}
+            className="ms-auto text-[11px] font-normal underline cursor-pointer hover:text-foreground"
+          >
             {t("decisionSidebar.firewalls")}
-          </span>
+          </button>
         </div>
       )}
 
@@ -291,7 +297,15 @@ export function CaseHeader({
           )}
 
           {/* OHSS Risk Level (Shape + Color + Text) */}
-          <Badge variant="outline" className={cn("h-6 gap-1", ohssBadge.className)}>
+          <Badge
+            variant="outline"
+            onClick={() => onOpenDecision?.("firewalls")}
+            className={cn(
+              "h-6 gap-1 cursor-pointer transition-all hover:ring-1 hover:ring-primary/40",
+              ohssBadge.className,
+            )}
+            title="Click to view OHSS safety recommendations"
+          >
             <span>{ohssBadge.icon}</span>
             <span>{ohssBadge.label}</span>
           </Badge>

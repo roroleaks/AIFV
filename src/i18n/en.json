@@ -66,7 +66,10 @@
     "warnings": "Clinical Warnings",
     "guidelines": "Review Guidelines",
     "statusActive": "Active Guard",
-    "statusPending": "Awaiting Telemetry"
+    "statusPending": "Awaiting Telemetry",
+    "buttonLabel": "Decision & Insights",
+    "close": "Close sidebar",
+    "dismissAlert": "Acknowledge Alert"
   },
   "lockOverlay": {
     "lockedTitle": "Clinical Session Locked",
