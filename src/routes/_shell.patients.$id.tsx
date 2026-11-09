@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams, Outlet, useRouterState } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Edit3,
@@ -100,6 +100,17 @@ const DEFAULT_CONSENTS: ConsentDocument[] = [
 
 export function PatientMasterRecordView() {
   const { id } = useParams({ strict: false }) as { id?: string };
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isMaster =
+    !id ||
+    pathname.endsWith(`/${id}`) ||
+    pathname.endsWith(`/${id}/`) ||
+    pathname.endsWith(`/patient/${id}`) ||
+    pathname.endsWith(`/patient/${id}/`);
+  if (!isMaster) {
+    return <Outlet />;
+  }
+
   const { records } = usePatients();
   const auditSectionRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
