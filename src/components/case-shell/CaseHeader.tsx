@@ -82,27 +82,28 @@ export function CaseHeader({
   const gravidity = gravidityVal !== undefined ? `G${gravidityVal}` : "";
   const parityStr = [gravidity, parity].filter(Boolean).join("") || "G0P0";
 
-  // OHSS Risk Badge with WCAG Shape + Color + Text
+  // OHSS Risk Badge with WCAG Shape + Color + Text (§11 Safety Tokens)
   const getOhssBadge = (risk: OHSSRiskCategory) => {
     switch (risk) {
       case "critical":
         return {
           label: t("caseHeader.ohssCritical"),
           icon: "◆",
-          className: "bg-red-950 text-red-200 border-red-700 animate-pulse font-bold",
+          className:
+            "bg-safety-danger-bg text-safety-danger border-safety-danger animate-pulse font-bold",
         };
       case "high":
         return {
           label: "OHSS: High",
           icon: "■",
-          className: "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/40 font-semibold",
+          className: "bg-safety-danger-bg text-safety-danger border-safety-danger/40 font-semibold",
         };
       case "moderate":
         return {
           label: "OHSS: Moderate",
           icon: "▲",
           className:
-            "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/40 font-semibold",
+            "bg-safety-warning-bg text-safety-warning border-safety-warning/40 font-semibold",
         };
       case "low":
       default:
@@ -110,14 +111,14 @@ export function CaseHeader({
           label: t("caseHeader.ohssLow"),
           icon: "●",
           className:
-            "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/40 font-medium",
+            "bg-safety-success-bg text-safety-success border-safety-success/40 font-medium",
         };
     }
   };
 
   const ohssBadge = getOhssBadge(ohssRisk);
 
-  // Concise one-line stratification summary for tertiary row (§2.3)
+  // Concise one-line stratification summary for tertiary row
   const poseidonSummary =
     derived.poseidon.status === "insufficient-data"
       ? t("caseHeader.notClassified")
@@ -140,20 +141,20 @@ export function CaseHeader({
   const stratSummaryText = `${poseidonSummary} · ${bolognaSummary} · ${protocolSummary}`;
 
   return (
-    <div className="flex flex-col border-b border-border/80 bg-card/60 shadow-xs backdrop-blur-xs">
-      {/* Top Warning Banner if Safety Ceiling Breached - ARIA live assertive (§2.4) */}
+    <div className="flex flex-col border-b border-border-subtle bg-bg-surface shadow-2xs">
+      {/* Top Warning Banner if Safety Ceiling Breached - ARIA live assertive */}
       {firewallBreached && firewallMessage && (
         <div
           role="alert"
           aria-live="assertive"
-          className="flex items-center gap-2 bg-destructive/15 px-6 py-2 text-xs font-semibold text-destructive border-b border-destructive/30"
+          className="flex items-center gap-2 bg-safety-danger-bg px-6 py-2 text-xs font-semibold text-safety-danger border-b border-safety-danger/30"
         >
           <ShieldAlert className="size-4 shrink-0" />
           <span>{firewallMessage}</span>
           <button
             type="button"
             onClick={() => onOpenDecision?.("firewalls")}
-            className="ms-auto text-[11px] font-normal underline cursor-pointer hover:text-foreground"
+            className="ms-auto text-[11px] font-normal underline cursor-pointer hover:text-text-primary"
           >
             {t("decisionSidebar.firewalls")}
           </button>
@@ -161,38 +162,50 @@ export function CaseHeader({
       )}
 
       {/* Main Header Strip — Hierarchy Anchor: Primary Identity + Key Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-3.5">
         {/* Tier 1 (Primary): Large, Bold Patient Identity */}
         <div className="flex items-center gap-3.5">
-          <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold text-base ring-1 ring-primary/20 shrink-0">
+          <div className="flex size-11 items-center justify-center rounded-xl bg-accent-primary/10 text-accent-primary font-bold text-base ring-1 ring-accent-primary/20 shrink-0">
             {patient.name.charAt(0) || "P"}
           </div>
           <div className="flex flex-col">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-lg font-bold text-foreground tracking-tight">{patient.name}</h1>
-              <Badge variant="outline" className="h-5 px-1.5 font-mono text-xs">
+              <h1 className="text-lg font-bold text-text-primary tracking-tight">{patient.name}</h1>
+              <Badge
+                variant="outline"
+                className="h-5 px-1.5 font-mono text-xs text-text-muted border-border-default"
+              >
                 MRN: {patient.fileNumber || "00482"}
               </Badge>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[11px]">
+              <Badge
+                variant="secondary"
+                className="h-5 px-1.5 text-[11px] bg-bg-surface-muted text-text-secondary border-border-subtle"
+              >
                 {patient.age} {t("leftRail.yearsOld")}
               </Badge>
-              <Badge variant="secondary" className="h-5 px-1.5 text-[11px]">
+              <Badge
+                variant="secondary"
+                className="h-5 px-1.5 text-[11px] bg-bg-surface-muted text-text-secondary border-border-subtle"
+              >
                 {parityStr}
               </Badge>
               {bmi && (
-                <Badge variant="secondary" className="h-5 px-1.5 text-[11px]">
+                <Badge
+                  variant="secondary"
+                  className="h-5 px-1.5 text-[11px] bg-bg-surface-muted text-text-secondary border-border-subtle"
+                >
                   {t("caseHeader.bmi")} {bmi}
                 </Badge>
               )}
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground pt-0.5">
+            <div className="flex items-center gap-2 text-xs text-text-muted pt-0.5">
               <span>Cycle #{patient.cycles || 1}</span>
               <span>·</span>
               <span>{patient.infertilityType || t("caseHeader.recordSubtitle")}</span>
               {patient.causes?.[0] && (
                 <>
                   <span>·</span>
-                  <span className="font-medium text-foreground/80">{patient.causes[0]}</span>
+                  <span className="font-medium text-text-secondary">{patient.causes[0]}</span>
                 </>
               )}
             </div>
@@ -205,7 +218,7 @@ export function CaseHeader({
           <Button
             size="sm"
             onClick={onNewVisit}
-            className="h-8.5 gap-1.5 bg-primary text-primary-foreground font-semibold shadow-xs"
+            className="h-8.5 gap-1.5 bg-accent-primary text-text-on-accent hover:bg-accent-primary-hover font-semibold shadow-xs"
             title="Add monitoring encounter (Alt+V)"
           >
             <PlusCircle className="size-3.5" />
@@ -218,10 +231,10 @@ export function CaseHeader({
               variant="outline"
               size="sm"
               onClick={onSign}
-              className="h-8.5 gap-1.5 text-xs font-semibold"
+              className="h-8.5 gap-1.5 text-xs font-semibold border-border-default text-text-primary hover:bg-bg-surface-muted"
               title={t("report.signReport")}
             >
-              <FileCheck2 className="size-3.5 text-muted-foreground" />
+              <FileCheck2 className="size-3.5 text-text-muted" />
               <span>{t("report.signReport")}</span>
             </Button>
           ) : (
@@ -229,10 +242,10 @@ export function CaseHeader({
               variant="outline"
               size="sm"
               onClick={onPrint}
-              className="h-8.5 gap-1.5 text-xs"
+              className="h-8.5 gap-1.5 text-xs border-border-default text-text-primary hover:bg-bg-surface-muted"
               title={t("report.exportPdf")}
             >
-              <Printer className="size-3.5 text-muted-foreground" />
+              <Printer className="size-3.5 text-text-muted" />
               <span>Print</span>
             </Button>
           )}
@@ -243,25 +256,37 @@ export function CaseHeader({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-8.5 w-8.5 p-0"
+                className="h-8.5 w-8.5 p-0 border-border-default text-text-muted hover:text-text-primary hover:bg-bg-surface-muted"
                 aria-label={t("caseHeader.moreActions")}
                 title={t("caseHeader.moreActions")}
               >
-                <MoreHorizontal className="size-4 text-muted-foreground" />
+                <MoreHorizontal className="size-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 text-xs">
-              <DropdownMenuItem onClick={onPrint} className="gap-2 cursor-pointer">
-                <Printer className="size-3.5 text-muted-foreground" />
+            <DropdownMenuContent
+              align="end"
+              className="w-48 text-xs bg-bg-surface border-border-subtle shadow-md"
+            >
+              <DropdownMenuItem
+                onClick={onPrint}
+                className="gap-2 cursor-pointer text-text-primary hover:bg-bg-surface-muted"
+              >
+                <Printer className="size-3.5 text-text-muted" />
                 <span>{t("report.exportPdf")}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onExport} className="gap-2 cursor-pointer">
-                <Share2 className="size-3.5 text-muted-foreground" />
+              <DropdownMenuItem
+                onClick={onExport}
+                className="gap-2 cursor-pointer text-text-primary hover:bg-bg-surface-muted"
+              >
+                <Share2 className="size-3.5 text-text-muted" />
                 <span>{t("report.exportEhr")}</span>
               </DropdownMenuItem>
               {isPhysician && (
-                <DropdownMenuItem onClick={onSign} className="gap-2 cursor-pointer">
-                  <FileCheck2 className="size-3.5 text-muted-foreground" />
+                <DropdownMenuItem
+                  onClick={onSign}
+                  className="gap-2 cursor-pointer text-text-primary hover:bg-bg-surface-muted"
+                >
+                  <FileCheck2 className="size-3.5 text-text-muted" />
                   <span>{t("report.signReport")}</span>
                 </DropdownMenuItem>
               )}
@@ -273,22 +298,22 @@ export function CaseHeader({
       {/* Tier 2 (Secondary) & Tier 3 (Tertiary) Bar: Cycle State, Stratification, OHSS Safety */}
       <div
         aria-live="polite"
-        className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 bg-muted/20 px-6 py-2.5 text-xs"
+        className="flex flex-wrap items-center justify-between gap-3 border-t border-border-subtle bg-bg-surface-muted/50 px-6 py-2 text-xs"
       >
         {/* Secondary + Tertiary Group */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Secondary: Stimulation Day & Leading Cohort */}
           <Badge
             variant="outline"
-            className="h-6.5 gap-1.5 bg-background font-medium px-2 shadow-2xs"
+            className="h-6.5 gap-1.5 bg-bg-surface font-medium px-2 shadow-2xs border-border-subtle text-text-secondary"
           >
-            <Calendar className="size-3 text-muted-foreground" />
-            <span className="font-semibold text-foreground">
+            <Calendar className="size-3 text-text-muted" />
+            <span className="font-semibold text-text-primary">
               {t("leftRail.day")} {currentStimDay || "0"}
             </span>
             {leadFollicleSize && (
               <>
-                <span className="text-muted-foreground/60">·</span>
+                <span className="text-text-muted/60">·</span>
                 <span>
                   {t("encounter.largestFollicle")}: {leadFollicleSize}mm
                 </span>
@@ -296,51 +321,54 @@ export function CaseHeader({
             )}
             {folliclesGte14 > 0 && (
               <>
-                <span className="text-muted-foreground/60">·</span>
+                <span className="text-text-muted/60">·</span>
                 <span>{folliclesGte14} ≥14mm</span>
               </>
             )}
           </Badge>
 
-          {/* Tertiary: Collapsible Stratification Engines Row (§2.3) */}
+          {/* Tertiary: Collapsible Stratification Engines Row */}
           {!stratificationExpanded ? (
             /* Collapsed Single Summary Strip */
             <button
               type="button"
               onClick={() => setStratificationExpanded(true)}
-              className="flex items-center gap-1.5 rounded-md border border-border/70 bg-background/60 px-2.5 py-1 text-[11px] text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 rounded-md border border-border-subtle bg-bg-surface px-2.5 py-1 text-[11px] text-text-muted hover:bg-bg-surface-muted hover:text-text-primary transition-colors cursor-pointer shadow-2xs"
               title={t("caseHeader.expandStratification")}
               aria-expanded={false}
             >
-              <span className="font-semibold text-foreground/80">
+              <span className="font-semibold text-text-secondary">
                 {t("caseHeader.stratificationSummary")}:
               </span>
               <span>{stratSummaryText}</span>
-              <ChevronDown className="size-3 text-muted-foreground ms-0.5" />
+              <ChevronDown className="size-3 text-text-muted ms-0.5" />
             </button>
           ) : (
-            /* Expanded Full Engine Chips */
+            /* Expanded Full Engine Chips - Mapped to Slate Accent Classification (§11) */
             <div className="flex flex-wrap items-center gap-2">
               {/* POSEIDON Chip */}
               {derived.poseidon.status === "insufficient-data" ? (
                 <Badge
                   variant="secondary"
-                  className="h-6 gap-1 bg-muted/60 text-muted-foreground font-medium"
+                  className="h-6 gap-1 bg-bg-surface text-text-muted font-medium border-border-subtle"
                 >
-                  <span className="size-1.5 rounded-full bg-muted-foreground/60" />
+                  <span className="size-1.5 rounded-full bg-text-muted/60" />
                   <span>{t("caseHeader.notClassified")}</span>
                 </Badge>
               ) : derived.poseidon.groupLabel ? (
                 <Badge
                   variant="outline"
                   onClick={() => onOpenDecision?.("rationale")}
-                  className="h-6 gap-1 border-primary/40 bg-primary/5 font-semibold text-primary cursor-pointer hover:bg-primary/10"
+                  className="h-6 gap-1 border-accent-classification/30 bg-accent-classification/10 font-semibold text-accent-classification cursor-pointer hover:bg-accent-classification/20"
                 >
-                  <span className="size-1.5 rounded-full bg-primary" />
+                  <span className="size-1.5 rounded-full bg-accent-classification" />
                   <span>POSEIDON {derived.poseidon.groupLabel}</span>
                 </Badge>
               ) : (
-                <Badge variant="outline" className="h-6 text-muted-foreground">
+                <Badge
+                  variant="outline"
+                  className="h-6 text-text-muted border-border-subtle bg-bg-surface"
+                >
                   {t("caseHeader.adequateReserve")}
                 </Badge>
               )}
@@ -349,27 +377,35 @@ export function CaseHeader({
               {derived.bologna.status === "positive" && (
                 <Badge
                   variant="outline"
-                  className="h-6 border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400 font-semibold"
+                  className="h-6 border-accent-classification/30 bg-accent-classification/10 text-accent-classification font-semibold"
                 >
                   {t("caseHeader.bolognaFulfilled")}
                 </Badge>
               )}
 
               {/* Protocol Chip */}
-              <Badge variant="outline" className="h-6 gap-1 bg-background font-medium">
+              <Badge
+                variant="outline"
+                className="h-6 gap-1 bg-bg-surface border-border-subtle font-medium text-text-secondary"
+              >
                 <span>{t("plan.protocolTitle")}:</span>
-                <span className="font-semibold text-foreground">{protocolSummary}</span>
+                <span className="font-semibold text-text-primary">{protocolSummary}</span>
               </Badge>
 
               {/* Estradiol & Trend */}
               {estradiol && (
-                <Badge variant="outline" className="h-6 gap-1 bg-background">
+                <Badge
+                  variant="outline"
+                  className="h-6 gap-1 bg-bg-surface border-border-subtle text-text-secondary"
+                >
                   <span>
                     {t("encounter.estradiol")}: {estradiol} pg/mL
                   </span>
-                  {estradiolTrend === "up" && <TrendingUp className="size-3 text-emerald-600" />}
-                  {estradiolTrend === "down" && <TrendingDown className="size-3 text-amber-600" />}
-                  {estradiolTrend === "flat" && <Minus className="size-3 text-muted-foreground" />}
+                  {estradiolTrend === "up" && <TrendingUp className="size-3 text-safety-success" />}
+                  {estradiolTrend === "down" && (
+                    <TrendingDown className="size-3 text-safety-warning" />
+                  )}
+                  {estradiolTrend === "flat" && <Minus className="size-3 text-text-muted" />}
                 </Badge>
               )}
 
@@ -377,7 +413,7 @@ export function CaseHeader({
               <button
                 type="button"
                 onClick={() => setStratificationExpanded(false)}
-                className="flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                className="flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                 title={t("caseHeader.collapseStratification")}
                 aria-expanded={true}
               >
@@ -388,10 +424,10 @@ export function CaseHeader({
           )}
         </div>
 
-        {/* Far Right: State Machine + Dedicated OHSS Safety Badge (§2.3) */}
+        {/* Far Right: State Machine + Dedicated OHSS Safety Badge */}
         <div className="flex items-center gap-3">
           {/* State Lifecycle Pipeline */}
-          <div className="flex items-center gap-1 rounded-lg bg-background/80 p-0.5 border border-border/60">
+          <div className="flex items-center gap-1 rounded-md bg-bg-surface p-0.5 border border-border-subtle">
             {LIFECYCLE_STAGES.map((s) => {
               const isActive = s === state;
               return (
@@ -400,8 +436,8 @@ export function CaseHeader({
                   className={cn(
                     "rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors",
                     isActive
-                      ? "bg-primary text-primary-foreground font-semibold shadow-2xs"
-                      : "text-muted-foreground/70",
+                      ? "bg-accent-primary text-text-on-accent font-semibold shadow-2xs"
+                      : "text-text-muted/70",
                   )}
                 >
                   {s}
@@ -415,7 +451,7 @@ export function CaseHeader({
             variant="outline"
             onClick={() => onOpenDecision?.("firewalls")}
             className={cn(
-              "h-6.5 gap-1.5 px-2.5 cursor-pointer transition-all hover:ring-2 hover:ring-primary/40 shadow-2xs",
+              "h-6.5 gap-1.5 px-2.5 cursor-pointer transition-all hover:ring-2 hover:ring-accent-primary/40 shadow-2xs",
               ohssBadge.className,
             )}
             title="Click to view OHSS safety recommendations"

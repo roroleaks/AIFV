@@ -72,7 +72,7 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-bg-canvas text-text-primary">
       {/* Zone 1: Persistent Top Bar */}
       <TopBar
         activeRole={activeRole}
@@ -81,7 +81,7 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
         onToggleDecision={toggleDecisionSidebar}
       />
 
-      {/* Zone 2, 3, 4: Main Layout (Main Content expands to full width when sidebar is overlay) */}
+      {/* Zone 2 & 3: Two Primary Content Columns (LeftRail + Case Workspace) */}
       <div className="flex flex-1 overflow-hidden">
         {/* Zone 2: Persistent Left Rail Worklist */}
         <LeftRail
@@ -90,12 +90,12 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
           onNewCase={() => setIsIntakeOpen(true)}
         />
 
-        {/* Zone 3: Main Clinical Workspace (Reclaims ~300px horizontal space) */}
-        <main className="flex flex-1 flex-col overflow-hidden bg-background">
+        {/* Zone 3: Main Clinical Workspace (fills remaining viewport, strictly two-column) */}
+        <main className="flex flex-1 flex-col overflow-hidden bg-bg-canvas">
           <TestModeBanner />
 
           {isLoading || !effectiveSummary ? (
-            <div className="flex flex-1 items-center justify-center p-8 text-xs text-muted-foreground">
+            <div className="flex flex-1 items-center justify-center p-8 text-xs text-text-muted">
               Loading patient case...
             </div>
           ) : (
@@ -111,30 +111,30 @@ export function AppShellCase({ caseId }: AppShellCaseProps) {
               <CaseTabs caseSummary={effectiveSummary} activeRole={activeRole} />
 
               {/* Dr Raouf Roshdy Footer */}
-              <footer className="mt-auto flex items-center justify-between border-t border-border/60 bg-muted/10 px-6 py-2.5 text-xs text-muted-foreground shrink-0">
+              <footer className="mt-auto flex items-center justify-between border-t border-border-subtle bg-bg-surface-muted/30 px-6 py-2.5 text-xs text-text-muted shrink-0">
                 <div className="flex items-center gap-3">
                   <img
                     src="/dr-raouf-roshdy.jpg"
                     alt="Dr Raouf Roshdy"
-                    className="size-7 rounded-full object-cover ring-1 ring-primary/30"
+                    className="size-7 rounded-full object-cover ring-1 ring-accent-primary/30"
                   />
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-foreground">
+                    <span className="font-semibold text-text-primary">
                       Created by Dr Raouf Roshdy
                     </span>
                     <span>·</span>
                     <span className="text-[11px]">All copyrights reserved 2026</span>
                   </div>
                 </div>
-                <div className="text-[11px] font-mono">
-                  AiFV Precision Hospital CDSS · Phase 1 Case Shell
+                <div className="text-[11px] font-mono text-text-muted">
+                  AiFV Precision Hospital CDSS · Case Workspace
                 </div>
               </footer>
             </>
           )}
         </main>
 
-        {/* Zone 4: Contextual Decision Sidebar (On-Demand Slide-In Overlay §2.2) */}
+        {/* Zone 4: Contextual Decision Sidebar (On-Demand Slide-In Overlay, Not in layout flow) */}
         {caseSummary && (
           <DecisionSidebar
             caseSummary={caseSummary}

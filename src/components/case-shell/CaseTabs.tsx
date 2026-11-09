@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-
 import { useTranslation } from "react-i18next";
 import { Activity, Layers, FileText } from "lucide-react";
 import type { CaseSummary } from "@/features/case/types";
@@ -26,9 +25,7 @@ import { ReportPreview } from "@/features/report/ReportPreview";
 import { buildRawReport, compileReportSections } from "@/features/report/ReportSectionRegistry";
 import type { ReportContext, ReportCaseSnapshot } from "@/features/report/types";
 import type { Override } from "@/services/clinical/types";
-
 import { Badge } from "@/components/ui/badge";
-
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface CaseTabsProps {
@@ -268,41 +265,44 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
         onValueChange={(v) => setActiveTab(v as typeof activeTab)}
         className="flex flex-1 flex-col overflow-hidden"
       >
-        {/* Persistent Tab Navigation */}
-        <div className="border-b border-border/80 bg-background/50 px-6 pt-2">
-          <TabsList className="h-10 bg-muted/50 p-1">
+        {/* Persistent Tab Navigation with Academic Navy Active State */}
+        <div className="border-b border-border-subtle bg-bg-surface px-6 pt-2">
+          <TabsList className="h-10 bg-bg-surface-muted p-1 border border-border-subtle rounded-lg">
             <TabsTrigger
               value="encounters"
-              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs"
+              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-accent-primary data-[state=active]:text-text-on-accent data-[state=active]:shadow-xs text-text-muted hover:text-text-primary transition-colors"
             >
               <Activity className="size-4" />
               <span>{t("tabs.encounters")}</span>
-              <Badge variant="secondary" className="h-4.5 px-1 text-[10px]">
+              <Badge
+                variant="secondary"
+                className="h-4.5 px-1.5 text-[10px] bg-bg-surface text-text-muted"
+              >
                 {encounters.length}
               </Badge>
-              <kbd className="ms-1 hidden rounded bg-muted px-1 text-[9px] text-muted-foreground lg:inline">
+              <kbd className="ms-1 hidden rounded bg-bg-surface/80 px-1 text-[9px] text-text-muted lg:inline">
                 Alt+E
               </kbd>
             </TabsTrigger>
 
             <TabsTrigger
               value="plan"
-              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs"
+              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-accent-primary data-[state=active]:text-text-on-accent data-[state=active]:shadow-xs text-text-muted hover:text-text-primary transition-colors"
             >
               <Layers className="size-4" />
               <span>{t("tabs.plan")}</span>
-              <kbd className="ms-1 hidden rounded bg-muted px-1 text-[9px] text-muted-foreground lg:inline">
+              <kbd className="ms-1 hidden rounded bg-bg-surface/80 px-1 text-[9px] text-text-muted lg:inline">
                 Alt+P
               </kbd>
             </TabsTrigger>
 
             <TabsTrigger
               value="report"
-              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xs"
+              className="gap-2 px-4 text-xs font-semibold data-[state=active]:bg-accent-primary data-[state=active]:text-text-on-accent data-[state=active]:shadow-xs text-text-muted hover:text-text-primary transition-colors"
             >
               <FileText className="size-4" />
               <span>{t("tabs.report")}</span>
-              <kbd className="ms-1 hidden rounded bg-muted px-1 text-[9px] text-muted-foreground lg:inline">
+              <kbd className="ms-1 hidden rounded bg-bg-surface/80 px-1 text-[9px] text-text-muted lg:inline">
                 Alt+R
               </kbd>
             </TabsTrigger>
@@ -348,20 +348,26 @@ export function CaseTabs({ caseSummary, onNewVisit, activeRole = "Physician" }: 
           className="flex-1 overflow-y-auto p-8 focus-visible:outline-hidden"
         >
           <div className="mx-auto max-w-5xl space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-border/60">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1 border-b border-border-subtle">
               <div>
-                <h2 className="text-base font-bold text-foreground">Clinical Stimulation Plan</h2>
-                <p className="text-xs text-muted-foreground">
+                <h2 className="text-base font-bold text-text-primary">Clinical Stimulation Plan</h2>
+                <p className="text-xs text-text-muted">
                   Consolidated reserve stratification, protocol planning, dose nomograms, and
                   trigger strategy.
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs font-mono">
+                <Badge
+                  variant="outline"
+                  className="text-xs font-mono border-border-default text-text-muted"
+                >
                   Role: {activeRole}
                 </Badge>
                 {activeRole !== "Physician" && (
-                  <Badge variant="secondary" className="text-[10px] text-amber-600 bg-amber-500/10">
+                  <Badge
+                    variant="secondary"
+                    className="text-[10px] text-safety-warning bg-safety-warning-bg border-safety-warning/30"
+                  >
                     Overrides Physician-Only
                   </Badge>
                 )}
