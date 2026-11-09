@@ -225,11 +225,11 @@ function getStageInfo(pathname: string): { title: string; stageNumber?: number }
     return { title: "Stage 4: Starting Dose Engine", stageNumber: 4 };
   if (pathname.includes("/monitoring") || pathname.startsWith("/monitoring"))
     return { title: "Stage 5: Monitoring & Dose Adjustment", stageNumber: 5 };
-  if (pathname.startsWith("/trigger"))
+  if (pathname.includes("/trigger") || pathname.startsWith("/trigger"))
     return { title: "Stage 6: Trigger Decision & Safety", stageNumber: 6 };
-  if (pathname.startsWith("/cycle-completion"))
+  if (pathname.includes("/cycle-completion") || pathname.startsWith("/cycle-completion"))
     return { title: "Stage 7: Cycle Completion & Safety", stageNumber: 7 };
-  if (pathname.startsWith("/reports"))
+  if (pathname.includes("/report") || pathname.startsWith("/reports"))
     return { title: "Stage 8: Clinical Intelligence Report", stageNumber: 8 };
   if (pathname.startsWith("/worklist")) return { title: "Hospital Clinical Worklist" };
   if (pathname.startsWith("/patients")) return { title: "Patients Registry" };

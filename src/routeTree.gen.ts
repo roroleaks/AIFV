@@ -45,6 +45,7 @@ import { Route as ShellPatientsIdDoseRouteImport } from './routes/_shell.patient
 import { Route as ShellPatientsIdMonitoringRouteImport } from './routes/_shell.patients.$id.monitoring'
 import { Route as ShellPatientsIdPoseidonRouteImport } from './routes/_shell.patients.$id.poseidon'
 import { Route as ShellPatientsIdProtocolRouteImport } from './routes/_shell.patients.$id.protocol'
+import { Route as ShellPatientsIdTriggerRouteImport } from './routes/_shell.patients.$id.trigger'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -228,6 +229,11 @@ const ShellPatientsIdProtocolRoute = ShellPatientsIdProtocolRouteImport.update({
   path: '/protocol',
   getParentRoute: () => ShellPatientsIdRoute,
 } as any)
+const ShellPatientsIdTriggerRoute = ShellPatientsIdTriggerRouteImport.update({
+  id: '/trigger',
+  path: '/trigger',
+  getParentRoute: () => ShellPatientsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -265,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
   '/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
   '/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
+  '/patients/$id/trigger': typeof ShellPatientsIdTriggerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -302,6 +309,7 @@ export interface FileRoutesByTo {
   '/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
   '/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
   '/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
+  '/patients/$id/trigger': typeof ShellPatientsIdTriggerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -341,6 +349,7 @@ export interface FileRoutesById {
   '/_shell/patients/$id/monitoring': typeof ShellPatientsIdMonitoringRoute
   '/_shell/patients/$id/poseidon': typeof ShellPatientsIdPoseidonRoute
   '/_shell/patients/$id/protocol': typeof ShellPatientsIdProtocolRoute
+  '/_shell/patients/$id/trigger': typeof ShellPatientsIdTriggerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -380,6 +389,7 @@ export interface FileRouteTypes {
     | '/patients/$id/monitoring'
     | '/patients/$id/poseidon'
     | '/patients/$id/protocol'
+    | '/patients/$id/trigger'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/patients/$id/monitoring'
     | '/patients/$id/poseidon'
     | '/patients/$id/protocol'
+    | '/patients/$id/trigger'
   id:
     | '__root__'
     | '/'
@@ -455,6 +466,7 @@ export interface FileRouteTypes {
     | '/_shell/patients/$id/monitoring'
     | '/_shell/patients/$id/poseidon'
     | '/_shell/patients/$id/protocol'
+    | '/_shell/patients/$id/trigger'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -718,6 +730,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellPatientsIdProtocolRouteImport
       parentRoute: typeof ShellPatientsIdRoute
     }
+    '/_shell/patients/$id/trigger': {
+      id: '/_shell/patients/$id/trigger'
+      path: '/trigger'
+      fullPath: '/patients/$id/trigger'
+      preLoaderRoute: typeof ShellPatientsIdTriggerRouteImport
+      parentRoute: typeof ShellPatientsIdRoute
+    }
   }
 }
 
@@ -727,6 +746,7 @@ interface ShellPatientsIdRouteChildren {
   ShellPatientsIdMonitoringRoute: typeof ShellPatientsIdMonitoringRoute
   ShellPatientsIdPoseidonRoute: typeof ShellPatientsIdPoseidonRoute
   ShellPatientsIdProtocolRoute: typeof ShellPatientsIdProtocolRoute
+  ShellPatientsIdTriggerRoute: typeof ShellPatientsIdTriggerRoute
 }
 
 const ShellPatientsIdRouteChildren: ShellPatientsIdRouteChildren = {
@@ -735,6 +755,7 @@ const ShellPatientsIdRouteChildren: ShellPatientsIdRouteChildren = {
   ShellPatientsIdMonitoringRoute: ShellPatientsIdMonitoringRoute,
   ShellPatientsIdPoseidonRoute: ShellPatientsIdPoseidonRoute,
   ShellPatientsIdProtocolRoute: ShellPatientsIdProtocolRoute,
+  ShellPatientsIdTriggerRoute: ShellPatientsIdTriggerRoute,
 }
 
 const ShellPatientsIdRouteWithChildren = ShellPatientsIdRoute._addFileChildren(
