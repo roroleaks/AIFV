@@ -162,6 +162,8 @@
     "applyOverride": "Apply Clinical Override",
     "reverseOverride": "Reverse Override",
     "viewEvidence": "View Evidence Citations",
+    "showDetails": "Show details & rationale",
+    "hideDetails": "Hide details",
     "overrideDialogTitle": "Physician Clinical Override",
     "overrideFieldLabel": "Target Decision Field",
     "originalValueLabel": "Engine Recommendation",

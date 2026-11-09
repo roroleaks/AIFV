@@ -162,6 +162,8 @@
     "applyOverride": "تعديل سريري بقرار الطبيب",
     "reverseOverride": "التراجع عن التعديل السريري",
     "viewEvidence": "عرض المراجع السريرية",
+    "showDetails": "عرض التفاصيل والمسوغات",
+    "hideDetails": "إخفاء التفاصيل",
     "overrideDialogTitle": "تعديل سريري بقرار الطبيب المعالج",
     "overrideFieldLabel": "الحقل المستهدف للتعديل",
     "originalValueLabel": "توصية النظام الخوارزمي",

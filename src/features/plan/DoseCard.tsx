@@ -1,5 +1,5 @@
 /**
- * DoseCard Component (§2.2, §3)
+ * DoseCard Component (§2.2, §3, §2.4)
  *
  * Displays starting gonadotropin dose (CONSORT + ESHRE 2025 nomogram),
  * current encounter dose, cumulative cycle dose, and LH add-on strategy.
@@ -7,10 +7,14 @@
  * OVERRIDES:
  *  - Overridable: Starting Dose and LH Add-on
  *  - NOT Overridable: Cumulative dose (derived math) and 300 IU ceiling (safety rule)
+ *
+ * Progressive disclosure: primary dose and cumulative counters prominent;
+ * nomogram parameters, model explanations, and LH add-on behind on-demand toggle.
  */
 
 import { useState } from "react";
-import { Syringe, UserCheck, AlertTriangle, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Syringe, UserCheck, AlertTriangle, ArrowRight, ChevronDown } from "lucide-react";
 import type { ProtocolPlanResult, Override } from "@/services/clinical/types";
 import type { MonitoringVisit } from "@/lib/engine/monitoring";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -65,6 +69,8 @@ export function DoseCard({
   onRemoveOverride,
 }: DoseCardProps) {
   const [activeDialog, setActiveDialog] = useState<"dose" | "lh" | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = useTranslation();
   const isPhysician = activeRole.toLowerCase() === "physician";
 
   const { startingDose, consort, gonadotropin } = plan;
@@ -141,7 +147,7 @@ export function DoseCard({
       </CardHeader>
 
       <CardContent className="p-4 space-y-3.5 text-xs">
-        {/* Section A: Starting Dose Calculation */}
+        {/* Section A: Starting Dose Calculation (Primary Focus) */}
         <div className="rounded-lg border border-border/50 bg-background/50 p-3 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
@@ -186,11 +192,11 @@ export function DoseCard({
           {/* Overridden vs Raw Starting Dose */}
           {startingDoseOverride ? (
             <div className="space-y-1.5 pt-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs line-through text-muted-foreground">
                   {rawStartingDoseDisplay}
                 </span>
-                <ArrowRight className="size-3 text-amber-600" />
+                <ArrowRight className="size-3 text-amber-600 shrink-0" />
                 <span className="text-base font-bold text-amber-600 dark:text-amber-400 font-mono">
                   {currentStartingDoseDisplay}
                 </span>
@@ -249,44 +255,64 @@ export function DoseCard({
           </div>
         </div>
 
-        {/* Section C: LH Add-on Recommendation & Override */}
-        <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1.5">
-          <div className="flex items-center justify-between">
-            <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
-              LH Activity Supplementation
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={!isPhysician}
-              onClick={() => setActiveDialog("lh")}
-              className="h-6 px-1.5 text-[11px] text-muted-foreground hover:text-foreground gap-1"
-            >
-              {lhAddonOverride ? (
-                <span className="text-amber-600 font-bold">Edit Override</span>
-              ) : (
-                <span>Override</span>
-              )}
-            </Button>
-          </div>
+        {/* Progressive Disclosure Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full justify-between h-7 px-2.5 text-[11px] text-muted-foreground hover:text-foreground border border-border/40 hover:bg-muted/40"
+          aria-expanded={isExpanded}
+        >
+          <span>{isExpanded ? t("plan.hideDetails") : t("plan.showDetails")}</span>
+          <ChevronDown
+            className={`size-3.5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+          />
+        </Button>
 
-          {lhAddonOverride ? (
-            <div className="space-y-1 pt-0.5">
-              <div className="flex items-center gap-1.5 text-xs">
-                <span className="line-through text-muted-foreground text-[11px]">
-                  {rawLhDisplay}
+        {/* Expandable Section C: LH Activity Supplementation */}
+        {isExpanded && (
+          <div className="space-y-2 pt-1 border-t border-border/40">
+            <div className="rounded-lg border border-border/50 bg-background/50 p-2.5 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
+                  LH Activity Supplementation
                 </span>
-                <ArrowRight className="size-3 text-amber-600" />
-                <span className="font-bold text-amber-600 dark:text-amber-400">
-                  {currentLhDisplay}
-                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={!isPhysician}
+                  onClick={() => setActiveDialog("lh")}
+                  className="h-6 px-1.5 text-[11px] text-muted-foreground hover:text-foreground gap-1"
+                >
+                  {lhAddonOverride ? (
+                    <span className="text-amber-600 font-bold">Edit Override</span>
+                  ) : (
+                    <span>Override</span>
+                  )}
+                </Button>
               </div>
-              <p className="text-[10px] italic text-muted-foreground">"{lhAddonOverride.reason}"</p>
+
+              {lhAddonOverride ? (
+                <div className="space-y-1 pt-0.5">
+                  <div className="flex items-center gap-1.5 text-xs flex-wrap">
+                    <span className="line-through text-muted-foreground text-[11px]">
+                      {rawLhDisplay}
+                    </span>
+                    <ArrowRight className="size-3 text-amber-600 shrink-0" />
+                    <span className="font-bold text-amber-600 dark:text-amber-400">
+                      {currentLhDisplay}
+                    </span>
+                  </div>
+                  <p className="text-[10px] italic text-muted-foreground">
+                    "{lhAddonOverride.reason}"
+                  </p>
+                </div>
+              ) : (
+                <div className="text-[11px] font-medium text-foreground">{rawLhDisplay}</div>
+              )}
             </div>
-          ) : (
-            <div className="text-[11px] font-medium text-foreground">{rawLhDisplay}</div>
-          )}
-        </div>
+          </div>
+        )}
       </CardContent>
 
       {/* Starting Dose Override Dialog */}

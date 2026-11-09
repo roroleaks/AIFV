@@ -1,5 +1,5 @@
 /**
- * TriggerSafetyCard Component (§2.2, §3, §9.3)
+ * TriggerSafetyCard Component (§2.2, §3, §9.3, §2.4)
  *
  * Displays trigger strategy recommendation, readiness criteria,
  * multi-dimensional OHSS risk assessment (shape+color+text), and safety firewalls.
@@ -7,9 +7,13 @@
  * OVERRIDES:
  *  - Overridable: Trigger Agent Choice ONLY (hCG, GnRH Agonist, Dual)
  *  - NOT Overridable: OHSS Risk Score and Safety Firewalls (cannot be suppressed)
+ *
+ * Progressive disclosure: trigger readiness agent & OHSS risk badge prominent;
+ * detailed safety firewalls checklist and evidence rationale behind on-demand toggle.
  */
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ShieldAlert,
   AlertTriangle,
@@ -19,6 +23,7 @@ import {
   Circle,
   ArrowRight,
   UserCheck,
+  ChevronDown,
 } from "lucide-react";
 import type { TriggerDecisionResult, Override } from "@/services/clinical/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -65,6 +70,8 @@ export function TriggerSafetyCard({
   onRemoveOverride,
 }: TriggerSafetyCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = useTranslation();
   const isPhysician = activeRole.toLowerCase() === "physician";
 
   const { trigger, ohss, cycleCompletion, safetyFirewalls } = decision;
@@ -170,7 +177,7 @@ export function TriggerSafetyCard({
       </CardHeader>
 
       <CardContent className="p-4 space-y-3.5 text-xs">
-        {/* Section A: Trigger Readiness & Recommended Agent */}
+        {/* Section A: Trigger Readiness & Recommended Agent (Primary Focus) */}
         <div className="rounded-lg border border-border/50 bg-background/50 p-3 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-semibold text-foreground text-[11px] uppercase tracking-wider">
@@ -203,11 +210,11 @@ export function TriggerSafetyCard({
           {/* Overridden vs Raw Trigger Agent */}
           {override ? (
             <div className="space-y-1.5 pt-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs line-through text-muted-foreground">
                   {rawTriggerDisplay}
                 </span>
-                <ArrowRight className="size-3 text-amber-600" />
+                <ArrowRight className="size-3 text-amber-600 shrink-0" />
                 <span className="text-sm font-bold text-amber-600 dark:text-amber-400">
                   {currentTriggerDisplay}
                 </span>
@@ -231,7 +238,7 @@ export function TriggerSafetyCard({
             <div className="text-sm font-bold text-foreground">{rawTriggerDisplay}</div>
           )}
 
-          <p className="text-[11px] text-muted-foreground pt-0.5">
+          <p className="text-[11px] text-muted-foreground pt-0.5 line-clamp-2">
             {trigger.readiness?.headline || "Continue follicular monitoring."}
           </p>
         </div>
@@ -250,61 +257,77 @@ export function TriggerSafetyCard({
               <span>{ohssVisual.label}</span>
             </Badge>
           </div>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[11px] text-muted-foreground line-clamp-2">
             {ohss.status ||
               `Evaluated against follicular cohort count, latest estradiol kinematics, and baseline reserve markers.`}
           </p>
         </div>
 
-        {/* Section C: Safety Firewalls Status (NOT Overridable — §3) */}
-        <div className="space-y-1.5">
-          <span className="font-semibold text-muted-foreground text-[10px] uppercase tracking-wider block">
-            Clinical Safety Firewalls (Hard Ceilings)
-          </span>
-          <div className="space-y-1">
-            <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-              <span className="text-foreground">ESHRE Starting Dose Ceiling (≤ 300 IU/day)</span>
-              <Badge
-                variant="outline"
-                className={
-                  safetyFirewalls.eshre300CeilingBreached
-                    ? "border-destructive text-destructive font-bold"
-                    : "border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
-                }
-              >
-                {safetyFirewalls.eshre300CeilingBreached ? "BREACHED" : "Enforced"}
-              </Badge>
-            </div>
+        {/* Progressive Disclosure Toggle */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full justify-between h-7 px-2.5 text-[11px] text-muted-foreground hover:text-foreground border border-border/40 hover:bg-muted/40"
+          aria-expanded={isExpanded}
+        >
+          <span>{isExpanded ? t("plan.hideDetails") : t("plan.showDetails")}</span>
+          <ChevronDown
+            className={`size-3.5 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+          />
+        </Button>
 
-            <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-              <span className="text-foreground">Coasting Trigger (E2 ≥ 4,500 pg/mL)</span>
-              <Badge
-                variant="outline"
-                className={
-                  safetyFirewalls.coastingTriggerBreached
-                    ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
-                    : "text-muted-foreground"
-                }
-              >
-                {safetyFirewalls.coastingTriggerBreached ? "TRIGGERED" : "Not Active"}
-              </Badge>
-            </div>
+        {/* Expandable Section C: Safety Firewalls Status (NOT Overridable — §3) */}
+        {isExpanded && (
+          <div className="space-y-1.5 pt-1 border-t border-border/40">
+            <span className="font-semibold text-muted-foreground text-[10px] uppercase tracking-wider block">
+              Clinical Safety Firewalls (Hard Ceilings)
+            </span>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
+                <span className="text-foreground">ESHRE Starting Dose Ceiling (≤ 300 IU/day)</span>
+                <Badge
+                  variant="outline"
+                  className={
+                    safetyFirewalls.eshre300CeilingBreached
+                      ? "border-destructive text-destructive font-bold"
+                      : "border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
+                  }
+                >
+                  {safetyFirewalls.eshre300CeilingBreached ? "BREACHED" : "Enforced"}
+                </Badge>
+              </div>
 
-            <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
-              <span className="text-foreground">Freeze-All Policy (OHSS Prevention)</span>
-              <Badge
-                variant="outline"
-                className={
-                  safetyFirewalls.freezeAllTriggerBreached
-                    ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
-                    : "text-muted-foreground"
-                }
-              >
-                {cycleCompletion.freezeAll?.status || "Not Indicated"}
-              </Badge>
+              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
+                <span className="text-foreground">Coasting Trigger (E2 ≥ 4,500 pg/mL)</span>
+                <Badge
+                  variant="outline"
+                  className={
+                    safetyFirewalls.coastingTriggerBreached
+                      ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
+                      : "text-muted-foreground"
+                  }
+                >
+                  {safetyFirewalls.coastingTriggerBreached ? "TRIGGERED" : "Not Active"}
+                </Badge>
+              </div>
+
+              <div className="flex items-center justify-between p-2 rounded bg-muted/20 border border-border/40 text-[11px]">
+                <span className="text-foreground">Freeze-All Policy (OHSS Prevention)</span>
+                <Badge
+                  variant="outline"
+                  className={
+                    safetyFirewalls.freezeAllTriggerBreached
+                      ? "border-amber-500 text-amber-700 dark:text-amber-400 font-bold"
+                      : "text-muted-foreground"
+                  }
+                >
+                  {cycleCompletion.freezeAll?.status || "Not Indicated"}
+                </Badge>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </CardContent>
 
       {/* Trigger Agent Override Dialog */}

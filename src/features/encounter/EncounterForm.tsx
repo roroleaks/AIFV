@@ -14,6 +14,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Save, Plus, X, AlertTriangle, Sparkles, Barcode, RotateCcw } from "lucide-react";
 import type {
   Encounter,
@@ -66,6 +67,7 @@ export function EncounterForm({
   onSave,
   onCancel,
 }: EncounterFormProps) {
+  const { t } = useTranslation();
   // Determine smart defaults from previous encounter
   const nextDay = previousEncounter ? previousEncounter.day + 2 : 2;
   const todayDate = new Date().toISOString().split("T")[0] || "2026-01-01";
