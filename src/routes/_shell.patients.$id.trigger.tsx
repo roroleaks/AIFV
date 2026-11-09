@@ -1194,7 +1194,7 @@ export function PatientTriggerStage6View() {
             asChild
             className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            <Link to="/cycle-completion">
+            <Link to="/patients/$id/completion" params={{ id: patientId }}>
               Next &gt;
               <ArrowRight className="h-4 w-4" />
             </Link>
