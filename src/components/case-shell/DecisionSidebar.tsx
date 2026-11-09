@@ -72,9 +72,7 @@ export function DecisionSidebar({
                 <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                   {t("decisionSidebar.title")}
                 </h3>
-                <p className="text-[10px] text-muted-foreground">
-                  {t("decisionSidebar.subtitle")}
-                </p>
+                <p className="text-[10px] text-muted-foreground">{t("decisionSidebar.subtitle")}</p>
               </div>
             </div>
             <div className="flex items-center gap-1.5">
@@ -215,7 +213,8 @@ export function DecisionSidebar({
                           ESHRE 2025 Recommendation 31
                         </p>
                         <p className="text-muted-foreground text-[11px]">
-                          Combined use of r-hFSH with hMG is probably not recommended over either alone.
+                          Combined use of r-hFSH with hMG is probably not recommended over either
+                          alone.
                         </p>
                       </PopoverContent>
                     </Popover>
@@ -245,8 +244,8 @@ export function DecisionSidebar({
                     {t("plan.doseTitle")}
                   </span>
                   <p className="font-medium text-foreground text-[11px] mt-0.5">
-                    {derived.startingDose.doseDisplay} derived via CONSORT model + ESHRE 2025 age/AMH
-                    nomogram.
+                    {derived.startingDose.doseDisplay} derived via CONSORT model + ESHRE 2025
+                    age/AMH nomogram.
                   </p>
                 </div>
               </div>
@@ -259,8 +258,8 @@ export function DecisionSidebar({
                 <span>Pure Headless Services</span>
               </div>
               <p>
-                Engines execute deterministically in the background. Hospital ward staff interact with
-                case encounters, while engines run silently to update decision cards.
+                Engines execute deterministically in the background. Hospital ward staff interact
+                with case encounters, while engines run silently to update decision cards.
               </p>
             </div>
           </div>

@@ -460,9 +460,7 @@ export function EncounterForm({
               {/* Right Ovary (R) */}
               <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-foreground">
-                    Right Ovary (R)
-                  </span>
+                  <span className="text-xs font-semibold text-foreground">Right Ovary (R)</span>
                   {previousEncounter && (
                     <span className="text-[10px] text-muted-foreground">
                       ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}
@@ -572,9 +570,7 @@ export function EncounterForm({
               {/* Left Ovary (L) */}
               <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-foreground">
-                    Left Ovary (L)
-                  </span>
+                  <span className="text-xs font-semibold text-foreground">Left Ovary (L)</span>
                   {previousEncounter && (
                     <span className="text-[10px] text-muted-foreground">
                       ↩ {t("encounter.prefillFrom")} D{previousEncounter.day}

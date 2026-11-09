@@ -278,7 +278,10 @@ export function CaseHeader({
         {/* Secondary + Tertiary Group */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Secondary: Stimulation Day & Leading Cohort */}
-          <Badge variant="outline" className="h-6.5 gap-1.5 bg-background font-medium px-2 shadow-2xs">
+          <Badge
+            variant="outline"
+            className="h-6.5 gap-1.5 bg-background font-medium px-2 shadow-2xs"
+          >
             <Calendar className="size-3 text-muted-foreground" />
             <span className="font-semibold text-foreground">
               {t("leftRail.day")} {currentStimDay || "0"}

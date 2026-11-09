@@ -435,9 +435,7 @@ export function ReportPreview({
                           >
                             OVERRIDDEN
                           </Badge>
-                          <span className="font-bold text-foreground">
-                            {ov.label}:
-                          </span>
+                          <span className="font-bold text-foreground">{ov.label}:</span>
                           <span className="line-through text-muted-foreground">
                             {ov.originalValue}
                           </span>

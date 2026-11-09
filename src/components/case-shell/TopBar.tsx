@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Search, Globe, Settings, Sun, Moon, Eye, Shield, Building2, Lock, Brain } from "lucide-react";
+import {
+  Search,
+  Globe,
+  Settings,
+  Sun,
+  Moon,
+  Eye,
+  Shield,
+  Building2,
+  Lock,
+  Brain,
+} from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
