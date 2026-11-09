@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Brain, HelpCircle, ChevronRight, Info, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Brain, HelpCircle, ChevronRight, Info, AlertTriangle } from "lucide-react";
 import type { CaseSummary } from "@/features/case/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
