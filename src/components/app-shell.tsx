@@ -42,6 +42,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 
+import { ClinicalIcon } from "@/components/ui/clinical-icon";
 import { BrandMark } from "@/components/brand-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,16 +64,10 @@ import { useAutoSave } from "@/hooks/use-auto-save";
 import { cn } from "@/lib/utils";
 
 const topNav = [
-  { label: "Hospital Worklist", to: "/worklist" },
-  { label: "1. Assessment", to: "/assessment" },
-  { label: "2. POSEIDON", to: "/poseidon" },
-  { label: "3. Protocols", to: "/protocols" },
-  { label: "4. Starting Dose", to: "/starting-dose" },
-  { label: "5. Monitoring", to: "/monitoring" },
-  { label: "6. Trigger", to: "/trigger" },
-  { label: "7. Completion", to: "/cycle-completion" },
-  { label: "8. Reports", to: "/reports" },
-  { label: "Evidence", to: "/evidence" },
+  { label: "Patients", to: "/patients", icon: ClipboardPlus },
+  { label: "Protocols", to: "/protocols", icon: Stethoscope },
+  { label: "Reports", to: "/reports", icon: FileText },
+  { label: "Evidence", to: "/evidence", icon: BookOpen },
 ] as const;
 
 export interface NavItem {
@@ -160,8 +155,8 @@ function SideNavList({ collapsed, onNavigate }: { collapsed?: boolean; onNavigat
           {!collapsed && (
             <p
               className={cn(
-                "px-3 pb-1 text-[11px] font-bold uppercase tracking-wider",
-                sIdx === 1 ? "text-primary" : "text-muted-foreground/70",
+                "px-3 pb-1 text-section-title font-semibold tracking-wide",
+                sIdx === 1 ? "text-primary" : "text-foreground",
               )}
             >
               {section.title}
@@ -178,7 +173,7 @@ function SideNavList({ collapsed, onNavigate }: { collapsed?: boolean; onNavigat
                   "bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-xs ring-1 ring-border/50",
               }}
               className={cn(
-                "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-sidebar-foreground/80 transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
+                "group flex items-center gap-3 rounded-xl px-3 py-2 text-body text-slate-700 dark:text-slate-200 transition-all hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
                 collapsed && "justify-center px-0",
                 item.stageNumber && !collapsed && "hover:pl-3.5",
               )}
@@ -193,9 +188,10 @@ function SideNavList({ collapsed, onNavigate }: { collapsed?: boolean; onNavigat
                   {item.stageNumber}
                 </span>
               ) : (
-                <item.icon
-                  className="size-4 shrink-0 text-muted-foreground group-hover:text-foreground"
-                  strokeWidth={2}
+                <ClinicalIcon
+                  name={item.icon}
+                  size="inline"
+                  className="mr-2 text-muted-foreground group-hover:text-foreground"
                 />
               )}
               {!collapsed && <span className="truncate">{item.label}</span>}
@@ -264,26 +260,30 @@ function PatientContextBar({
   lastSavedText: string;
 }) {
   return (
-    <div className="sticky top-0 z-35 flex flex-wrap items-center justify-between gap-3 border-b border-border/80 bg-background/95 px-4 py-2 backdrop-blur-md shadow-2xs text-xs">
+    <div
+      role="region"
+      aria-label="Active Patient Context"
+      className="sticky top-14 z-30 flex flex-wrap items-center justify-between gap-3 border-b border-border/80 bg-background/95 px-4 py-2 backdrop-blur-md shadow-2xs text-xs"
+    >
       <div className="flex items-center gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="flex size-7 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xs border border-primary/20">
             {patientName.slice(0, 2).toUpperCase()}
           </div>
-          <span className="font-bold text-foreground text-sm tracking-tight">{patientName}</span>
+          <span className="text-display-patient text-foreground tracking-tight">{patientName}</span>
         </div>
 
         <span className="text-border">|</span>
 
-        <div className="flex items-center gap-1.5 font-mono text-muted-foreground text-[11px]">
-          <span className="text-muted-foreground/80">ID:</span>
+        <div className="flex items-center gap-1.5 font-mono text-slate-600 dark:text-slate-300 text-caption">
+          <span>ID:</span>
           <span className="font-semibold text-foreground">{patientId}</span>
         </div>
 
         <span className="text-border">|</span>
 
-        <div className="flex items-center gap-1 text-muted-foreground text-[11px]">
-          <span className="text-muted-foreground/80">Age:</span>
+        <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300 text-caption">
+          <span>Age:</span>
           <span className="font-medium text-foreground">{age}</span>
         </div>
 
@@ -302,7 +302,7 @@ function PatientContextBar({
       <div className="flex items-center gap-3 ms-auto">
         {/* Auto-save status indicator */}
         <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-mono">
-          <CheckCircle2 className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+          <ClinicalIcon name={CheckCircle2} size="inline" tone="success" className="mr-2" />
           <span>{lastSavedText}</span>
         </div>
 
@@ -312,7 +312,7 @@ function PatientContextBar({
             size="sm"
             className="h-7 px-2.5 text-[11px] font-medium border-border/70 hover:bg-muted text-foreground"
           >
-            <UserCheck className="size-3 me-1.5 text-primary" />
+            <ClinicalIcon name={UserCheck} size="inline" className="mr-2 text-primary" />
             <span>Change Patient</span>
           </Button>
         </Link>
@@ -347,12 +347,16 @@ function StickyBreadcrumb({
             size="sm"
             className="h-6 px-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-1"
           >
-            <Home className="size-3.5" />
+            <ClinicalIcon name={Home} size="inline" className="mr-2" />
             <span>Home</span>
           </Button>
         </Link>
 
-        <ChevronRight className="size-3.5 text-muted-foreground/50 rtl:rotate-180" />
+        <ClinicalIcon
+          name={ChevronRight}
+          size="inline"
+          className="mx-2 text-muted-foreground/50 rtl:rotate-180"
+        />
 
         <Link to="/assessment">
           <Button
@@ -360,12 +364,16 @@ function StickyBreadcrumb({
             size="sm"
             className="h-6 px-1.5 text-xs text-foreground font-semibold hover:bg-muted/50 gap-1"
           >
-            <User className="size-3.5 text-primary" />
+            <ClinicalIcon name={User} size="inline" className="mr-2 text-primary" />
             <span>{patientName}</span>
           </Button>
         </Link>
 
-        <ChevronRight className="size-3.5 text-muted-foreground/50 rtl:rotate-180" />
+        <ClinicalIcon
+          name={ChevronRight}
+          size="inline"
+          className="mx-2 text-muted-foreground/50 rtl:rotate-180"
+        />
 
         <Badge
           variant="secondary"
@@ -384,7 +392,7 @@ function StickyBreadcrumb({
           className="h-6.5 px-2.5 text-xs border-border/70 hover:bg-muted text-foreground gap-1.5"
           title="Manually trigger auto-save routine"
         >
-          <Save className="size-3 text-primary" />
+          <ClinicalIcon name={Save} size="inline" className="mr-2 text-primary" />
           <span>{isSaving ? "Saving..." : "Save Now"}</span>
         </Button>
       </div>
@@ -628,13 +636,13 @@ export function AppShell({ children }: { children?: ReactNode }) {
         )}
       >
         {/* Main Application TopBar */}
-        <header className="sticky top-0 z-40 border-b border-border/70 glass-panel">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 lg:px-6">
+        <header className="sticky top-0 z-40 h-14 border-b border-border/70 glass-panel">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center h-full px-4 lg:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
-                    <Menu className="size-5" />
+                    <ClinicalIcon name={Menu} size="feature" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-72 bg-sidebar p-0">
@@ -648,7 +656,10 @@ export function AppShell({ children }: { children?: ReactNode }) {
 
               <BrandMark className="shrink-0" />
 
-              <nav aria-label="Sections" className="ml-4 hidden min-w-0 items-center gap-1 xl:flex">
+              <nav
+                aria-label="Sections"
+                className="ml-4 hidden min-w-0 items-center gap-1 overflow-hidden xl:flex"
+              >
                 {topNav.map((item) => {
                   const active = pathname.startsWith(item.to);
                   return (
@@ -656,11 +667,12 @@ export function AppShell({ children }: { children?: ReactNode }) {
                       key={item.to}
                       to={item.to}
                       className={cn(
-                        "rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+                        "inline-flex shrink-0 items-center whitespace-nowrap rounded-lg px-3 py-1.5 text-body-emphasis text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
                         active && "bg-primary-soft text-primary",
                       )}
                     >
-                      {item.label}
+                      <ClinicalIcon name={item.icon} size="inline" className="mr-2" />
+                      <span>{item.label}</span>
                     </Link>
                   );
                 })}
@@ -670,17 +682,23 @@ export function AppShell({ children }: { children?: ReactNode }) {
             {/* Top Right Controls & Mandatory Idle-Lock Countdown */}
             <div className="flex shrink-0 items-center gap-2">
               <Link to="/worklist" className="hidden sm:inline-flex">
-                <Button size="sm" className="h-8 gap-1.5 text-xs font-semibold shadow-xs">
-                  <Sparkles className="size-3.5" />
+                <Button
+                  size="sm"
+                  className="h-8 gap-2 text-label font-semibold shadow-xs whitespace-nowrap"
+                >
+                  <ClinicalIcon name={Sparkles} size="inline" className="mr-2" />
                   <span>Hospital Worklist</span>
                 </Button>
               </Link>
 
               {/* 3. Top-Right Idle Countdown Timer */}
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="text-label text-muted-foreground hidden sm:inline whitespace-nowrap">
+                  Idle Lock:
+                </span>
                 <div
                   className={cn(
-                    "flex items-center gap-1.5 rounded-lg border px-2 py-1 text-xs font-mono transition-colors",
+                    "flex items-center gap-1.5 rounded-lg border px-2 py-1 font-mono transition-colors shrink-0",
                     secondsRemaining <= 15
                       ? "border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400 animate-pulse font-bold"
                       : secondsRemaining <= 60
@@ -689,8 +707,10 @@ export function AppShell({ children }: { children?: ReactNode }) {
                   )}
                   title={`Hospital Inactivity Countdown: ${formatCountdown(secondsRemaining)} remaining before lock`}
                 >
-                  <Clock className="size-3.5" />
-                  <span>{formatCountdown(secondsRemaining)}</span>
+                  <ClinicalIcon name={Clock} size="inline" className="mr-2" />
+                  <span className="text-sm sm:text-metric-value font-mono">
+                    {formatCountdown(secondsRemaining)}
+                  </span>
                 </div>
 
                 {/* Extend Button (visible when timer <= 60s) */}
@@ -699,10 +719,10 @@ export function AppShell({ children }: { children?: ReactNode }) {
                     variant="outline"
                     size="sm"
                     onClick={resetActivity}
-                    className="h-7 px-2 text-[11px] text-amber-700 dark:text-amber-300 hover:bg-amber-500/20 border-amber-500/40 gap-1 font-semibold"
+                    className="h-7 px-2 text-label text-amber-700 dark:text-amber-300 hover:bg-amber-500/20 border-amber-500/40 gap-1 font-semibold whitespace-nowrap"
                     title="Extend session by 5 minutes"
                   >
-                    <RotateCcw className="size-3" />
+                    <ClinicalIcon name={RotateCcw} size="inline" className="mr-2" />
                     <span>Extend (+5m)</span>
                   </Button>
                 )}
@@ -712,25 +732,34 @@ export function AppShell({ children }: { children?: ReactNode }) {
                   variant="ghost"
                   size="sm"
                   onClick={lockScreen}
-                  className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground hover:bg-muted gap-1"
+                  className="h-7 px-2 text-label text-muted-foreground hover:text-foreground hover:bg-muted gap-1 whitespace-nowrap"
                   title="Immediately lock clinical session"
                 >
-                  <Lock className="size-3.5" />
+                  <ClinicalIcon name={Lock} size="inline" className="sm:mr-2" />
                   <span className="hidden sm:inline">Lock</span>
                 </Button>
               </div>
 
-              <div className="relative hidden md:block">
-                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <div className="relative hidden 2xl:block">
+                <ClinicalIcon
+                  name={Search}
+                  size="inline"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                />
                 <Input
                   placeholder="Search patients, evidence…"
                   aria-label="Global search"
-                  className="h-9 w-44 lg:w-56 rounded-xl border-border/70 bg-background/60 pl-9 text-sm"
+                  className="h-9 w-48 rounded-xl border-border/70 bg-background/60 pl-9 text-body"
                 />
               </div>
 
-              <Button variant="ghost" size="icon" aria-label="Notifications">
-                <Bell className="size-4.5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hidden sm:inline-flex"
+                aria-label="Notifications"
+              >
+                <ClinicalIcon name={Bell} size="feature" />
               </Button>
               <Button
                 variant="ghost"
@@ -738,7 +767,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
                 onClick={toggle}
                 aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
-                {theme === "dark" ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
+                <ClinicalIcon name={theme === "dark" ? Sun : Moon} size="feature" />
               </Button>
               <img
                 src="/dr-raouf-roshdy.jpg"
@@ -762,7 +791,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
         <div className="flex w-full flex-1">
           <aside
             className={cn(
-              "sticky top-[95px] hidden h-[calc(100vh-95px)] shrink-0 flex-col border-r border-sidebar-border bg-sidebar py-4 transition-[width] duration-300 lg:flex",
+              "sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 transition-[width] duration-300 lg:flex",
               collapsed ? "w-[74px]" : "w-64",
             )}
           >
@@ -771,16 +800,16 @@ export function AppShell({ children }: { children?: ReactNode }) {
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-3 text-muted-foreground",
+                  "w-full justify-start gap-3 text-body text-slate-600 dark:text-slate-400",
                   collapsed && "justify-center",
                 )}
                 onClick={() => setCollapsed((c) => !c)}
                 aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
               >
                 {collapsed ? (
-                  <PanelLeft className="size-4.5" />
+                  <ClinicalIcon name={PanelLeft} size="feature" />
                 ) : (
-                  <PanelLeftClose className="size-4.5" />
+                  <ClinicalIcon name={PanelLeftClose} size="feature" className="mr-2" />
                 )}
                 {!collapsed && <span className="text-sm">Collapse</span>}
               </Button>
@@ -789,14 +818,14 @@ export function AppShell({ children }: { children?: ReactNode }) {
                   to="/help"
                   className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent/60"
                 >
-                  <LifeBuoy className="size-4.5" />
-                  Help & Support
+                  <ClinicalIcon name={LifeBuoy} size="feature" className="mr-2" />
+                  <span>Help & Support</span>
                 </Link>
               )}
             </div>
           </aside>
 
-          <main className="flex min-w-0 flex-1 flex-col px-4 py-6 lg:px-8 lg:py-8">
+          <main className="flex min-w-0 flex-1 flex-col p-6">
             <div className="mx-auto w-full max-w-7xl space-y-6">
               <TestModeBanner />
               {children ?? <Outlet />}
@@ -843,7 +872,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <DialogHeader>
             <div className="flex items-center gap-2 text-foreground">
               <div className="flex size-9 items-center justify-center rounded-xl bg-destructive/10 text-destructive border border-destructive/20">
-                <ShieldAlert className="size-5" />
+                <ClinicalIcon name={ShieldAlert} size="alert" tone="critical" />
               </div>
               <div>
                 <DialogTitle className="text-base font-bold text-foreground">
@@ -888,7 +917,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
                     className="absolute end-1 top-1 size-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     title="Clear input"
                   >
-                    <Delete className="size-4" />
+                    <ClinicalIcon name={Delete} size="inline" />
                   </Button>
                 )}
               </div>
@@ -904,7 +933,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
                 disabled={pin.length < 6 || isAuthenticating}
                 className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-xs gap-1.5"
               >
-                <KeyRound className="size-3.5" />
+                <ClinicalIcon name={KeyRound} size="inline" className="mr-2" />
                 <span>{isAuthenticating ? "Verifying..." : "Unlock Session"}</span>
               </Button>
             </DialogFooter>
